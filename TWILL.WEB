@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="TWILL.WEB[TEX,SYS]%20-%20www.SailDart.org-Dateien/u8.css"><meta charset="utf-8">
-<title>TWILL.WEB[TEX,SYS] - www.SailDart.org</title>
-</head>
-<body id="u8body">
-<div id="tagline">perm filename TWILL.WEB[TEX,SYS]  blob <a href="https://saildart.org/TWILL.WEB[TEX,SYS]_blob">sn#841303</a> filedate 1987-06-14 generic text, type C, neo UTF8</div>
-<pre id="u8lump">COMMENT ⊗   VALID 00025 PAGES
-C REC  PAGE   DESCRIPTION
-C00001 00001
-C00003 00002	% This program by D. E. Knuth is not copyrighted and can be used freely.
-C00008 00003	@* Introduction.
-C00021 00004	@* The character set.
-C00038 00005	@* Input and output.
-C00050 00006	@* Reporting errors to the user.
-C00057 00007	@* Data structures.
-C00078 00008	@* Searching for identifiers.
-C00084 00009	@* Initializing the table of reserved words.
-C00094 00010	@* Searching for module names.
-C00101 00011	@* Lexical scanning.
-C00127 00012	@* Inputting the next token.
-C00144 00013	@* Phase one processing.
-C00162 00014	@* Low-level output routines.
-C00172 00015	@* Routines that copy \TeX\ material.
-C00179 00016	@* Parsing.
-C00210 00017	@* Implementing the productions.
-C00248 00018	@* Initializing the scraps.
-C00270 00019	@* Output of tokens.
-C00292 00020	@* Phase two processing.
-C00318 00021	@* Phase three processing.
-C00331 00022	@* Debugging.
-C00339 00023	@* The main program.
-C00342 00024	@* System-dependent changes.
-C00343 00025	@* Index.
-C00347 ENDMK
-C⊗;
-% This program by D. E. Knuth is not copyrighted and can be used freely.
+% This program by D. E. Knuth is not copyrighted and can be used freely.
 % But it is not polished either, so you probably shouldn't try....
 % Version 2.8 (based on WEAVE 2.8) was hacked together on 28 Sep 1985.
 % Version 2.9 fixed output for dtype_string (14 Jun 1987).
@@ -61,7 +25,8 @@ C⊗;
 	\centerline{(Version 2.8)}
 	\vfill}
 \pageno=\contentspagenumber \advance\pageno by 1
-@* Introduction.
+
+@* Introduction.
 [Apology: This modification of \.{WEAVE} was put together hastily at the
 end of September, 1985, in order to prepare the listing of \TeX,
 on the WAITS system. No attempt has been made to polish anything
@@ -84,7 +49,7 @@ These features are also present in the \PASCAL\ version of \TeX, where they
 are used in a similar (but more complex) way. System-dependent portions
 of \.{WEAVE} can be identified by looking at the entries for `system
 dependencies' in the index below.
-@!@↑system dependencies@&gt;
+@!@↑system dependencies@>
 
 The ``banner line'' defined here should be changed whenever \.{WEAVE}
 is modified.
@@ -92,7 +57,7 @@ is modified.
 @d banner=='This is TWILL, Version 2.8'
 
 @ The program begins with a fairly normal header, made up of pieces that
-@↑system dependencies@&gt;
+@↑system dependencies@>
 will mostly be filled in later. The \.{WEB} input comes from files |web_file|
 and |change_file|, and the \TeX\ output goes to file |tex_file|.
 
@@ -101,16 +66,16 @@ calls the `|jump_out|' procedure, which goes to the label |end_of_WEAVE|.
 
 @d end_of_WEAVE = 9999 {go here to wrap it up}
 
-@p @t\4@&gt;@&lt;Compiler directives@&gt;@/
+@p @t\4@>@<Compiler directives@>@/
 program WEAVE(@!web_file,@!change_file,@!tex_file);
 label end_of_WEAVE; {go here to finish}
-const @&lt;Constants in the outer block@&gt;@/
-type @&lt;Types in the outer block@&gt;@/
-var @&lt;Globals in the outer block@&gt;@/
-@&lt;Error handling procedures@&gt;@/
+const @<Constants in the outer block@>@/
+type @<Types in the outer block@>@/
+var @<Globals in the outer block@>@/
+@<Error handling procedures@>@/
 procedure initialize;
-	var @&lt;Local variables for initialization@&gt;@/
-	begin @&lt;Set initial values@&gt;@/
+	var @<Local variables for initialization@>@/
+	begin @<Set initial values@>@/
 	end;
 
 @ Some of this code is optional for use when debugging only;
@@ -119,13 +84,13 @@ Other parts, delimited by |stat| and $|tats|$, are optionally included
 if statistics about \.{WEAVE}'s memory usage are desired.
 
 @d debug==@{ {change this to `$\\{debug}\equiv\null$' when debugging}
-@d gubed==@t@&gt;@} {change this to `$\\{gubed}\equiv\null$' when debugging}
+@d gubed==@t@>@} {change this to `$\\{gubed}\equiv\null$' when debugging}
 @f debug==begin
 @f gubed==end
 @#
 @d stat==@{ {change this to `$\\{stat}\equiv\null$'
 	when gathering usage statistics}
-@d tats==@t@&gt;@} {change this to `$\\{tats}\equiv\null$'
+@d tats==@t@>@} {change this to `$\\{tats}\equiv\null$'
 	when gathering usage statistics}
 @f stat==begin
 @f tats==end
@@ -133,23 +98,23 @@ if statistics about \.{WEAVE}'s memory usage are desired.
 @ The \PASCAL\ compiler used to develop this system has ``compiler
 directives'' that can appear in comments whose first character is a dollar sign.
 In production versions of \.{WEAVE} these directives tell the compiler that
-@↑system dependencies@&gt;
+@↑system dependencies@>
 it is safe to avoid range checks and to leave out the extra code it inserts
 for the \PASCAL\ debugger's benefit, although interrupts will occur if
 there is arithmetic overflow.
 
-@&lt;Compiler directives@&gt;=
-@{@&amp;$C-,A+,D-@} {no range check, catch arithmetic overflow, no debug overhead}
-@!debug @{@&amp;$C+,D+@}@+ gubed {but turn everything on when debugging}
+@<Compiler directives@>=
+@{@&$C-,A+,D-@} {no range check, catch arithmetic overflow, no debug overhead}
+@!debug @{@&$C+,D+@}@+ gubed {but turn everything on when debugging}
 
 @ Labels are given symbolic names by the following definitions. We insert
 the label `|exit|:' just before the `\ignorespaces|end|\unskip' of a
 procedure in which we have used the `|return|' statement defined below;
 the label `|restart|' is occasionally used at the very beginning of a
 procedure; and the label `|reswitch|' is occasionally used just prior to
-a \&amp;{case} statement in which some cases change the conditions and we wish to
+a \&{case} statement in which some cases change the conditions and we wish to
 branch to the newly applicable case.
-Loops that are set up with the \&amp;{loop} construction defined below are
+Loops that are set up with the \&{loop} construction defined below are
 commonly exited by going to `|done|' or to `|found|' or to `|not_found|',
 and they are sometimes repeated by going to `|continue|'.
 
@@ -173,7 +138,7 @@ and they are sometimes repeated by going to `|continue|'.
 
 @ We assume that |case| statements may include a default case that applies
 if no matching label is found. Thus, we shall use constructions like
-@↑system dependencies@&gt;
+@↑system dependencies@>
 $$\vbox{\halign{#\hfil\cr
 |case x of|\cr
 1: $\langle\,$code for $x=1\,\rangle$;\cr
@@ -184,7 +149,7 @@ since most \PASCAL\ compilers have plugged this hole in the language by
 incorporating some sort of default mechanism. For example, the compiler
 used to develop \.{WEB} and \TeX\ allows `|others|:' as a default label,
 and other \PASCAL s allow syntaxes like `\ignorespaces|else|\unskip' or
-`\&amp;{otherwise}' or `\\{otherwise}:', etc. The definitions of |othercases|
+`\&{otherwise}' or `\\{otherwise}:', etc. The definitions of |othercases|
 and |endcases| should be changed to agree with local conventions.
 (Of course, if no default mechanism is available, the |case| statements of
 this program must be extended by listing all remaining cases.)
@@ -197,7 +162,7 @@ this program must be extended by listing all remaining cases.)
 @ The following parameters are set big enough to handle \TeX, so they
 should be sufficient for most applications of \.{WEAVE}.
 
-@&lt;Constants...@&gt;=
+@<Constants...@>=
 @!max_bytes=42000; {|1/ww| times the number of bytes in identifiers,
 	index entries, and module names; must be less than 65536}
 @!max_names=4000; {number of identifiers, index entries, and module names;
@@ -232,14 +197,15 @@ of systems that might want to use such information.
 @d error_message=2 {|history| value when an error was noted}
 @d fatal_message=3 {|history| value when we had to stop prematurely}
 @#
-@d mark_harmless==@t@&gt;@+if history=spotless then history←harmless_message
+@d mark_harmless==@t@>@+if history=spotless then history←harmless_message
 @d mark_error==history←error_message
 @d mark_fatal==history←fatal_message
 
-@&lt;Glob...@&gt;=@!history:spotless..fatal_message; {how bad was this run?}
+@<Glob...@>=@!history:spotless..fatal_message; {how bad was this run?}
 
-@ @&lt;Set init...@&gt;=history←spotless;
-@* The character set.
+@ @<Set init...@>=history←spotless;
+
+@* The character set.
 One of the main goals in the design of \.{WEB} has been to make it readily
 portable between a wide variety of computers. Yet \.{WEB} by its very
 nature must use a greater variety of characters than most computer
@@ -258,7 +224,7 @@ the code used for preprocessed constants like \.{"A"}. If you are writing
 a program in \.{WEB} that makes use of such one-character constants, you
 should convert your input to ASCII form, like \.{WEAVE} and \.{TANGLE} do.
 Otherwise \.{WEB}'s internal coding scheme does not affect you.
-@↑ASCII code@&gt;
+@↑ASCII code@>
 
 Here is a table of the standard visible ASCII codes:
 $$\def\:{\char\count255\global\advance\count255 by 1}
@@ -275,21 +241,21 @@ $$\def\:{\char\count255\global\advance\count255 by 1}
 \vskip 4pt
 \hrule
 \def\↑{\vrule height 10.5pt depth 4.5pt}
-\halign{\hbox to 0pt{\hskip -24pt\O{#0}\hfill}&amp;\↑
-\hbox to 40pt{\tt\hfill#\hfill\↑}&amp;
-&amp;\hbox to 40pt{\tt\hfill#\hfill\↑}\cr
-04&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-05&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-06&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-07&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-10&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-11&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-12&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-13&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-14&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-15&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-16&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr\noalign{\hrule}
-17&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:&amp;\:\cr}
+\halign{\hbox to 0pt{\hskip -24pt\O{#0}\hfill}&\↑
+\hbox to 40pt{\tt\hfill#\hfill\↑}&
+&\hbox to 40pt{\tt\hfill#\hfill\↑}\cr
+04&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+05&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+06&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+07&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+10&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+11&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+12&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+13&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+14&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+15&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+16&\:&\:&\:&\:&\:&\:&\:&\:\cr\noalign{\hrule}
+17&\:&\:&\:&\:&\:&\:&\:\cr}
 \hrule width 280pt}$$
 (Actually, of course, code @'040 is an invisible blank space.)  Code @'136
 was once an upward arrow (\.{\char'13}), and code @'137 was
@@ -297,7 +263,7 @@ once a left arrow (\.↑↑X), in olden times when the first draft
 of ASCII code was prepared; but \.{WEB} works with today's standard
 ASCII in which those codes represent circumflex and underline as shown.
 
-@&lt;Types...@&gt;=
+@<Types...@>=
 @!ASCII_code=0..127; {seven-bit numbers, a subrange of the integers}
 
 @ The original \PASCAL\ compiler was designed in the late 60s, when six-bit
@@ -315,20 +281,20 @@ to stand for the data type of the characters in the input and output
 files.  We shall also assume that |text_char| consists of the elements
 |chr(first_text_char)| through |chr(last_text_char)|, inclusive. The
 following definitions should be adjusted if necessary.
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
 @d text_char == char {the data type of characters in text files}
 @d first_text_char=0 {ordinal number of the smallest element of |text_char|}
 @d last_text_char=127 {ordinal number of the largest element of |text_char|}
 
-@&lt;Types...@&gt;=
+@<Types...@>=
 @!text_file=packed file of text_char;
 
 @ The \.{WEAVE} and \.{TANGLE} processors convert between ASCII code and
 the user's external character set by means of arrays |xord| and |xchr|
 that are analogous to \PASCAL's |ord| and |chr| functions.
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!xord: array [text_char] of ASCII_code;
 	{specifies conversion of input characters}
 @!xchr: array [ASCII_code] of text_char;
@@ -349,14 +315,14 @@ incorrect to say \.{xchr[@@\'101]:="A"}, because |"A"| is a constant of
 type |integer|, not |char|, and because we have $|"A"|=65$ regardless of
 the external character set.
 
-@&lt;Set init...@&gt;=
+@<Set init...@>=
 xchr[@'40]←' ';
 xchr[@'41]←'!';
 xchr[@'42]←'"';
 xchr[@'43]←'#';
 xchr[@'44]←'$';
 xchr[@'45]←'%';
-xchr[@'46]←'&amp;';
+xchr[@'46]←'&';
 xchr[@'47]←'''';@/
 xchr[@'50]←'(';
 xchr[@'51]←')';
@@ -378,9 +344,9 @@ xchr[@'70]←'8';
 xchr[@'71]←'9';
 xchr[@'72]←':';
 xchr[@'73]←';';
-xchr[@'74]←'&lt;';
+xchr[@'74]←'<';
 xchr[@'75]←'=';
-xchr[@'76]←'&gt;';
+xchr[@'76]←'>';
 xchr[@'77]←'?';@/
 xchr[@'100]←'@@';
 xchr[@'101]←'A';
@@ -458,16 +424,16 @@ xchr[0]←' '; xchr[@'177]←' '; {these ASCII codes are not used}
 @d form_feed=@'14 {ASCII code used at end of page}
 @d carriage_return=@'15 {ASCII code used at end of line}
 @d left_arrow=@'30 {equivalent to `\.{:=}'}
-@d not_equal=@'32 {equivalent to `\.{&lt;&gt;}'}
-@d less_or_equal=@'34 {equivalent to `\.{&lt;=}'}
-@d greater_or_equal=@'35 {equivalent to `\.{&gt;=}'}
+@d not_equal=@'32 {equivalent to `\.{<>}'}
+@d less_or_equal=@'34 {equivalent to `\.{<=}'}
+@d greater_or_equal=@'35 {equivalent to `\.{>=}'}
 @d equivalence_sign=@'36 {equivalent to `\.{==}'}
 @d or_sign=@'37 {equivalent to `\.{or}'}
 
 @ When we initialize the |xord| array and the remaining parts of |xchr|,
 it will be convenient to make use of an index variable, |i|.
 
-@&lt;Local variables for init...@&gt;=
+@<Local variables for init...@>=
 @!i:0..last_text_char;
 
 @ Here now is the system-dependent part of the character set.
@@ -478,11 +444,11 @@ this module should be changed to
 $$\hbox{|for i←1 to @'37 do xchr[i]←chr(i);|}$$
 \.{WEB}'s character set is essentially identical to MIT's, even with respect to
 characters less than @'40.
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
 Changes to the present module will make \.{WEB} more friendly on computers
 that have an extended character set, so that one can type things like
-\.↑↑Z\ instead of \.{&lt;&gt;}. If you have an extended set of characters that
+\.↑↑Z\ instead of \.{<>}. If you have an extended set of characters that
 are easily incorporated into text files, you can assign codes arbitrarily
 here, giving an |xchr| equivalent to whatever characters the users of
 \.{WEB} are allowed to have in their input files, provided that unsuitable
@@ -496,16 +462,17 @@ convenient extended character set, then ``sanitized'' by applying another
 program that transliterated all of the non-standard characters into
 standard equivalents.)
 
-@&lt;Set init...@&gt;=
+@<Set init...@>=
 for i←1 to @'37 do xchr[i]←' ';
 
 @ The following system-independent code makes the |xord| array contain a
 suitable inverse to the information in |xchr|.
 
-@&lt;Set init...@&gt;=
+@<Set init...@>=
 for i←first_text_char to last_text_char do xord[chr(i)]←@'40;
 for i←1 to @'176 do xord[xchr[i]]←i;
-@* Input and output.
+
+@* Input and output.
 The input conventions of this program are intended to be very much like those
 of \TeX\ (except, of course, that they are much simpler, because much less
 needs to be done). Furthermore they are identical to those of \.{TANGLE}.
@@ -518,7 +485,7 @@ dynamically by the user, and since there is no input from the terminal.
 
 @ Terminal output is done by writing on file |term_out|, which is assumed to
 consist of characters of type |text_char|:
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
 @d print(#)==write(term_out,#) {`|print|' means write on the terminal}
 @d print_ln(#)==write_ln(term_out,#) {`|print|' and then start new line}
@@ -527,28 +494,28 @@ consist of characters of type |text_char|:
 	begin new_line; print(#);
 	end
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!term_out:text_file; {the terminal as an output file}
 
 @ Different systems have different ways of specifying that the output on a
 certain file will appear on the user's terminal. Here is one way to do this
 on the \PASCAL\ system that was used in \.{TANGLE}'s initial development:
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
-@&lt;Set init...@&gt;=
+@<Set init...@>=
 rewrite(term_out,'TTY:'); {send |term_out| output to the terminal}
 
 @ The |update_terminal| procedure is called when we want
 to make sure that everything we have output to the terminal so far has
 actually left the computer's internal buffers and been sent.
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
 @d update_terminal == break(term_out) {empty the terminal output buffer}
 
 @ The main input comes from |web_file|; this input may be overridden
 by changes in |change_file|. (If |change_file| is empty, there are no changes.)
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!web_file:text_file; {primary input}
 @!change_file:text_file; {updates}
 
@@ -557,7 +524,7 @@ in the program header, we assume that the \PASCAL\ runtime system has
 already checked that suitable file names have been given; therefore no
 additional error checking needs to be done. We will see below that
 \.{WEAVE} reads through the entire input twice.
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
 @p procedure open_input; {prepare to read |web_file| and |change_file|}
 begin reset(web_file); reset(change_file);
@@ -565,21 +532,21 @@ end;
 
 @ The main output goes to |tex_file|.
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!tex_file: text_file;
 
 @ The following code opens |tex_file|.
 Since this file was listed in the program header, we assume that the
 \PASCAL\ runtime system has checked that a suitable external file name has
 been given.
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
-@&lt;Set init...@&gt;=
+@<Set init...@>=
 rewrite(tex_file);
 
 @ Input goes into an array called |buffer|.
 
-@&lt;Globals...@&gt;=@!buffer: array[0..long_buf_size] of ASCII_code;
+@<Globals...@>=@!buffer: array[0..long_buf_size] of ASCII_code;
 
 @ The |input_ln| procedure brings the next line of input from the specified
 file into the |buffer| array and returns the value |true|, unless the file has
@@ -588,11 +555,11 @@ of \TeX\ are followed; i.e., |ASCII_code| numbers representing the next line
 of the file are input into |buffer[0]|, |buffer[1]|, \dots,
 |buffer[limit-1]|; trailing blanks are ignored;
 and the global variable |limit| is set to the length of the
-@↑system dependencies@&gt;
+@↑system dependencies@>
 line. The value of |limit| must be strictly less than |buf_size|.
 
 We assume that none of the |ASCII_code| values
-of |buffer[j]| for |0≤j&lt;limit| is equal to 0, @'177, |line_feed|, |form_feed|,
+of |buffer[j]| for |0≤j<limit| is equal to 0, @'177, |line_feed|, |form_feed|,
 or |carriage_return|. Since |buf_size| is strictly less than |long_buf_size|,
 some of \.{WEAVE}'s routines use the fact that it is safe to refer to
 |buffer[limit+2]| without overstepping the bounds of the array.
@@ -610,20 +577,21 @@ else	begin while not eoln(f) do
 			begin while not eoln(f) do get(f);
 			decr(limit); {keep |buffer[buf_size]| empty}
 			print_nl('! Input line too long'); loc←0; error;
-@.Input line too long@&gt;
+@.Input line too long@>
 			end;
 		end;
 	read_ln(f); limit←final_limit; input_ln←true;
 	end;
 end;
-@* Reporting errors to the user.
+
+@* Reporting errors to the user.
 The \.{WEAVE} processor operates in three phases: first it inputs the source
 file and stores cross-reference data, then it inputs the source once again and
 produces the \TeX\ output file, and finally it sorts and outputs the index.
 
 The global variables |phase_one| and |phase_three| tell which Phase we are in.
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!phase_one: boolean; {|true| in Phase I, |false| in Phases II and III}
 @!phase_three: boolean; {|true| in Phase III, |false| in Phases I and II}
 
@@ -631,7 +599,7 @@ The global variables |phase_one| and |phase_three| tell which Phase we are in.
 we usually want to look at the contents of memory.
 A special procedure will be declared later for this purpose.
 
-@&lt;Error handling...@&gt;=
+@<Error handling...@>=
 @!debug@+ procedure debug_help; forward;@+gubed
 
 @ The command `|err_print('! Error message')|' will report a syntax error to
@@ -651,10 +619,10 @@ during the second.
 		end;
 	end
 
-@&lt;Error handling...@&gt;=
+@<Error handling...@>=
 procedure error; {prints `\..' and location of error message}
 var@!k,@!l: 0..long_buf_size; {indices into |buffer|}
-begin @&lt;Print error location based on input buffer@&gt;;
+begin @<Print error location based on input buffer@>;
 update_terminal; mark_error;
 @!debug debug_skipped←debug_cycle;debug_help;@+gubed
 end;
@@ -665,9 +633,9 @@ unlooked-at position in |buffer|, the current line number, and whether or not
 the current line is from |change_file| or |web_file|.
 This routine should be modified on systems whose standard text editor
 has special line-numbering conventions.
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
-@&lt;Print error location based on input buffer@&gt;=
+@<Print error location based on input buffer@>=
 begin if changing then print('. (change file ')@+else print('. (');
 print_ln('l.', line:1, ')');
 if loc≥limit then l←limit else l←loc;
@@ -683,12 +651,12 @@ print(' '); {this space separates the message from future asterisks}
 end
 
 @ The |jump_out| procedure just cuts across all active procedure levels
-and jumps out of the program. This is the only non-local \&amp;{goto} statement
+and jumps out of the program. This is the only non-local \&{goto} statement
 in \.{WEAVE}. It is used when no recovery from a particular error has
 been provided.
 
 Some \PASCAL\ compilers do not implement non-local |goto| statements.
-@↑system dependencies@&gt;
+@↑system dependencies@>
 In such cases the code that appears at label |end_of_WEAVE| should be
 copied into the |jump_out| procedure, followed by a call to a system procedure
 that terminates the program.
@@ -696,7 +664,7 @@ that terminates the program.
 @d fatal_error(#)==begin new_line; print(#); error; mark_fatal; jump_out;
 	end
 
-@&lt;Error handling...@&gt;=
+@<Error handling...@>=
 procedure jump_out;
 begin goto end_of_WEAVE;
 end;
@@ -707,13 +675,14 @@ maintenance person, not the user. In such cases the program says
 |confusion('indication of where we are')|.
 
 @d confusion(#)==fatal_error('! This can''t happen (',#,')')
-@.This can't happen@&gt;
+@.This can't happen@>
 
 @ An overflow stop occurs if \.{WEAVE}'s tables aren't large enough.
 
 @d overflow(#)==fatal_error('! Sorry, ',#,' capacity exceeded')
-@.Sorry, x capacity exceeded@&gt;
-@* Data structures.
+@.Sorry, x capacity exceeded@>
+
+@* Data structures.
 During the first phase of its processing, \.{WEAVE} puts identifier names,
 index entries, and module names into the large |byte_mem| array, which is
 packed with seven-bit integers. Allocation is sequential, since names are
@@ -723,7 +692,7 @@ An auxiliary array |byte_start| is used as a directory for |byte_mem|,
 and the |link|, |ilk|, and |xref| arrays give further information about names.
 These auxiliary arrays consist of sixteen-bit items.
 
-@&lt;Types...@&gt;=
+@<Types...@>=
 @!eight_bits=0..255; {unsigned one-byte quantity}
 @!sixteen_bits=0..65535; {unsigned two-byte quantity}
 
@@ -739,7 +708,7 @@ ways if |ww=1|.)
 
 @d ww=2 {we multiply the byte capacity by approximately this amount}
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!byte_mem: packed array [0..ww-1,0..max_bytes] of ASCII_code;
 	{characters of names}
 @!byte_start: array [0..max_names] of sixteen_bits; {directory into |byte_mem|}
@@ -757,30 +726,30 @@ A `|name_pointer|' variable, which signifies a name, is an index into
 |byte_start|. The actual sequence of characters in the name pointed to by
 |p| appears in positions |byte_start[p]| to |byte_start[p+ww]-1|, inclusive,
 in the segment of |byte_mem| whose first index is |p mod ww|. Thus, when
-|ww=2| the even-numbered name bytes appear in |byte_mem[0,@t$*$@&gt;]|
-and the odd-numbered ones appear in |byte_mem[1,@t$*$@&gt;]|.
+|ww=2| the even-numbered name bytes appear in |byte_mem[0,@t$*$@>]|
+and the odd-numbered ones appear in |byte_mem[1,@t$*$@>]|.
 The pointer 0 is used for undefined module names; we don't
 want to use it for the names of identifiers, since 0 stands for a null
 pointer in a linked list.
 
 We usually have |byte_start[name_ptr+w]=byte_ptr[(name_ptr+w) mod ww]|
-for |0≤w&lt;ww|, since these are the starting positions for the next |ww|
+for |0≤w<ww|, since these are the starting positions for the next |ww|
 names to be stored in |byte_mem|.
 
 @d length(#)==byte_start[#+ww]-byte_start[#] {the length of a name}
 
-@&lt;Types...@&gt;=
+@<Types...@>=
 @!name_pointer=0..max_names; {identifies a name}
 
-@ @&lt;Global...@&gt;=
+@ @<Global...@>=
 @!name_ptr:name_pointer; {first unused position in |byte_start|}
 @!byte_ptr:array [0..ww-1] of 0..max_bytes;
 	{first unused position in |byte_mem|}
 
-@ @&lt;Local variables for init...@&gt;=
+@ @<Local variables for init...@>=
 @!wi: 0..ww-1; {to initialize the |byte_mem| indices}
 
-@ @&lt;Set init...@&gt;=
+@ @<Set init...@>=
 for wi←0 to ww-1 do
 	begin byte_start[wi]←0; byte_ptr[wi]←0;
 	end;
@@ -813,28 +782,28 @@ to be treated when \PASCAL\ code is being formatted.
 @d roman=1 {normal index entries have |roman| ilk}
 @d wildcard=2 {user-formatted index entries have |wildcard| ilk}
 @d typewriter=3 {`typewriter type' entries have |typewriter| ilk}
-@d reserved(#)==(ilk[#]&gt;typewriter) {tells if a name is a reserved word}
-@d array_like=4 {\&amp;{array}, \&amp;{file}, \&amp;{set}}
-@d begin_like=5 {\&amp;{begin}}
-@d case_like=6 {\&amp;{case}}
-@d const_like=7 {\&amp;{const}, \&amp;{label}, \&amp;{type}}
-@d div_like=8 {\&amp;{div}, \&amp;{mod}}
-@d do_like=9 {\&amp;{do}, \&amp;{of}, \&amp;{then}}
-@d else_like=10 {\&amp;{else}}
-@d end_like=11 {\&amp;{end}}
-@d for_like=12 {\&amp;{for}, \&amp;{while}, \&amp;{with}}
-@d goto_like=13 {\&amp;{goto}, \&amp;{packed}}
-@d if_like=14 {\&amp;{if}}
-@d in_like=15 {\&amp;{in}}
-@d nil_like=16 {\&amp;{nil}}
-@d proc_like=17 {\&amp;{function}, \&amp;{procedure}, \&amp;{program}}
-@d record_like=18 {\&amp;{record}}
-@d repeat_like=19 {\&amp;{repeat}}
-@d to_like=20 {\&amp;{downto}, \&amp;{to}}
-@d until_like=21 {\&amp;{until}}
-@d var_like=22 {\&amp;{var}}
-@d loop_like=23 {\&amp;{loop}, \&amp;{xclause}}
-@d char_like=24 {\&amp;{and}, \&amp;{or}, \&amp;{not}, \&amp;{in}}
+@d reserved(#)==(ilk[#]>typewriter) {tells if a name is a reserved word}
+@d array_like=4 {\&{array}, \&{file}, \&{set}}
+@d begin_like=5 {\&{begin}}
+@d case_like=6 {\&{case}}
+@d const_like=7 {\&{const}, \&{label}, \&{type}}
+@d div_like=8 {\&{div}, \&{mod}}
+@d do_like=9 {\&{do}, \&{of}, \&{then}}
+@d else_like=10 {\&{else}}
+@d end_like=11 {\&{end}}
+@d for_like=12 {\&{for}, \&{while}, \&{with}}
+@d goto_like=13 {\&{goto}, \&{packed}}
+@d if_like=14 {\&{if}}
+@d in_like=15 {\&{in}}
+@d nil_like=16 {\&{nil}}
+@d proc_like=17 {\&{function}, \&{procedure}, \&{program}}
+@d record_like=18 {\&{record}}
+@d repeat_like=19 {\&{repeat}}
+@d to_like=20 {\&{downto}, \&{to}}
+@d until_like=21 {\&{until}}
+@d var_like=22 {\&{var}}
+@d loop_like=23 {\&{loop}, \&{xclause}}
+@d char_like=24 {\&{and}, \&{or}, \&{not}, \&{in}}
 
 @ The names of modules are stored in |byte_mem| together
 with the identifier names, but a hash table is not used for them because
@@ -847,7 +816,7 @@ root of this tree is |rlink[0]|.
 @d rlink==ilk {right link in binary search tree for module names}
 @d root==rlink[0] {the root of the binary search tree for module names}
 
-@&lt;Set init...@&gt;=
+@<Set init...@>=
 root←0; {the binary search tree starts out with nothing in it}
 
 @ Here is a little procedure that prints the text of a given name on the
@@ -868,7 +837,7 @@ end;
 Modules which have been altered by a change file entry
 have their |changed_module| flag turned on during the first phase.
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!module_count:0..max_modules; {the current module number}
 @!changed_module: packed array [0..max_modules] of boolean; {is it changed?}
 @!change_exists: boolean; {has any module changed?}
@@ -900,7 +869,7 @@ on whether a module name is being defined or used.
 @d dlink(#)==xmem[#].dlink_field
 @d def_flag=10240 {must be strictly larger than |max_modules|}
 
-@ @&lt;Types...@&gt;=
+@ @<Types...@>=
 @!xref_number=0..max_refs;
 
 @ Definitions are classified into 15 types.
@@ -920,8 +889,8 @@ on whether a module name is being defined or used.
 @d dtype_colon_ital_dots=13
 @d dtype_equal_ital_dots=14
 
-@&lt;Globals...@&gt;=
-@!xmem:array[xref_number] of packed record@t@&gt;@/
+@<Globals...@>=
+@!xmem:array[xref_number] of packed record@t@>@/
 	@!num_field: sixteen_bits; {module number plus zero or |def_flag|}
 	@!xlink_field: sixteen_bits; {pointer to the previous cross reference}
 	@!dtype_field: sixteen_bits; {type of definition}
@@ -935,7 +904,7 @@ on whether a module name is being defined or used.
  @!const_name,@!packed_name:integer;
 @!danger_zone:boolean;
 
-@ @&lt;Set init...@&gt;=xref_ptr←0; xref_switch←0; mod_xref_switch←0; num(0)←0;
+@ @<Set init...@>=xref_ptr←0; xref_switch←0; mod_xref_switch←0; num(0)←0;
 danger_zone←false;
 xref[0]←0; {cross references to undefined modules}
 
@@ -955,7 +924,7 @@ var q:xref_number; {pointer to previous cross reference}
 begin if (reserved(p)∨(byte_start[p]+1=byte_start[p+ww]))∧
 	(xref_switch=0) then return;
 m←module_count+xref_switch; xref_switch←0; q←xref[p];
-if q&gt;0 then
+if q>0 then
 	begin n←num(q);
 	if (n=m)∨(n=m+def_flag) then return
 	else if m=n+def_flag then
@@ -966,10 +935,10 @@ if q&gt;0 then
 			end;
 	end;
 append_xref(m); xlink(xref_ptr)←q; xref[p]←xref_ptr;
-if m&gt;def_flag then
+if m>def_flag then
 	begin dtype(xref_ptr)←def_type; dname(xref_ptr)←def_name;
 	dback(xref_ptr)←p;
-	if def_type&gt;dtype_comma then
+	if def_type>dtype_comma then
 		begin append_xref(0); dtype(xref_ptr)←def_subtype;
 		dname(xref_ptr)←def_subname;
 		end;
@@ -993,7 +962,7 @@ $m_1+|def_flag|$, \dots, $m_k+|def_flag|$, $n_1$, \dots, $n_l$.
 @p procedure new_mod_xref(@!p:name_pointer);
 var q,@!r:xref_number; {pointers to previous cross references}
 begin q←xref[p]; r←0;
-if q&gt;0 then
+if q>0 then
 	begin if mod_xref_switch=0 then while num(q)≥def_flag do
 		begin r←q; q←xlink(q);
 		end
@@ -1013,7 +982,7 @@ are used to contain the result of \PASCAL\ code translated into \TeX\ form;
 further details about them will be explained later. A |text_pointer| variable
 is an index into |tok_start|.
 
-@&lt;Types...@&gt;=
+@<Types...@>=
 @!text_pointer=0..max_texts; {identifies a token list}
 
 @ The first position of |tok_mem|
@@ -1021,19 +990,20 @@ that is unoccupied by replacement text is called |tok_ptr|, and the first
 unused location of |tok_start| is called |text_ptr|.
 Thus, we usually have |tok_start[text_ptr]=tok_ptr|.
 
-@&lt;Glob...@&gt;=
-@t\hskip1em@&gt;@!tok_mem: packed array [0..max_toks] of sixteen_bits; {tokens}
-@t\hskip1em@&gt;@!tok_start: array [text_pointer] of sixteen_bits;
+@<Glob...@>=
+@t\hskip1em@>@!tok_mem: packed array [0..max_toks] of sixteen_bits; {tokens}
+@t\hskip1em@>@!tok_start: array [text_pointer] of sixteen_bits;
 	{directory into |tok_mem|}
-@t\hskip1em@&gt;@!text_ptr:text_pointer; {first unused position in |tok_start|}
-@t\hskip1em@&gt;@!tok_ptr:0..max_toks; {first unused position in |tok_mem|}
+@t\hskip1em@>@!text_ptr:text_pointer; {first unused position in |tok_start|}
+@t\hskip1em@>@!tok_ptr:0..max_toks; {first unused position in |tok_mem|}
 stat@!max_tok_ptr,@!max_txt_ptr:0..max_toks; {largest values occurring}
 tats
 
-@ @&lt;Set init...@&gt;=
+@ @<Set init...@>=
 tok_ptr←1; text_ptr←1; tok_start[0]←1; tok_start[1]←1;
 stat max_tok_ptr←1; max_txt_ptr←1;@+tats
-@* Searching for identifiers.
+
+@* Searching for identifiers.
 The hash table described above is updated by the |id_lookup| procedure,
 which finds a given identifier and returns a pointer to its index in
 |byte_start|. The identifier is supposed to match character by character
@@ -1047,7 +1017,7 @@ to let |id_lookup| search for an identifier that is present in the |buffer|
 array. Two other global variables specify its position in the buffer: the
 first character is |buffer[id_first]|, and the last is |buffer[id_loc-1]|.
 
-@&lt;Glob...@&gt;=
+@<Glob...@>=
 @!id_first:0..long_buf_size; {where the current identifier begins in the buffer}
 @!id_loc:0..long_buf_size; {just after the current identifier in the buffer}
 @#
@@ -1055,10 +1025,10 @@ first character is |buffer[id_first]|, and the last is |buffer[id_loc-1]|.
 
 @ Initially all the hash lists are empty.
 
-@&lt;Local variables for init...@&gt;=
+@<Local variables for init...@>=
 @!h:0..hash_size; {index into hash-head array}
 
-@ @&lt;Set init...@&gt;=
+@ @<Set init...@>=
 for h:=0 to hash_size-1 do hash[h]:=0;
 
 @ Here now is the main procedure for finding identifiers (and index
@@ -1075,9 +1045,9 @@ var i:0..long_buf_size; {index into |buffer|}
 @!l:0..long_buf_size; {length of the given identifier}
 @!p:name_pointer; {where the identifier is being sought}
 begin l:=id_loc-id_first; {compute the length}
-@&lt;Compute the hash code |h|@&gt;;
-@&lt;Compute the name location |p|@&gt;;
-if p=name_ptr then @&lt;Enter a new name into the table at position |p|@&gt;;
+@<Compute the hash code |h|@>;
+@<Compute the name location |p|@>;
+if p=name_ptr then @<Enter a new name into the table at position |p|@>;
 id_lookup:=p;
 end;
 
@@ -1085,30 +1055,30 @@ end;
 ASCII codes is $c_1c_2\ldots c_m$, its hash value will be
 $$(2↑{n-1}c_1+2↑{n-2}c_2+\cdots+c_n)\,\bmod\,|hash_size|.$$
 
-@&lt;Compute the hash...@&gt;=
+@<Compute the hash...@>=
 h:=buffer[id_first]; i:=id_first+1;
-while i&lt;id_loc do
+while i<id_loc do
   begin h:=(h+h+buffer[i]) mod hash_size; incr(i);
   end
 
 @ If the identifier is new, it will be placed in position |p=name_ptr|,
 otherwise |p| will point to its existing location.
 
-@&lt;Compute the name location...@&gt;=
+@<Compute the name location...@>=
 p←hash[h];
 while p≠0 do
 	begin if (length(p)=l)∧((ilk[p]=t)∨((t=normal)∧ reserved(p))) then
-		@&lt;Compare name |p| with current identifier,
-			|goto found| if equal@&gt;;
+		@<Compare name |p| with current identifier,
+			|goto found| if equal@>;
 	p←link[p];
 	end;
 p←name_ptr; {the current identifier is new}
 link[p]←hash[h]; hash[h]←p; {insert |p| at beginning of hash list}
 found:
 
-@ @&lt;Compare name |p|...@&gt;=
+@ @<Compare name |p|...@>=
 begin i←id_first; k←byte_start[p]; w←p mod ww;
-while (i&lt;id_loc)∧(buffer[i]=byte_mem[w,k]) do
+while (i<id_loc)∧(buffer[i]=byte_mem[w,k]) do
 	begin incr(i); incr(k);
 	end;
 if i=id_loc then goto found; {all characters agree}
@@ -1118,18 +1088,19 @@ end
 
 @d undef_val==10000000
 
-@&lt;Enter a new name...@&gt;=
+@<Enter a new name...@>=
 begin w←name_ptr mod ww;
-if byte_ptr[w]+l&gt;max_bytes then overflow('byte memory');
-if name_ptr+ww&gt;max_names then overflow('name');
+if byte_ptr[w]+l>max_bytes then overflow('byte memory');
+if name_ptr+ww>max_names then overflow('name');
 i←id_first; k←byte_ptr[w]; {get ready to move the identifier into |byte_mem|}
-while i&lt;id_loc do
+while i<id_loc do
 	begin byte_mem[w,k]←buffer[i]; incr(k); incr(i);
 	end;
 byte_ptr[w]←k; byte_start[name_ptr+ww]←k; incr(name_ptr);
 ilk[p]←t; xref[p]←0; def_val[p]←undef_val;
 end
-@* Initializing the table of reserved words.
+
+@* Initializing the table of reserved words.
 We have to get \PASCAL's reserved words into the hash table, and the
 simplest way to do this is to insert them every time \.{WEAVE} is run.
 A few macros permit us to do the initialization with a compact program.
@@ -1152,13 +1123,13 @@ A few macros permit us to do the initialization with a compact program.
 @d id8==id_first←2; sid2
 @d id9==id_first←1; sid1
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!cur_name:name_pointer; {points to the identifier just inserted}
 
 @ The intended use of the macros above might not be immediately obvious,
 but the riddle is answered by the following:
 
-@&lt;Store all the reserved words@&gt;=
+@<Store all the reserved words@>=
 id_loc←10;@/
 id3("a")("n")("d")(char_like+and_sign);@/
 id5("a")("r")("r")("a")("y")(array_like);@/
@@ -1196,12 +1167,13 @@ id3("v")("a")("r")(var_like);@/
 id5("w")("h")("i")("l")("e")(for_like);@/
 id4("w")("i")("t")("h")(for_like);@/
 id7("x")("c")("l")("a")("u")("s")("e")(loop_like);@/
-@* Searching for module names.
+
+@* Searching for module names.
 The |mod_lookup| procedure finds the module name |mod_text[1..l]| in the
 search tree, after inserting it if necessary, and returns a pointer to
 where it was found.
 
-@&lt;Glob...@&gt;=
+@<Glob...@>=
 @!mod_text:array [0..longest_name] of ASCII_code; {name being sought for}
 
 @ According to the rules of \.{WEB}, no module name
@@ -1226,41 +1198,41 @@ var c:less..extension; {comparison between two names}
 @!q:name_pointer; {father of node |p|}
 begin c←greater; q←0; p←root;
 while p≠0 do
-	begin @&lt;Set variable |c| to the result of comparing the given name
-		to name |p|@&gt;;
+	begin @<Set variable |c| to the result of comparing the given name
+		to name |p|@>;
 	q←p;
 	if c=less then p←llink[q]
 	else if c=greater then p←rlink[q]
 	else goto found;
 	end;
-@&lt;Enter a new module name into the tree@&gt;;
+@<Enter a new module name into the tree@>;
 found: if c≠equal then
 	begin err_print('! Incompatible section names'); p←0;
-@.Incompatible section names@&gt;
+@.Incompatible section names@>
 	end;
 mod_lookup←p;
 end;
 
-@ @&lt;Enter a new module name...@&gt;=
+@ @<Enter a new module name...@>=
 w←name_ptr mod ww; k←byte_ptr[w];
-if k+l&gt;max_bytes then overflow('byte memory');
-if name_ptr&gt;max_names-ww then overflow('name');
+if k+l>max_bytes then overflow('byte memory');
+if name_ptr>max_names-ww then overflow('name');
 p←name_ptr;
 if c=less then llink[q]←p else rlink[q]←p;
 llink[p]←0; rlink[p]←0; xref[p]←0; c←equal;
 for j←1 to l do byte_mem[w,k+j-1]←mod_text[j];
 byte_ptr[w]←k+l; byte_start[name_ptr+ww]←k+l; incr(name_ptr);
 
-@ @&lt;Set variable |c|...@&gt;=
+@ @<Set variable |c|...@>=
 begin k←byte_start[p]; w←p mod ww; c←equal; j←1;
-while (k&lt;byte_start[p+ww]) ∧ (j≤l) ∧ (mod_text[j]=byte_mem[w,k]) do
+while (k<byte_start[p+ww]) ∧ (j≤l) ∧ (mod_text[j]=byte_mem[w,k]) do
 	begin incr(k); incr(j);
 	end;
 if k=byte_start[p+ww] then
-	if j&gt;l then c←equal
+	if j>l then c←equal
 	else c←extension
-else if j&gt;l then c←prefix
-else if mod_text[j]&lt;byte_mem[w,k] then c←less
+else if j>l then c←prefix
+else if mod_text[j]<byte_mem[w,k] then c←less
 else c←greater;
 end
 
@@ -1289,7 +1261,7 @@ var c:less..extension; {comparison between two names}
 @!r:name_pointer; {extension found}
 begin q←0; p←root; count←0; r←0; {begin search at root of tree}
 while p≠0 do
-	begin @&lt;Set variable |c| to the result of comparing...@&gt;;
+	begin @<Set variable |c| to the result of comparing...@>;
 	if c=less then p←llink[p]
 	else if c=greater then p←rlink[p]
 	else	begin r←p; incr(count); q←rlink[p]; p←llink[p];
@@ -1300,12 +1272,13 @@ while p≠0 do
 	end;
 if count≠1 then
 	if count=0 then err_print('! Name does not match')
-@.Name does not match@&gt;
+@.Name does not match@>
 	else err_print('! Ambiguous prefix');
-@.Ambiguous prefix@&gt;
+@.Ambiguous prefix@>
 prefix_lookup←r; {the result will be 0 if there was no match}
 end;
-@* Lexical scanning.
+
+@* Lexical scanning.
 Let us now consider the subroutines that read the \.{WEB} source file
 and break it into meaningful units. There are four such procedures:
 One simply skips to the next `\.{@@\ }' or `\.{@@*}' that begins a
@@ -1318,7 +1291,7 @@ a \PASCAL\ text.
 that takes care of merging |change_file| into |web_file|. The |get_line|
 procedure also updates the line numbers for error messages.
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!line:integer; {the number of the current line in the current file}
 @!other_line:integer; {the number of the current line in the input file that
 	is not currently being read}
@@ -1335,14 +1308,14 @@ routine will be sure to report the correct line number.
 @d change_changing==
 	changing ← ¬ changing;
 	temp_line←other_line; other_line←line; line←temp_line
-		{|line @t$\null\BA\null$@&gt; other_line|}
+		{|line @t$\null\BA\null$@> other_line|}
 
 @ When |changing| is |false|, the next line of |change_file| is kept in
 |change_buffer[0..change_limit]|, for purposes of comparison with the next
 line of |web_file|. After the change file has been completely input, we
 set |change_limit←0|, so that no further matches will be made.
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!change_buffer:array[0..buf_size] of ASCII_code;
 @!change_limit:0..buf_size; {the last position occupied in |change_buffer|}
 
@@ -1353,7 +1326,7 @@ label exit;
 var k:0..buf_size; {index into the buffers}
 begin lines_dont_match←true;
 if change_limit≠limit then return;
-if limit&gt;0 then
+if limit>0 then
 	for k←0 to limit-1 do if change_buffer[k]≠buffer[k] then return;
 lines_dont_match←false;
 exit: end;
@@ -1368,9 +1341,9 @@ when |changing| is true; hence error messages will be reported correctly.
 label continue, done, exit;
 var k:0..buf_size; {index into the buffers}
 begin change_limit←0; {this value will be used if the change file ends}
-@&lt;Skip over comment lines in the change file; |return| if end of file@&gt;;
-@&lt;Skip to the next nonblank line; |return| if end of file@&gt;;
-@&lt;Move |buffer| and |limit| to |change_buffer| and |change_limit|@&gt;;
+@<Skip over comment lines in the change file; |return| if end of file@>;
+@<Skip to the next nonblank line; |return| if end of file@>;
+@<Move |buffer| and |limit| to |change_buffer| and |change_limit|@>;
 exit: end;
 
 @ While looking for a line that begins with \.{@@x} in the change file,
@@ -1378,35 +1351,35 @@ we allow lines that begin with \.{@@}, as long as they don't begin with
 \.{@@y} or \.{@@z} (which would probably indicate that the change file is
 fouled up).
 
-@&lt;Skip over comment lines in the change file...@&gt;=
+@<Skip over comment lines in the change file...@>=
 loop@+	begin incr(line);
 	if not input_ln(change_file) then return;
-	if limit&lt;2 then goto continue;
+	if limit<2 then goto continue;
 	if buffer[0]≠"@@" then goto continue;
 	if (buffer[1]≥"X")∧(buffer[1]≤"Z") then
 		buffer[1]←buffer[1]+"z"-"Z"; {lowercasify}
 	if buffer[1]="x" then goto done;
 	if (buffer[1]="y")∨(buffer[1]="z") then
 		begin loc←2; err_print('! Where is the matching @@x?');
-@.Where is the match...@&gt;
+@.Where is the match...@>
 		end;
 continue: end;
 done:
 
 @ Here we are looking at lines following the \.{@@x}.
 
-@&lt;Skip to the next nonblank line...@&gt;=
+@<Skip to the next nonblank line...@>=
 repeat incr(line);
 	if not input_ln(change_file) then
 		begin err_print('! Change file ended after @@x');
-@.Change file ended...@&gt;
+@.Change file ended...@>
 		return;
 		end;
-until limit&gt;0;
+until limit>0;
 
-@ @&lt;Move |buffer| and |limit| to |change_buffer| and |change_limit|@&gt;=
+@ @<Move |buffer| and |limit| to |change_buffer| and |change_limit|@>=
 begin change_limit←limit;
-if limit&gt;0 then for k←0 to limit-1 do change_buffer[k]←buffer[k];
+if limit>0 then for k←0 to limit-1 do change_buffer[k]←buffer[k];
 end
 
 @ The following procedure is used to see if the next change entry should
@@ -1428,37 +1401,37 @@ loop@+	begin change_changing; {now it's |true|}
 	incr(line);
 	if not input_ln(change_file) then
 		begin err_print('! Change file ended before @@y');
-@.Change file ended...@&gt;
+@.Change file ended...@>
 		change_limit←0;	change_changing; {|false| again}
 		return;
 		end;
-	@&lt;If the current line starts with \.{@@y},
-		report any discrepancies and |return|@&gt;;
-	@&lt;Move |buffer| and |limit|...@&gt;;
+	@<If the current line starts with \.{@@y},
+		report any discrepancies and |return|@>;
+	@<Move |buffer| and |limit|...@>;
 	change_changing; {now it's |false|}
 	incr(line);
 	if not input_ln(web_file) then
 		begin err_print('! WEB file ended during a change');
-@.WEB file ended...@&gt;
+@.WEB file ended...@>
 		input_has_ended←true; return;
 		end;
 	if lines_dont_match then incr(n);
 	end;
 exit: end;
 
-@ @&lt;If the current line starts with \.{@@y}...@&gt;=
-if limit&gt;1 then if buffer[0]="@@" then
+@ @<If the current line starts with \.{@@y}...@>=
+if limit>1 then if buffer[0]="@@" then
 	begin if (buffer[1]≥"X")∧(buffer[1]≤"Z") then
 		buffer[1]←buffer[1]+"z"-"Z"; {lowercasify}
 	if (buffer[1]="x")∨(buffer[1]="z") then
 		begin loc←2; err_print('! Where is the matching @@y?');
-@.Where is the match...@&gt;
+@.Where is the match...@>
 		end
 	else if buffer[1]="y" then
-		begin if n&gt;0 then
+		begin if n>0 then
 			begin loc←2; err_print('! Hmm... ',n:1,
 				' of the preceding lines failed to match');
-@.Hmm... n of the preceding...@&gt;
+@.Hmm... n of the preceding...@>
 			end;
 		return;
 		end;
@@ -1473,16 +1446,16 @@ changing←true; prime_the_change_buffer; change_changing;@/
 limit←0; loc←1; buffer[0]←" "; input_has_ended←false;
 end;
 
-@ The |get_line| procedure is called when |loc&gt;limit|; it puts the next
+@ The |get_line| procedure is called when |loc>limit|; it puts the next
 line of merged input into the buffer and updates the other variables
 appropriately. A space is placed at the right end of the line.
 
 @p procedure get_line; {inputs the next line}
 label restart;
 begin restart: if changing then changed_module[module_count]←true
-else	@&lt;Read from |web_file| and maybe turn on |changing|@&gt;;
+else	@<Read from |web_file| and maybe turn on |changing|@>;
 if changing then
-	begin @&lt;Read from |change_file| and maybe turn off |changing|@&gt;;
+	begin @<Read from |change_file| and maybe turn off |changing|@>;
 	if not changing then
 		begin changed_module[module_count]←true; goto restart;
 		end;
@@ -1490,28 +1463,28 @@ if changing then
 loc←0; buffer[limit]←" ";
 end;
 
-@ @&lt;Read from |web_file|...@&gt;=
+@ @<Read from |web_file|...@>=
 begin incr(line);
 if not input_ln(web_file) then input_has_ended←true
 else if limit=change_limit then
 	if buffer[0]=change_buffer[0] then
-		if change_limit&gt;0 then check_change;
+		if change_limit>0 then check_change;
 end
 
-@ @&lt;Read from |change_file|...@&gt;=
+@ @<Read from |change_file|...@>=
 begin incr(line);
 if not input_ln(change_file) then
 	begin err_print('! Change file ended without @@z');
-@.Change file ended...@&gt;
+@.Change file ended...@>
 	buffer[0]←"@@"; buffer[1]←"z"; limit←2;
 	end;
-if limit&gt;1 then {check if the change has ended}
+if limit>1 then {check if the change has ended}
 	if buffer[0]="@@" then
 		begin if (buffer[1]≥"X")∧(buffer[1]≤"Z") then
 			buffer[1]←buffer[1]+"z"-"Z"; {lowercasify}
 		if (buffer[1]="x")∨(buffer[1]="y") then
 			begin loc←2; err_print('! Where is the matching @@z?');
-@.Where is the match...@&gt;
+@.Where is the match...@>
 			end
 		else if buffer[1]="z" then
 			begin prime_the_change_buffer; change_changing;
@@ -1522,12 +1495,12 @@ end
 @ At the end of the program, we will tell the user if the change file
 had a line that didn't match any relevant line in |web_file|.
 
-@&lt;Check that all changes have been read@&gt;=
+@<Check that all changes have been read@>=
 if change_limit≠0 then {|changing| is false}
 	begin for loc←0 to change_limit do buffer[loc]←change_buffer[loc];
 	limit←change_limit; changing←true; line←other_line; loc←change_limit;
 	err_print('! Change file entry did not match');
-@.Change file entry did not match@&gt;
+@.Change file entry did not match@>
 	end
 
 @ Control codes in \.{WEB}, which begin with `\.{@@}', are converted
@@ -1537,7 +1510,7 @@ milestones, and the code of |new_module| should be the largest of
 all. Some of these numeric control codes take the place of ASCII
 control codes that will not otherwise appear in the output of the
 scanning routines.
-@↑ASCII code@&gt;
+@↑ASCII code@>
 
 @d ignore=0 {control code of no interest to \.{WEAVE}}
 @d verbatim=@'2 {extended ASCII alpha will not appear}
@@ -1555,7 +1528,7 @@ scanning routines.
 @d xref_typewriter=@'205 {control code for `\.{@@.}'}
 @d TeX_string=@'206 {control code for `\.{@@t}'}
 @d check_sum=@'207 {control code for `\.{@@\$}'}
-@d join=@'210 {control code for `\.{@@\&amp;}'}
+@d join=@'210 {control code for `\.{@@\&}'}
 @d thin_space=@'211 {control code for `\.{@@,}'}
 @d math_break=@'212 {control code for `\.{@@\char'174}'}
 @d line_break=@'213 {control code for `\.{@@/}'}
@@ -1565,7 +1538,7 @@ scanning routines.
 @d format=@'217 {control code for `\.{@@f}'}
 @d definition=@'220 {control code for `\.{@@d}'}
 @d begin_Pascal=@'221 {control code for `\.{@@p}'}
-@d module_name=@'222 {control code for `\.{@@&lt;}'}
+@d module_name=@'222 {control code for `\.{@@<}'}
 @d new_module=@'223 {control code for `\.{@@\ }' and `\.{@@*}'}
 
 @ Control codes are converted from ASCII to \.{WEAVE}'s internal
@@ -1586,10 +1559,10 @@ begin case c of
 "{": control_code←begin_comment; {begin-comment delimiter}
 "}": control_code←end_comment; {end-comment delimiter}
 "P","p": control_code←begin_Pascal; {\PASCAL\ text in unnamed module}
-"&amp;": control_code←join; {concatenate two tokens}
-"&lt;": control_code←module_name; {beginning of a module name}
-"&gt;": begin err_print('! Extra @@&gt;'); control_code←ignore;
-@.Extra \AT!&gt;@&gt;
+"&": control_code←join; {concatenate two tokens}
+"<": control_code←module_name; {beginning of a module name}
+">": begin err_print('! Extra @@>'); control_code←ignore;
+@.Extra \AT!>@>
 	end; {end of module name should not be discovered in this way}
 "T","t": control_code←TeX_string; {\TeX\ box within \PASCAL}
 "!": control_code←underline; {set definition flag}
@@ -1603,9 +1576,9 @@ begin case c of
 "#": control_code←big_line_break; {forces end-of-line and some space besides}
 "+": control_code←no_line_break; {cancels end-of-line down to single space}
 ";": control_code←pseudo_semi; {acts like a semicolon, but is invisible}
-@t\4@&gt;@&lt;Special control codes allowed only when debugging@&gt;@;
+@t\4@>@<Special control codes allowed only when debugging@>@;
 othercases begin err_print('! Unknown control code'); control_code←ignore;
-@.Unknown control code@&gt;
+@.Unknown control code@>
 	end
 endcases;
 end;
@@ -1613,11 +1586,11 @@ end;
 @ If \.{WEAVE} is compiled with debugging commands, one can write
 \.{@@2}, \.{@@1}, and \.{@@0} to turn tracing fully on, partly on,
 and off, respectively.
-@.\AT!2@&gt;
-@.\AT!1@&gt;
+@.\AT!2@>
+@.\AT!1@>
 
-@&lt;Special control codes...@&gt;=
-@!debug@t@&gt;@/
+@<Special control codes...@>=
+@!debug@t@>@/
 "0","1","2": begin tracing←c-"0"; control_code←ignore;
 	end;
 "3": begin @{'*****************************************************'@}
@@ -1634,7 +1607,7 @@ actually been found.
 @p procedure skip_limbo; {skip to next module}
 label exit;
 var c:ASCII_code; {character following \.{@@}}
-begin loop if loc&gt;limit then
+begin loop if loc>limit then
 		begin get_line;
 		if input_has_ended then return;
 		end
@@ -1655,7 +1628,7 @@ assumed to exist at the very end of the file.
 @p function skip_TeX: eight_bits; {skip past pure \TeX\ code}
 label done;
 var c:eight_bits; {control code found}
-begin loop begin if loc&gt;limit then
+begin loop begin if loc>limit then
 		begin get_line;
 		if input_has_ended then
 			begin c←new_module; goto done;
@@ -1688,7 +1661,7 @@ One should call |skip_comment(1)| when beginning to scan a comment.
 	code in comments}
 label done;
 var c:ASCII_code; {the current character}
-begin loop begin if loc&gt;limit then
+begin loop begin if loc>limit then
 		begin get_line;
 		if input_has_ended then
 			begin bal←0; goto done;
@@ -1696,12 +1669,12 @@ begin loop begin if loc&gt;limit then
 		end;
 	c←buffer[loc]; incr(loc);
 	if c="|" then goto done;
-	@&lt;Do special things when |c="@@", "\", "{", "}"|; |goto done| at end@&gt;;
+	@<Do special things when |c="@@", "\", "{", "}"|; |goto done| at end@>;
 	end;
 done: skip_comment←bal;
 end;
 
-@ @&lt;Do special things when |c="@@"...@&gt;=
+@ @<Do special things when |c="@@"...@>=
 if c="@@" then
 	begin c←buffer[loc];
 	if (c≠" ")∧(c≠tab_mark)∧(c≠"*") then incr(loc)
@@ -1714,7 +1687,8 @@ else if c="}" then
 	begin decr(bal);
 	if bal=0 then goto done;
 	end
-@* Inputting the next token.
+
+@* Inputting the next token.
 As stated above, \.{WEAVE}'s most interesting lexical scanning routine is the
 |get_next| function that inputs the next token of \PASCAL\ input. However,
 |get_next| is not especially complicated.
@@ -1758,11 +1732,11 @@ the letters \.A through \.F should be treated as if they were digits.
 @d string=@'201 {\PASCAL\ string or \.{WEB} precomputed string}
 @d identifier=@'202 {\PASCAL\ identifier or reserved word}
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!cur_module: name_pointer; {name of module just scanned}
 @!scanning_hex: boolean; {are we scanning a hexadecimal constant?}
 
-@ @&lt;Set init...@&gt;=
+@ @<Set init...@>=
 scanning_hex←false;
 
 @ As one might expect, |get_next| consists mostly of a big switch
@@ -1776,20 +1750,20 @@ label restart,done,found;
 var c:eight_bits; {the current character}
 @!d:eight_bits; {the next character}
 @!j,@!k:0..longest_name; {indices into |mod_text|}
-begin restart: if loc&gt;limit then
+begin restart: if loc>limit then
 	begin get_line;
 	if input_has_ended then
 		begin c←new_module; goto found;
 		end;
 	end;
 c←buffer[loc]; incr(loc);
-if scanning_hex then @&lt;Go to |found| if |c| is a hexadecimal digit,
-	otherwise set |scanning_hex←false|@&gt;;
+if scanning_hex then @<Go to |found| if |c| is a hexadecimal digit,
+	otherwise set |scanning_hex←false|@>;
 case c of
-"A",up_to("Z"),"a",up_to("z"): @&lt;Get an identifier@&gt;;
-"'","""": @&lt;Get a string@&gt;;
-"@@": @&lt;Get control code and possible module name@&gt;;
-@t\4@&gt;@&lt;Compress two-symbol combinations like `\.{:=}'@&gt;@;
+"A",up_to("Z"),"a",up_to("z"): @<Get an identifier@>;
+"'","""": @<Get a string@>;
+"@@": @<Get control code and possible module name@>;
+@t\4@>@<Compress two-symbol combinations like `\.{:=}'@>@;
 " ",tab_mark: goto restart; {ignore spaces and tabs}
 othercases do_nothing
 endcases;
@@ -1797,7 +1771,7 @@ found:@!debug if trouble_shooting then debug_help;@;@+gubed@/
 get_next←c;
 end;
 
-@ @&lt;Go to |found| if |c| is a hexadecimal digit...@&gt;=
+@ @<Go to |found| if |c| is a hexadecimal digit...@>=
 if ((c≥"0")∧(c≤"9"))∨((c≥"A")∧(c≤"F")) then goto found
 else scanning_hex←false
 
@@ -1807,25 +1781,25 @@ for \TeX\ comments in \PASCAL\ text.
 
 @d compress(#)==begin if loc≤limit then begin c←#; incr(loc); end; end
 
-@&lt;Compress two-symbol...@&gt;=
+@<Compress two-symbol...@>=
 ".": if buffer[loc]="." then compress(double_dot)
 	else if buffer[loc]=")" then compress("]");
 ":": if buffer[loc]="=" then compress(left_arrow);
 "=": if buffer[loc]="=" then compress(equivalence_sign);
-"&gt;": if buffer[loc]="=" then compress(greater_or_equal);
-"&lt;": if buffer[loc]="=" then compress(less_or_equal)
-	else if buffer[loc]="&gt;" then compress(not_equal);
+">": if buffer[loc]="=" then compress(greater_or_equal);
+"<": if buffer[loc]="=" then compress(less_or_equal)
+	else if buffer[loc]=">" then compress(not_equal);
 "(": if buffer[loc]="*" then compress(begin_comment)
 	else if buffer[loc]="." then compress("[");
 "*": if buffer[loc]=")" then compress(end_comment);
 
-@ @&lt;Get an identifier@&gt;=
-begin if ((c="E")∨(c="e"))∧(loc&gt;1) then
+@ @<Get an identifier@>=
+begin if ((c="E")∨(c="e"))∧(loc>1) then
 	if (buffer[loc-2]≤"9")∧(buffer[loc-2]≥"0") then c←exponent;
 if c≠exponent then
 	begin decr(loc); id_first←loc;
 	repeat incr(loc); d←buffer[loc];
-	until ((d&lt;"0")∨((d&gt;"9")∧(d&lt;"A"))∨((d&gt;"Z")∧(d&lt;"a"))∨(d&gt;"z"))∧(d≠"_");
+	until ((d<"0")∨((d>"9")∧(d<"A"))∨((d>"Z")∧(d<"a"))∨(d>"z"))∧(d≠"_");
 	c←identifier; id_loc←loc;
 	end;
 end
@@ -1833,12 +1807,12 @@ end
 @ A string that starts and ends with single or double quote marks is
 scanned by the following piece of the program.
 
-@&lt;Get a string@&gt;=
+@<Get a string@>=
 begin id_first←loc-1;
 repeat d←buffer[loc]; incr(loc);
-if loc&gt;limit then
+if loc>limit then
 	begin err_print('! String constant didn''t end');
-@.String constant didn't end@&gt;
+@.String constant didn't end@>
 	loc←limit; d←c;
 	end;
 until d=c;
@@ -1848,7 +1822,7 @@ end
 @ After an \.{@@} sign has been scanned, the next character tells us
 whether there is more work to do.
 
-@&lt;Get control code and possible module name@&gt;=
+@<Get control code and possible module name@>=
 begin c←control_code(buffer[loc]); incr(loc);
 if c=underline then
 	begin xref_switch←def_flag; goto restart;
@@ -1857,19 +1831,19 @@ else if c=no_underline then
 	begin xref_switch←0; goto restart;
 	end
 else if (c≤TeX_string)∧(c≥xref_roman) then
-	@&lt;Scan to the next \.{@@&gt;}@&gt;
+	@<Scan to the next \.{@@>}@>
 else if c=hex then scanning_hex←true
 else if c=module_name then
-	@&lt;Scan the module name and make |cur_module| point to it@&gt;
-else if c=verbatim then @&lt;Scan a verbatim string@&gt;;
+	@<Scan the module name and make |cur_module| point to it@>
+else if c=verbatim then @<Scan a verbatim string@>;
 end
 
 @ The occurrence of a module name sets |xref_switch| to zero,
-because the module name might (for example) follow \&amp;{var}.
+because the module name might (for example) follow \&{var}.
 
-@&lt;Scan the module name...@&gt;=
-begin @&lt;Put module name into |mod_text[1..k]|@&gt;;
-if k&gt;3 then
+@<Scan the module name...@>=
+begin @<Put module name into |mod_text[1..k]|@>;
+if k>3 then
 	begin if (mod_text[k]=".")∧(mod_text[k-1]=".")∧(mod_text[k-2]=".") then
 		cur_module←prefix_lookup(k-3)
 	else cur_module←mod_lookup(k);
@@ -1884,62 +1858,62 @@ spaces at the beginning or the end. (We set |mod_text[0]←" "| to facilitate
 this, since the |mod_lookup| routine uses |mod_text[1]| as the first
 character of the name.)
 
-@&lt;Set init...@&gt;=mod_text[0]←" ";
+@<Set init...@>=mod_text[0]←" ";
 
-@ @&lt;Put module name...@&gt;=
+@ @<Put module name...@>=
 k←0;
-loop@+	begin if loc&gt;limit then
+loop@+	begin if loc>limit then
 		begin get_line;
 		if input_has_ended then
 			begin err_print('! Input ended in section name');
-@.Input ended in section name@&gt;
+@.Input ended in section name@>
 			loc←1; goto done;
 			end;
 		end;
 	d←buffer[loc];
-	@&lt;If end of name, |goto done|@&gt;;
-	incr(loc); if k&lt;longest_name-1 then incr(k);
+	@<If end of name, |goto done|@>;
+	incr(loc); if k<longest_name-1 then incr(k);
 	if (d=" ")∨(d=tab_mark) then
 		begin d←" "; if mod_text[k-1]=" " then decr(k);
 		end;
 	mod_text[k]←d;
 	end;
-done: @&lt;Check for overlong name@&gt;;
-if (mod_text[k]=" ")∧(k&gt;0) then decr(k)
+done: @<Check for overlong name@>;
+if (mod_text[k]=" ")∧(k>0) then decr(k)
 
-@ @&lt;If end of name,...@&gt;=
+@ @<If end of name,...@>=
 if d="@@" then
 	begin d←buffer[loc+1];
-	if d="&gt;" then
+	if d=">" then
 		begin loc←loc+2; goto done;
 		end;
 	if (d=" ")∨(d=tab_mark)∨(d="*") then
 		begin err_print('! Section name didn''t end'); goto done;
-@.Section name didn't end@&gt;
+@.Section name didn't end@>
 		end;
 	incr(k); mod_text[k]←"@@"; incr(loc); {now |d=buffer[loc]| again}
 	end
 
-@ @&lt;Check for overlong name@&gt;=
+@ @<Check for overlong name@>=
 if k≥longest_name-2 then
 	begin print_nl('! Section name too long: ');
-@.Section name too long@&gt;
+@.Section name too long@>
 	for j←1 to 25 do print(xchr[mod_text[j]]);
 	print('...'); mark_harmless;
 	end
 
-@ @&lt;Scan to the next...@&gt;=
+@ @<Scan to the next...@>=
 begin id_first←loc; buffer[limit+1]←"@@";
 while buffer[loc]≠"@@" do incr(loc);
 id_loc←loc;
-if loc&gt;limit then
+if loc>limit then
 	begin err_print('! Control text didn''t end'); loc←limit;
-@.Control text didn't end@&gt;
+@.Control text didn't end@>
 	end
 else	begin loc←loc+2;
-	if buffer[loc-1]≠"&gt;" then
+	if buffer[loc-1]≠">" then
 		err_print('! Control codes are forbidden in control text');
-@.Control codes are forbidden...@&gt;
+@.Control codes are forbidden...@>
 	end;
 end
 
@@ -1949,12 +1923,12 @@ have |buffer[loc-1]=verbatim|; we must set |id_first| to the beginning
 of the string itself, and |id_loc| to its ending-plus-one location in the
 buffer.  We also set |loc| to the position just after the ending delimiter.
 
-@&lt;Scan a verbatim string@&gt;=
+@<Scan a verbatim string@>=
 begin id_first←loc; incr(loc);
-buffer[limit+1]←"@@"; buffer[limit+2]←"&gt;";
-while (buffer[loc]≠"@@")∨(buffer[loc+1]≠"&gt;") do incr(loc);
+buffer[limit+1]←"@@"; buffer[limit+2]←">";
+while (buffer[loc]≠"@@")∨(buffer[loc+1]≠">") do incr(loc);
 if loc≥limit then err_print('! Verbatim string didn''t end');
-@.Verbatim string didn't end@&gt;
+@.Verbatim string didn't end@>
 id_loc←loc; loc←loc+2;
 end
 
@@ -1979,11 +1953,11 @@ else	begin accum←0;
 	else	begin radix←10; accum←next_control-"0";
 		end;
 	loop	begin next_control ←get_next;
-		if next_control&lt;"0" then goto done;
+		if next_control<"0" then goto done;
 		if radix=16 then
 			begin if (next_control≥"A")∧(next_control≤"F") then
 				next_control←next_control-"A"+"0"+10
-			else if next_control&gt;"9" then goto done;
+			else if next_control>"9" then goto done;
 			end
 		else if next_control≥"0"+radix then goto done;
 		accum←accum*radix+next_control-"0";
@@ -2012,7 +1986,8 @@ loop	begin if not sign(next_control) then goto done;
 	end;
 done:scan_exp←accum;
 end;
-@* Phase one processing.
+
+@* Phase one processing.
 We now have accumulated enough subroutines to make it possible to carry out
 \.{WEAVE}'s first pass over the source file. If everything works right,
 both phase one and phase two of \.{WEAVE} will assign the same numbers to
@@ -2022,23 +1997,23 @@ The global variable |next_control| often contains the most recent output of
 |get_next|; in interesting cases, this will be the control code that
 ended a module or part of a module.
 
-@&lt;Glob...@&gt;=@!next_control:eight_bits; {control code waiting to be acting upon}
+@<Glob...@>=@!next_control:eight_bits; {control code waiting to be acting upon}
 
 @ The overall processing strategy in phase one has the following
 straightforward outline.
 
-@&lt;Phase I: Read all the user's text and store the cross references@&gt;=
+@<Phase I: Read all the user's text and store the cross references@>=
 phase_one←true; phase_three←false;
 reset_input;
 module_count←0; skip_limbo; change_exists←false;
 while ¬ input_has_ended do
-	@&lt;Store cross reference data for the current module@&gt;;
+	@<Store cross reference data for the current module@>;
 changed_module[module_count]←change_exists;
 	{the index changes if anything does}
 phase_one←false; {prepare for second phase}
-@&lt;Print error messages about unused or undefined module names@&gt;;
+@<Print error messages about unused or undefined module names@>;
 
-@ @&lt;Store cross reference data...@&gt;=
+@ @<Store cross reference data...@>=
 begin incr(module_count);
 if module_count=max_modules then overflow('section number');
 changed_module[module_count]←false; {it will become |true| if any line changes}
@@ -2046,9 +2021,9 @@ if buffer[loc-1]="*" then
 	begin print('*',module_count:1);
 	update_terminal; {print a progress report}
 	end;
-@&lt;Store cross references in the \TeX\ part of a module@&gt;;
-@&lt;Store cross references in the \(definition part of a module@&gt;;
-@&lt;Store cross references in the \PASCAL\ part of a module@&gt;;
+@<Store cross references in the \TeX\ part of a module@>;
+@<Store cross references in the \(definition part of a module@>;
+@<Store cross references in the \PASCAL\ part of a module@>;
 if changed_module[module_count] then change_exists←true;
 end
 
@@ -2064,18 +2039,18 @@ The program uses the fact that our internal code numbers satisfy
 the relations |xref_roman=identifier+roman| and |xref_wildcard=identifier
 +wildcard| and |xref_typewriter=identifier+
 typewriter| and |normal=0|. An implied `\.{@@!}' is inserted after
-\&amp;{function}, \&amp;{procedure}, \&amp;{program}, and \&amp;{var}.
+\&{function}, \&{procedure}, \&{program}, and \&{var}.
 
 @p procedure Pascal_xref; {makes cross references for \PASCAL\ identifiers}
 label exit,done,found,not_found;
 var p,q,r:name_pointer; {a referenced name}
 @!eq:0..3; {addition to |dtype| code}
-begin while next_control&lt;format do
+begin while next_control<format do
 	begin if (next_control≥identifier)∧
 			(next_control≤xref_typewriter) then
 		begin p←id_lookup(next_control-identifier);
 		if next_control=identifier then if xref_switch≠0 then if ilk[p]=normal then
-			@&lt;Figure out the |def_type| and |def_name|, etc.@&gt;;
+			@<Figure out the |def_type| and |def_name|, etc.@>;
 		new_xref(p);
 		danger_zone←(def_type=dtype_comma);
 		if (ilk[p]=proc_like)∨(ilk[p]=var_like) then
@@ -2095,24 +2070,24 @@ exit:end;
 
 @ @d found_it(#)==begin def_type←#; goto found; end
 
-@&lt;Figure out the |def_type| and |def_name|, etc.@&gt;=
+@<Figure out the |def_type| and |def_name|, etc.@>=
 begin next_control←get_next;
 if next_control="," then found_it(dtype_comma);
 if(next_control=":")∨(next_control="=") then
-	@&lt;Figure out a type and |goto| either |found| or |not_found|@&gt;;
+	@<Figure out a type and |goto| either |found| or |not_found|@>;
 not_found:def_type←dtype_none; new_xref(p); goto done;
 found: end
 
-@ @&lt;Figure out a type and...@&gt;=
+@ @<Figure out a type and...@>=
 begin eq←(next_control-":") div ("="-":");
 next_control←get_next;
 if next_control=identifier then
-	@&lt;Figure out a type starting with an identifier;
-		|goto| |found| or |not_found| unless it's a subrange@&gt;
-else if (next_control=string)∧(id_loc-id_first&gt;2) then found_it(dtype_string)
+	@<Figure out a type starting with an identifier;
+		|goto| |found| or |not_found| unless it's a subrange@>
+else if (next_control=string)∧(id_loc-id_first>2) then found_it(dtype_string)
 else if start_of_num(next_control) then
-	@&lt;Figure out a type starting with a constant;
-		|goto| |found| or |not_found| unless it's a subrange@&gt;
+	@<Figure out a type starting with a constant;
+		|goto| |found| or |not_found| unless it's a subrange@>
 else goto not_found;
 next_control←get_next;
 if next_control=identifier then
@@ -2126,15 +2101,15 @@ if next_control=identifier then
 if start_of_num(next_control) then
 	begin def_subname←scan_exp; def_subtype←dtype_colon_const_dots;
 	if abs(def_subname)≥32768 then goto not_found;
-	if def_subname&lt;0 then def_subname←def_subname+65536;
+	if def_subname<0 then def_subname←def_subname+65536;
 	goto found;
 	end;
 goto not_found;
 end
 
-@ @&lt;Figure out a type starting with an identifier...@&gt;=
+@ @<Figure out a type starting with an identifier...@>=
 begin def_name←id_lookup(normal);
-if ilk[def_name]=goto_like then {\&amp;{packed}}
+if ilk[def_name]=goto_like then {\&{packed}}
 	begin next_control←get_next; eq←eq+2;
 	if next_control≠identifier then goto not_found;
 	def_name←id_lookup(normal);
@@ -2148,16 +2123,16 @@ if def_val[def_name]=undef_val then
 	if next_control=double_dot then def_type←dtype_colon_ital_dots+eq
 	else found_it(dtype_colon_ital+eq);
 	end
-else @&lt;Figure out a type starting with a constant...@&gt;;
+else @<Figure out a type starting with a constant...@>;
 end
 
-@ @&lt;Figure out a type starting with a constant...@&gt;=
+@ @<Figure out a type starting with a constant...@>=
 begin def_name←scan_exp;
 if next_control≠double_dot then
 	if eq=1 then found_it(dtype_equal_bold; def_name←const_name)
 	else goto not_found;
 if abs(def_name)≥32768 then goto not_found;
-if def_name&lt;0 then def_name←def_name+65536;
+if def_name<0 then def_name←def_name+65536;
 def_type←dtype_colon_const_dots+eq;
 end
 
@@ -2167,10 +2142,10 @@ handles \PASCAL\ text with embedded comments.
 
 @p procedure outer_xref; {extension of |Pascal_xref|}
 var bal:eight_bits; {brace level in comment}
-begin while next_control&lt;format do
+begin while next_control<format do
 	if next_control≠"{" then Pascal_xref
 	else	begin bal←skip_comment(1); next_control←"|";
-		while bal&gt;0 do
+		while bal>0 do
 			begin Pascal_xref;
 			if next_control="|" then bal←skip_comment(bal)
 			else bal←0; {an error will be reported in phase two}
@@ -2180,17 +2155,17 @@ end;
 
 @ In the \TeX\ part of a module, cross reference entries are made only for
 the identifiers in \PASCAL\ texts enclosed in \pb, or for control texts
-enclosed in \.{@@\↑}$\,\ldots\,$\.{@@&gt;} or \.{@@.}$\,\ldots\,$\.{@@&gt;}
-or \.{@@:}$\,\ldots\,$\.{@@&gt;}.
+enclosed in \.{@@\↑}$\,\ldots\,$\.{@@>} or \.{@@.}$\,\ldots\,$\.{@@>}
+or \.{@@:}$\,\ldots\,$\.{@@>}.
 
-@&lt;Store cross references in the \T...@&gt;=
+@<Store cross references in the \T...@>=
 repeat next_control←skip_TeX;
 case next_control of
 underline: xref_switch←def_flag;
 no_underline: xref_switch←0;
 "|": Pascal_xref;
 xref_roman, xref_wildcard, xref_typewriter, module_name:
-	begin loc←loc-2; next_control←get_next; {scan to \.{@@&gt;}}
+	begin loc←loc-2; next_control←get_next; {scan to \.{@@>}}
 	if next_control≠module_name then
 		new_xref(id_lookup(next_control-identifier));
 	end;
@@ -2208,12 +2183,12 @@ entirely, even if it contains \pb\ constructions.
 The variables |lhs| and |rhs| point to the respective identifiers involved
 in a format definition.
 
-@&lt;Global...@&gt;=
+@<Global...@>=
 @!lhs,@!rhs:integer; {indices into |byte_start| for format identifiers}
 
 @ When we get to the following code we have |next_control≥format|.
 
-@&lt;Store cross references in the \(d...@&gt;=
+@<Store cross references in the \(d...@>=
 while next_control≤definition do {|format| or |definition|}
 	begin xref_switch←def_flag; {implied \.{@@!}}
 	if next_control=definition then
@@ -2230,12 +2205,12 @@ while next_control≤definition do {|format| or |definition|}
 				def_name←def_val[lhs]; def_type←dtype_const;
 				xref_switch←def_flag;
 				if abs(def_name)≥32768 then def_type←dtype_macro
-				else if def_name&lt;0 then def_name←def_name+65536;
+				else if def_name<0 then def_name←def_name+65536;
 				new_xref(lhs);
 				end;
 			end;
 		end
-	else @&lt;Process a format definition@&gt;;
+	else @<Process a format definition@>;
 	outer_xref;
 	end
 
@@ -2245,7 +2220,7 @@ identifier, and to fool the |new_xref| routine into thinking that the
 identifier on the right-hand side of the format definition is not a
 reserved word.
 
-@&lt;Process a form...@&gt;=
+@<Process a form...@>=
 begin next_control←get_next;
 if next_control=identifier then
 	begin lhs←id_lookup(normal); ilk[lhs]←normal; new_xref(lhs);
@@ -2264,13 +2239,13 @@ end
 @ Finally, when the \TeX\ and definition parts have been treated, we have
 |next_control≥begin_Pascal|.
 
-@&lt;Store cross references in the \P...@&gt;=
+@<Store cross references in the \P...@>=
 if next_control≤module_name then {|begin_Pascal| or |module_name|}
 	begin if next_control=begin_Pascal then mod_xref_switch←0
 	else mod_xref_switch←def_flag;
 	repeat if next_control=module_name then new_mod_xref(cur_module);
 		next_control←get_next; outer_xref;
-	until next_control&gt;module_name;
+	until next_control>module_name;
 	end
 
 @ After phase one has looked at everything, we want to check that each
@@ -2278,39 +2253,40 @@ module name was both defined and used.
 The variable |cur_xref| will point to cross references for the
 current module name of interest.
 
-@&lt;Glob...@&gt;=@!cur_xref:xref_number; {temporary cross reference pointer}
+@<Glob...@>=@!cur_xref:xref_number; {temporary cross reference pointer}
 
 @ The following recursive procedure
 walks through the tree of module names and prints out anomalies.
-@↑recursion@&gt;
+@↑recursion@>
 
 @p procedure mod_check(@!p:name_pointer); {print anomalies in subtree |p|}
-begin if p&gt;0 then
+begin if p>0 then
 	begin mod_check(llink[p]);@/
 	cur_xref←xref[p];
-	if num(cur_xref)&lt;def_flag then
-		begin print_nl('! Never defined: &lt;'); print_id(p);
-@.Never defined: &lt;section name&gt;@&gt;
-		print('&gt;'); mark_harmless;
+	if num(cur_xref)<def_flag then
+		begin print_nl('! Never defined: <'); print_id(p);
+@.Never defined: <section name>@>
+		print('>'); mark_harmless;
 		end;
 	while num(cur_xref)≥def_flag do cur_xref←xlink(cur_xref);
 	if cur_xref=0 then
-		begin print_nl('! Never used: &lt;'); print_id(p); print('&gt;');
-@.Never used: &lt;section name&gt;@&gt;
+		begin print_nl('! Never used: <'); print_id(p); print('>');
+@.Never used: <section name>@>
 		mark_harmless;
 		end;
 	mod_check(rlink[p]);
 	end;
 end;
 
-@ @&lt;Print error messages about un...@&gt;=@+mod_check(root)
-@* Low-level output routines.
+@ @<Print error messages about un...@>=@+mod_check(root)
+
+@* Low-level output routines.
 The \TeX\ output is supposed to appear in lines at most |line_length|
 characters long, so we place it into an output buffer. During the output
 process, |out_line| will hold the current line number of the line about to
 be output.
 
-@&lt;Glo...@&gt;=
+@<Glo...@>=
 @!out_buf:array[0..line_length] of ASCII_code; {assembled characters}
 @!out_ptr:0..line_length; {number of characters in |out_buf|}
 @!out_line: integer; {coordinates of next line to be output}
@@ -2336,7 +2312,7 @@ if not per_cent then {remove trailing blanks}
 done: for k←1 to j do write(tex_file,xchr[out_buf[k]]);
 if per_cent then write(tex_file,xchr["%"]);
 write_ln(tex_file); incr(out_line);
-if b&lt;out_ptr then for k←b+1 to out_ptr do out_buf[k-b]←out_buf[k];
+if b<out_ptr then for k←b+1 to out_ptr do out_buf[k-b]←out_buf[k];
 out_ptr←out_ptr-b;
 end;
 
@@ -2351,7 +2327,7 @@ been emitted during the output of translated \PASCAL\ text.
 @p procedure finish_line; {do this at the end of a line}
 label exit;
 var k:0..buf_size; {index into |buffer|}
-begin if out_ptr&gt;0 then flush_buffer(out_ptr,false)
+begin if out_ptr>0 then flush_buffer(out_ptr,false)
 else	begin for k←0 to limit do
 		if (buffer[k]≠" ")∧(buffer[k]≠tab_mark) then return;
 	flush_buffer(0,false);
@@ -2363,7 +2339,7 @@ beginning of phase two. We initialize the output variables in a slightly
 tricky way so that the first line of the output file will be
 `\.{\\input twimac}'.
 
-@&lt;Set init...@&gt;=
+@<Set init...@>=
 out_ptr←1; out_line←1; out_buf[1]←"c"; write(tex_file,'\input twima');
 
 @ When we wish to append the character |c| to the output buffer, we write
@@ -2404,7 +2380,7 @@ A line break will occur at a space or after a single-nonletter
 to overflow. To make this routine a little faster, we initialize position
 0 of the output buffer to `\.\\'; this character isn't really output.
 
-@&lt;Set init...@&gt;=
+@<Set init...@>=
 out_buf[0]←"\";
 
 @ A long line is broken at a blank space or just before a backslash that isn't
@@ -2417,12 +2393,12 @@ var k:0..line_length; {index into |out_buf|}
 @!c,@!d:ASCII_code; {characters from the buffer}
 begin k←out_ptr;
 loop@+	begin if k=0 then
-		@&lt;Print warning message, break the line, |return|@&gt;;
+		@<Print warning message, break the line, |return|@>;
 	d←out_buf[k];
 	if d=" " then
 		begin flush_buffer(k,false); return;
 		end;
-	if (d="\")∧(out_buf[k-1]≠"\") then {in this case |k&gt;1|}
+	if (d="\")∧(out_buf[k-1]≠"\") then {in this case |k>1|}
 		begin flush_buffer(k-1,true); return;
 		end;
 	decr(k);
@@ -2434,9 +2410,9 @@ consists of a string of backslashes followed by a string of nonblank
 non-backslashes. In such cases it is almost always safe to break the
 line by putting a |"%"| just before the last character.
 
-@&lt;Print warning message...@&gt;=
+@<Print warning message...@>=
 begin print_nl('! Line had to be broken (output l.',out_line:1);
-@.Line had to be broken@&gt;
+@.Line had to be broken@>
 print_ln('):');
 for k←1 to out_ptr-1 do print(xchr[out_buf[k]]);
 new_line; mark_harmless;
@@ -2445,7 +2421,7 @@ end
 
 @ Here is a procedure that outputs a module number in decimal notation.
 
-@&lt;Glob...@&gt;=@!dig:array[0..4] of 0..9; {digits to output}
+@<Glob...@>=@!dig:array[0..4] of 0..9; {digits to output}
 
 @ The number to be converted by |out_mod| is known to be less than
 |def_flag|, so it cannot have more than five decimal digits.  If
@@ -2460,7 +2436,7 @@ until a=0;
 repeat decr(k); out(dig[k]+"0");
 until k=0;
 if changed_module[m] then out2("\")("*");
-@.\\*@&gt;
+@.\\*@>
 end;
 
 @ The |out_name| subroutine is used to output an identifier or index
@@ -2472,12 +2448,13 @@ var k:0..max_bytes; {index into |byte_mem|}
 begin out("{"); w←p mod ww;
 for k←byte_start[p] to byte_start[p+ww]-1 do
 	begin if byte_mem[w,k]="_" then out("\");
-@.\\_@&gt;
+@.\\_@>
 	out(byte_mem[w,k]);
 	end;
 out("}");
 end;
-@* Routines that copy \TeX\ material.
+
+@* Routines that copy \TeX\ material.
 During phase two, we use the subroutines |copy_limbo|, |copy_TeX|, and
 |copy_comment| in place of the analogous |skip_limbo|, |skip_TeX|, and
 |skip_comment| that were used in phase one.
@@ -2490,16 +2467,16 @@ pairs; such pairs are replaced by singletons.
 @p procedure copy_limbo; {copy \TeX\ code until the next module begins}
 label exit;
 var c:ASCII_code; {character following \.{@@} sign}
-begin loop if loc&gt;limit then
+begin loop if loc>limit then
 		begin finish_line; get_line;
 		if input_has_ended then return;
 		end
 	else	begin buffer[limit+1]←"@@";
-		@&lt;Copy up to control code, |return| if finished@&gt;;
+		@<Copy up to control code, |return| if finished@>;
 		end;
 exit:end;
 
-@ @&lt;Copy up to control...@&gt;=
+@ @<Copy up to control...@>=
 while buffer[loc]≠"@@" do
 	begin out(buffer[loc]); incr(loc);
 	end;
@@ -2509,7 +2486,7 @@ if loc≤limit then
 	if (c≠"z")∧(c≠"Z") then
 		begin out("@@");
 		if c≠"@@" then err_print('! Double @@ required outside of sections');
-@.Double \AT! required...@&gt;
+@.Double \AT! required...@>
 		end;
 	end
 
@@ -2520,14 +2497,14 @@ way. It returns the next control code or `\v' found in the input.
 @p function copy_TeX:eight_bits; {copy pure \TeX\ material}
 label done;
 var c:eight_bits; {control code found}
-begin loop begin if loc&gt;limit then
+begin loop begin if loc>limit then
 		begin finish_line; get_line;
 		if input_has_ended then
 			begin c←new_module; goto done;
 			end;
 		end;
 	buffer[limit+1]←"@@";
-	@&lt;Copy up to `\v' or control code, |goto done| if finished@&gt;;
+	@<Copy up to `\v' or control code, |goto done| if finished@>;
 	end;
 done:copy_TeX←c;
 end;
@@ -2535,7 +2512,7 @@ end;
 @ We don't copy spaces or tab marks into the beginning of a line. This
 makes the test for empty lines in |finish_line| work.
 
-@&lt;Copy up to `\v'...@&gt;=
+@<Copy up to `\v'...@>=
 repeat c←buffer[loc]; incr(loc);
 if c="|" then goto done;
 if c≠"@@" then
@@ -2555,7 +2532,7 @@ The abbreviation |app_tok(t)| is used to append token |t| to the current
 token list, and it also makes sure that it is possible to append at least
 one further token without overflow.
 
-@d app_tok(#)==begin if tok_ptr+2&gt;max_toks then overflow('token');
+@d app_tok(#)==begin if tok_ptr+2>max_toks then overflow('token');
 	tok_mem[tok_ptr]←#; incr(tok_ptr);
 	end
 
@@ -2563,30 +2540,30 @@ one further token without overflow.
 	comments}
 label done;
 var c:ASCII_code; {current character being copied}
-begin loop begin if loc&gt;limit then
+begin loop begin if loc>limit then
 		begin get_line;
 		if input_has_ended then
 			begin err_print('! Input ended in mid-comment');
-@.Input ended in mid-comment@&gt;
-			loc←1; @&lt;Clear |bal| and |goto done|@&gt;;
+@.Input ended in mid-comment@>
+			loc←1; @<Clear |bal| and |goto done|@>;
 			end;
 		end;
 	c←buffer[loc]; incr(loc);
 	if c="|" then goto done;
 	app_tok(c);
-	@&lt;Copy special things when |c="@@", "\", "{", "}"|;
-		|goto done| at end@&gt;;
+	@<Copy special things when |c="@@", "\", "{", "}"|;
+		|goto done| at end@>;
 	end;
 done: copy_comment←bal;
 end;
 
-@ @&lt;Copy special things when |c="@@"...@&gt;=
+@ @<Copy special things when |c="@@"...@>=
 if c="@@" then
 	begin incr(loc);
 	if buffer[loc-1]≠"@@" then
 		begin err_print('! Illegal use of @@ in comment');
-@.Illegal use of \AT!...@&gt;
-		loc←loc-2; decr(tok_ptr); @&lt;Clear |bal|...@&gt;;
+@.Illegal use of \AT!...@>
+		loc←loc-2; decr(tok_ptr); @<Clear |bal|...@>;
 		end;
 	end
 else if (c="\")∧(buffer[loc]≠"@@") then
@@ -2601,12 +2578,13 @@ else if c="}" then
 @ When the comment has terminated abruptly due to an error, we output
 enough right braces to keep \TeX\ happy.
 
-@&lt;Clear |bal|...@&gt;=
+@<Clear |bal|...@>=
 app_tok(" "); {this is done in case the previous character was `\.\\'}
 repeat app_tok("}"); decr(bal);
 until bal=0;
 goto done;
-@* Parsing.
+
+@* Parsing.
 The most intricate part of \.{WEAVE} is its mechanism for converting
 \PASCAL-like code into \TeX\ code, and we might as well plunge into this
 aspect of the program now. A ``bottom up'' approach is used to parse the
@@ -2639,8 +2617,8 @@ and it means that three consecutive scraps whose respective categories are
 |open|, |math|, and |semi| are con\-verted to two scraps whose categories
 are |open| and |math|. This production also has an associated rule that
 tells how to combine the translation parts:
-$$\eqalign{O_2&amp;=O_1\cr
-M_2&amp;=M_1\,S\,\.{\\,}\,\hbox{|opt|\thinspace\tt5}\cr}$$
+$$\eqalign{O_2&=O_1\cr
+M_2&=M_1\,S\,\.{\\,}\,\hbox{|opt|\thinspace\tt5}\cr}$$
 This means that the |open| scrap has not changed, while the new |math| scrap
 has a translation $M_2$ composed of the translation $M_1$ of the original
 |math| scrap followed by the translation |S| of the |semi| scrap followed
@@ -2685,7 +2663,7 @@ concatenation of the disappearing scraps on the left-hand side.
 @d semi=9 {denotes a semicolon and possible comment following it}
 @d terminator=10 {something that ends a statement or declaration}
 @d stmt=11 {denotes a statement or declaration including its terminator}
-@d cond=12 {precedes an \&amp;{if} clause that might have a matching \&amp;{else}}
+@d cond=12 {precedes an \&{if} clause that might have a matching \&{else}}
 @d clause=13 {precedes a statement after which indentation ends}
 @d colon=14 {denotes a colon}
 @d exp=15 {stands for the E in a floating point constant}
@@ -2693,8 +2671,8 @@ concatenation of the disappearing scraps on the left-hand side.
 @d case_head=17 {denotes a case statement or record heading}
 @d record_head=18 {denotes a record heading without indentation}
 @d var_head=19 {denotes a variable declaration heading}
-@d elsie=20 {\&amp;{else}}
-@d casey=21 {\&amp;{case}}
+@d elsie=20 {\&{else}}
+@d casey=21 {\&{case}}
 @d mod_scrap=22 {denotes a module name}
 
 @p @!debug procedure print_cat(@!c:eight_bits);
@@ -2765,7 +2743,7 @@ comes from \PASCAL\ text between \pb\ signs; |break_space| and |force| and
 The tokens |math_rel|, |math_bin|, |math_op| will be translated into
 \.{\\mathrel\{}, \.{\\mathbin\{}, and \.{\\mathop\{}, respectively.
 Other control sequences in the \TeX\ output will be `\.{\\\\\{}$\,\ldots\,$\.\}'
-surrounding identifiers, `\.{\\\&amp;\{}$\,\ldots\,$\.\}' surrounding
+surrounding identifiers, `\.{\\\&\{}$\,\ldots\,$\.\}' surrounding
 reserved words, `\.{\\.\{}$\,\ldots\,$\.\}' surrounding strings,
 `\.{\\C\{}$\,\ldots\,$\.\}$\,$|force|' surrounding comments, and
 `\.{\\X$n$:}$\,\ldots\,$\.{\\X}' surrounding module names, where
@@ -2789,100 +2767,100 @@ reserved words, `\.{\\.\{}$\,\ldots\,$\.\}' surrounding strings,
 which gives category codes followed by the translations. Sometimes a single
 item of input produces more than one scrap.
 \def\stars {\.{**}}%
-(The symbol `\stars' stands for `\.{\\\&amp;\{{\rm identifier}\}}',
+(The symbol `\stars' stands for `\.{\\\&\{{\rm identifier}\}}',
 i.e., the identifier itself treated as a reserved word. In a few cases the
 category is given as `|@!comment|'; this is not an actual category code, it
 means that the translation will be treated as a comment, as explained
 below.)
 
-\yskip\halign{\quad#\hfil&amp;\quad#\hfil\cr
-\.{&lt;&gt;}&amp;|math:|\.{\\I}\cr
-\.{&lt;=}&amp;|math:|\.{\\L}\cr
-\.{&gt;=}&amp;|math:|\.{\\G}\cr
-\.{:=}&amp;|math:|\.{\\K}\cr
-\.{==}&amp;|math:|\.{\\S}\cr
-\.{(*}&amp;|math:|\.{\\B}\cr
-\.{*)}&amp;|math:|\.{\\T}\cr
-\.{(.}&amp;|open:|\.[\cr
-\.{.)}&amp;|close:|\.]\cr
-\."$\,$string$\,$\."&amp;|simp:|\.{\\.\{"{\rm$\,$modified string$\,$}"\}}\cr
-\.\'$\,$string$\,$\.\'&amp;|simp:|\.{\\.\{\\\'{\rm$\,$modified
+\yskip\halign{\quad#\hfil&\quad#\hfil\cr
+\.{<>}&|math:|\.{\\I}\cr
+\.{<=}&|math:|\.{\\L}\cr
+\.{>=}&|math:|\.{\\G}\cr
+\.{:=}&|math:|\.{\\K}\cr
+\.{==}&|math:|\.{\\S}\cr
+\.{(*}&|math:|\.{\\B}\cr
+\.{*)}&|math:|\.{\\T}\cr
+\.{(.}&|open:|\.[\cr
+\.{.)}&|close:|\.]\cr
+\."$\,$string$\,$\."&|simp:|\.{\\.\{"{\rm$\,$modified string$\,$}"\}}\cr
+\.\'$\,$string$\,$\.\'&|simp:|\.{\\.\{\\\'{\rm$\,$modified
 	string$\,$}\\\'\}}\cr
-\.{@@=}$\,$string$\,$\.{@@&gt;}&amp;|simp:|\.{\\=\{{\rm$\,$modified string$\,$}\}}\cr
-\#&amp;|math:|\.{\\\#}\cr
-\.\$&amp;|math:|\.{\\\$}\cr
-\.\_&amp;|math:|\.{\\\_}\cr
-\.\%&amp;|math:|\.{\\\%}\cr
-\.\↑&amp;|math:|\.{\\\↑}\cr
-\.(&amp;|open:|\.(\cr
-\.)&amp;|close:|\.)\cr
-\.[&amp;|open:|\.[\cr
-\.]&amp;|close:|\.]\cr
-\.*&amp;|math:|\.{\\ast}\cr
-\.,&amp;|math:|\.,|@,opt@,|\.9\cr
-\.{..}&amp;|math:|\.{\\to}\cr
-\..&amp;|simp:|\..\cr
-\.:&amp;|colon:|\.:\cr
-\.;&amp;|semi:|\.;\cr
-identifier&amp;|simp:|\.{\\\\\{{\rm$\,$identifier$\,$}\}}\cr
-\.E in constant&amp;|exp:|\.{\\E\{}\cr
-digit $d$&amp;|simp:|$d$\cr
-other character $c$&amp;|math:|$c$\cr
-\.{and}&amp;|math:|\.{\\W}\cr
-\.{array}&amp;|alpha:|\stars\cr
-\.{begin}&amp;|beginning:|$|force|\,\stars\,|cancel|$\qquad|intro:|\cr
-\.{case}&amp;|casey:|\qquad|alpha:|$|force|\,\stars$\cr
-\.{const}&amp;|intro:|$|force|\,|backup|\,\stars$\cr
-\.{div}&amp;|math:|$|math_bin|\,\stars\,\.\}$\cr
-\.{do}&amp;|omega:|\stars\cr
-\.{downto}&amp;|math:|$|math_rel|\,\stars\,\.\}$\cr
-\.{else}&amp;|terminator:|\qquad|elsie:|$|force|\,|backup|\,\stars$\cr
-\.{end}&amp;|terminator:|\qquad|close:|$|force|\,\stars$\cr
-\.{file}&amp;|alpha:|\stars\cr
-\.{for}&amp;|alpha:|$|force|\,\stars$\cr
-\.{function}&amp;|proc:|$|force|\,|backup|\,\stars\,|cancel|$\qquad
+\.{@@=}$\,$string$\,$\.{@@>}&|simp:|\.{\\=\{{\rm$\,$modified string$\,$}\}}\cr
+\#&|math:|\.{\\\#}\cr
+\.\$&|math:|\.{\\\$}\cr
+\.\_&|math:|\.{\\\_}\cr
+\.\%&|math:|\.{\\\%}\cr
+\.\↑&|math:|\.{\\\↑}\cr
+\.(&|open:|\.(\cr
+\.)&|close:|\.)\cr
+\.[&|open:|\.[\cr
+\.]&|close:|\.]\cr
+\.*&|math:|\.{\\ast}\cr
+\.,&|math:|\.,|@,opt@,|\.9\cr
+\.{..}&|math:|\.{\\to}\cr
+\..&|simp:|\..\cr
+\.:&|colon:|\.:\cr
+\.;&|semi:|\.;\cr
+identifier&|simp:|\.{\\\\\{{\rm$\,$identifier$\,$}\}}\cr
+\.E in constant&|exp:|\.{\\E\{}\cr
+digit $d$&|simp:|$d$\cr
+other character $c$&|math:|$c$\cr
+\.{and}&|math:|\.{\\W}\cr
+\.{array}&|alpha:|\stars\cr
+\.{begin}&|beginning:|$|force|\,\stars\,|cancel|$\qquad|intro:|\cr
+\.{case}&|casey:|\qquad|alpha:|$|force|\,\stars$\cr
+\.{const}&|intro:|$|force|\,|backup|\,\stars$\cr
+\.{div}&|math:|$|math_bin|\,\stars\,\.\}$\cr
+\.{do}&|omega:|\stars\cr
+\.{downto}&|math:|$|math_rel|\,\stars\,\.\}$\cr
+\.{else}&|terminator:|\qquad|elsie:|$|force|\,|backup|\,\stars$\cr
+\.{end}&|terminator:|\qquad|close:|$|force|\,\stars$\cr
+\.{file}&|alpha:|\stars\cr
+\.{for}&|alpha:|$|force|\,\stars$\cr
+\.{function}&|proc:|$|force|\,|backup|\,\stars\,|cancel|$\qquad
 	|intro:|$|indent|\,\.{\\\ }$\cr
-\.{goto}&amp;|intro:|\stars\cr
-\.{if}&amp;|cond:|\qquad|alpha:|$|force|\,\stars$\cr
-\.{in}&amp;|math:|\.{\\in}\cr
-\.{label}&amp;|intro:|$|force|\,|backup|\,\stars$\cr
-\.{mod}&amp;|math:|$|math_bin|\,\stars\,\.\}$\cr
-\.{nil}&amp;|simp:|\stars\cr
-\.{not}&amp;|math:|\.{\\R}\cr
-\.{of}&amp;|omega:|\stars\cr
-\.{or}&amp;|math:|\.{\\V}\cr
-\.{packed}&amp;|intro:|\stars\cr
-\.{procedure}&amp;|proc:|$|force|\,|backup|\,\stars\,|cancel|$\qquad
+\.{goto}&|intro:|\stars\cr
+\.{if}&|cond:|\qquad|alpha:|$|force|\,\stars$\cr
+\.{in}&|math:|\.{\\in}\cr
+\.{label}&|intro:|$|force|\,|backup|\,\stars$\cr
+\.{mod}&|math:|$|math_bin|\,\stars\,\.\}$\cr
+\.{nil}&|simp:|\stars\cr
+\.{not}&|math:|\.{\\R}\cr
+\.{of}&|omega:|\stars\cr
+\.{or}&|math:|\.{\\V}\cr
+\.{packed}&|intro:|\stars\cr
+\.{procedure}&|proc:|$|force|\,|backup|\,\stars\,|cancel|$\qquad
 	|intro:|$|indent|\,\.{\\\ }$\cr
-\.{program}&amp;|proc:|$|force|\,|backup|\,\stars\,|cancel|$\qquad
+\.{program}&|proc:|$|force|\,|backup|\,\stars\,|cancel|$\qquad
 	|intro:|$|indent|\,\.{\\\ }$\cr
-\.{record}&amp;|record_head:|\stars\qquad|intro:|\cr
-\.{repeat}&amp;|beginning:|$|force|\,|indent|\,\stars\,|cancel|$\qquad|intro:|\cr
-\.{set}&amp;|alpha:|\stars\cr
-\.{then}&amp;|omega:|\stars\cr
-\.{to}&amp;|math:|$|math_rel|\,\stars\,\.\}$\cr
-\.{type}&amp;|intro:|$|force|\,|backup|\,\stars$\cr
-\.{until}&amp;|terminator:|\qquad|close:|$|force|\,|backup|\,\stars$\qquad
+\.{record}&|record_head:|\stars\qquad|intro:|\cr
+\.{repeat}&|beginning:|$|force|\,|indent|\,\stars\,|cancel|$\qquad|intro:|\cr
+\.{set}&|alpha:|\stars\cr
+\.{then}&|omega:|\stars\cr
+\.{to}&|math:|$|math_rel|\,\stars\,\.\}$\cr
+\.{type}&|intro:|$|force|\,|backup|\,\stars$\cr
+\.{until}&|terminator:|\qquad|close:|$|force|\,|backup|\,\stars$\qquad
 	|clause:|\cr
-\.{var}&amp;|var_head:|$|force|\,|backup|\,\stars\,|cancel|$\qquad|intro:|\cr
-\.{while}&amp;|alpha:|$|force|\,\stars$\cr
-\.{with}&amp;|alpha:|$|force|\,\stars$\cr
-\.{xclause}&amp;|alpha:|$|force|\,\.{\\\~}$\qquad|omega:|\stars\cr
-\.{@@\'}$\,$const&amp;|simp:|\.{\\O\{}\hbox{const}\.\}\cr
-\.{@@"}$\,$const&amp;|simp:|\.{\\H\{}\hbox{const}\.\}\cr
-\.{@@\$}&amp;|simp:|\.{\\)}\cr
-\.{@@\\}&amp;|simp:|\.{\\]}\cr
-\.{@@,}&amp;|math:|\.{\\,}\cr
-\.{@@t}$\,$stuff$\,$\.{@@&gt;}&amp;|simp:|\.{\\hbox\{{\rm$\,$stuff$\,$}\}}\cr
-\.{@@&lt;}$\,$module$\,$\.{@@&gt;}&amp;|mod_scrap:|\.{\\X$n$:{\rm$\,$module$\,$}\\X}\cr
-\.{@@\#}&amp;|comment:||big_force|\cr
-\.{@@/}&amp;|comment:||force|\cr
-\.{@@\char'174}&amp;|simp:|$|opt|\,\.0$\cr
-\.{@@+}&amp;|comment:|$|big_cancel|\,\.{\\\ }\,|big_cancel|$\cr
-\.{@@;}&amp;|semi:|\cr
-\.{@@\&amp;}&amp;|math:|\.{\\J}\cr
-\.{@@\{}&amp;|math:|\.{\\B}\cr
-\.{@@\}}&amp;|math:|\.{\\T}\cr}
+\.{var}&|var_head:|$|force|\,|backup|\,\stars\,|cancel|$\qquad|intro:|\cr
+\.{while}&|alpha:|$|force|\,\stars$\cr
+\.{with}&|alpha:|$|force|\,\stars$\cr
+\.{xclause}&|alpha:|$|force|\,\.{\\\~}$\qquad|omega:|\stars\cr
+\.{@@\'}$\,$const&|simp:|\.{\\O\{}\hbox{const}\.\}\cr
+\.{@@"}$\,$const&|simp:|\.{\\H\{}\hbox{const}\.\}\cr
+\.{@@\$}&|simp:|\.{\\)}\cr
+\.{@@\\}&|simp:|\.{\\]}\cr
+\.{@@,}&|math:|\.{\\,}\cr
+\.{@@t}$\,$stuff$\,$\.{@@>}&|simp:|\.{\\hbox\{{\rm$\,$stuff$\,$}\}}\cr
+\.{@@<}$\,$module$\,$\.{@@>}&|mod_scrap:|\.{\\X$n$:{\rm$\,$module$\,$}\\X}\cr
+\.{@@\#}&|comment:||big_force|\cr
+\.{@@/}&|comment:||force|\cr
+\.{@@\char'174}&|simp:|$|opt|\,\.0$\cr
+\.{@@+}&|comment:|$|big_cancel|\,\.{\\\ }\,|big_cancel|$\cr
+\.{@@;}&|semi:|\cr
+\.{@@\&}&|math:|\.{\\J}\cr
+\.{@@\{}&|math:|\.{\\B}\cr
+\.{@@\}}&|math:|\.{\\T}\cr}
 \yskip\noindent When a string is output, certain characters are preceded by
 `\.\\' signs so that they will print properly.
 
@@ -2898,14 +2876,14 @@ From this table it is evident that \.{WEAVE} will parse a lot of non-\PASCAL\
 programs. For example, the reserved words `\.{for}' and `\.{array}' are
 treated in an identical way by \.{WEAVE} from a syntactic standpoint,
 and semantically they are equivalent except that a forced line break occurs
-just before `\&amp;{for}'; \PASCAL\ programmers may well be surprised at this
+just before `\&{for}'; \PASCAL\ programmers may well be surprised at this
 similarity. The idea is to keep \.{WEAVE}'s rules as simple as possible,
 consistent with doing a reasonable job on syntactically correct \PASCAL\
 programs. The production rules below have been formulated in the same
 spirit of ``almost anything goes.''
 
 @ Here is a table of all the productions. The reader can best get a feel for
-@↑productions, table of@&gt;
+@↑productions, table of@>
 how they work by trying them out by hand on small examples; no amount of
 explanation will be as effective as watching the rules in action.
 Parsing can also be watched by debugging with `\.{@@2}'.
@@ -2913,97 +2891,97 @@ Parsing can also be watched by debugging with `\.{@@2}'.
 \def\[#1]{\quad$\dleft#1\dright$}
 \def\sp{\.{\ }}
 \yskip
-\halign to\the\hsize{\hfil\it# &amp;
-	#\hfil\hskip-200pt\tabskip 0pt plus 100pt&amp;
+\halign to\the\hsize{\hfil\it# &
+	#\hfil\hskip-200pt\tabskip 0pt plus 100pt&
 	#\hfil\tabskip0pt\cr
-&amp;Production categories\[\hbox{translations}]&amp;Remarks\cr
+&Production categories\[\hbox{translations}]&Remarks\cr
 \noalign{\yskip}
-1&amp;|alpha@,math@,colon| $\RA$ |alpha@,math|&amp;e.g., |case v:boolean of|\cr
-2&amp;|alpha@,math@,omega| $\RA$ |clause|\[C=A\,\sp\,\.\$\,M\,\.\$\,\sp\,|indent|\,
-O]&amp;e.g., |while x&gt;0 do|\cr
-3&amp;|alpha@,omega| $\RA$ |clause|\[C=A\,\sp\,|indent|\,O]&amp;e.g., |file of|\cr
-4&amp;|alpha@,simp| $\RA$ |alpha@,math|&amp;convert to math mode\cr
-5&amp;|beginning@,close@,(terminator@t or @&gt;stmt)| $\RA$ |stmt|&amp;compound statement
+1&|alpha@,math@,colon| $\RA$ |alpha@,math|&e.g., |case v:boolean of|\cr
+2&|alpha@,math@,omega| $\RA$ |clause|\[C=A\,\sp\,\.\$\,M\,\.\$\,\sp\,|indent|\,
+O]&e.g., |while x>0 do|\cr
+3&|alpha@,omega| $\RA$ |clause|\[C=A\,\sp\,|indent|\,O]&e.g., |file of|\cr
+4&|alpha@,simp| $\RA$ |alpha@,math|&convert to math mode\cr
+5&|beginning@,close@,(terminator@t or @>stmt)| $\RA$ |stmt|&compound statement
 ends\cr
-6&amp;|beginning@,stmt| $\RA$ |beginning|\[B_2=B_1\,|break_space|\,S]&amp;compound
+6&|beginning@,stmt| $\RA$ |beginning|\[B_2=B_1\,|break_space|\,S]&compound
 statement grows\cr
-7&amp;|case_head@,casey@,clause| $\RA$ |case_head|\[C_4=C_1\,|outdent|\,C_2\,C_3]&amp;
+7&|case_head@,casey@,clause| $\RA$ |case_head|\[C_4=C_1\,|outdent|\,C_2\,C_3]&
 variant records\cr
-8&amp;|case_head@,close@,terminator| $\RA$ |stmt|\[S=C_1\,|cancel|\,|outdent|\,
-C_2\,T]&amp;end of case statement\cr
-9&amp;|case_head@,stmt| $\RA$ |case_head|\[C_2=C_1\,|force|\,S]&amp;case statement
+8&|case_head@,close@,terminator| $\RA$ |stmt|\[S=C_1\,|cancel|\,|outdent|\,
+C_2\,T]&end of case statement\cr
+9&|case_head@,stmt| $\RA$ |case_head|\[C_2=C_1\,|force|\,S]&case statement
 grows\cr
-10&amp;|casey@,clause| $\RA$ |case_head|&amp;beginning of case statement\cr
-11&amp;|clause@,stmt| $\RA$ |stmt|\[S_2=C\,|break_space|\,S_1\,|cancel|\,|outdent|\,
-|force|]&amp;end of controlled statement\cr
-12&amp;|cond@,clause@,stmt@,elsie| $\RA$ |clause|\[C_3=C_1\,C_2\,|break_space|\,S\,
-E\,\sp\,|cancel|]&amp;complete conditional\cr
-13&amp;|cond@,clause@,stmt| $\RA$ |stmt|\cr
-&amp;\qquad\[S_2=C_1\,C_2\,|break_space|\,S_1\,
-|cancel|\,|outdent|\,|force|]&amp;incomplete conditional\cr
-14&amp;|elsie| $\RA$ |intro|&amp;unmatched else\cr
-15&amp;|exp@,math@,simp|* $\RA$ |math|\[M_2=E\,M_1\,S\,\.\}]&amp;signed exponent\cr
-16&amp;|exp@,simp|* $\RA$ |math|\[M=E\,S\,\.\}]&amp;unsigned exponent\cr
-17&amp;|intro@,stmt| $\RA$ |stmt|\[S_2=I\,\sp\,|opt|\,\.7\,|cancel|\,S_1]&amp;labeled
+10&|casey@,clause| $\RA$ |case_head|&beginning of case statement\cr
+11&|clause@,stmt| $\RA$ |stmt|\[S_2=C\,|break_space|\,S_1\,|cancel|\,|outdent|\,
+|force|]&end of controlled statement\cr
+12&|cond@,clause@,stmt@,elsie| $\RA$ |clause|\[C_3=C_1\,C_2\,|break_space|\,S\,
+E\,\sp\,|cancel|]&complete conditional\cr
+13&|cond@,clause@,stmt| $\RA$ |stmt|\cr
+&\qquad\[S_2=C_1\,C_2\,|break_space|\,S_1\,
+|cancel|\,|outdent|\,|force|]&incomplete conditional\cr
+14&|elsie| $\RA$ |intro|&unmatched else\cr
+15&|exp@,math@,simp|* $\RA$ |math|\[M_2=E\,M_1\,S\,\.\}]&signed exponent\cr
+16&|exp@,simp|* $\RA$ |math|\[M=E\,S\,\.\}]&unsigned exponent\cr
+17&|intro@,stmt| $\RA$ |stmt|\[S_2=I\,\sp\,|opt|\,\.7\,|cancel|\,S_1]&labeled
 statement, etc.\cr
-18&amp;|math@,close| $\RA$ |stmt@,close|\[S=\.\$\,M\,\.\$]&amp;end of field list\cr
-19&amp;|math@,colon| $\RA$ |intro|\[I=|force|\,|backup|\,\.\$\,M\,\.\$\,C]&amp;compound
+18&|math@,close| $\RA$ |stmt@,close|\[S=\.\$\,M\,\.\$]&end of field list\cr
+19&|math@,colon| $\RA$ |intro|\[I=|force|\,|backup|\,\.\$\,M\,\.\$\,C]&compound
 label\cr
-20&amp;|math@,math| $\RA$ |math|&amp;simple concatenation\cr
-21&amp;|math@,simp| $\RA$ |math|&amp;simple concatenation\cr
-22&amp;|math@,stmt| $\RA$ |stmt|\cr
-&amp;\qquad\[S_2=\.\$\,M\,\.\$\,|indent|\,|break_space|\,
+20&|math@,math| $\RA$ |math|&simple concatenation\cr
+21&|math@,simp| $\RA$ |math|&simple concatenation\cr
+22&|math@,stmt| $\RA$ |stmt|\cr
+&\qquad\[S_2=\.\$\,M\,\.\$\,|indent|\,|break_space|\,
 S_1\,|cancel|\,|outdent|\,|force|]¯o or type definition\cr
-23&amp;|math@,terminator| $\RA$ |stmt|\[S=\.\$\,M\,\.\$\,T]&amp;statement involving
+23&|math@,terminator| $\RA$ |stmt|\[S=\.\$\,M\,\.\$\,T]&statement involving
 math\cr
-24&amp;|mod_scrap@,(terminator@t or @&gt;semi)| $\RA$ |stmt|\[S=M\,T\,|force|]&amp;module
+24&|mod_scrap@,(terminator@t or @>semi)| $\RA$ |stmt|\[S=M\,T\,|force|]&module
 like a statement\cr
-25&amp;|mod_scrap| $\RA$ |simp|&amp;module unlike a statement\cr
-26&amp;|open@,case_head@,close| $\RA$ |math|\[M=O\,\.\$\,|cancel|\,C_1\,
-|cancel|\,|outdent|\,\.\$\,C_2]&amp;case in field list\cr
-27&amp;|open@,close| $\RA$ |math|\[M=O\,\.\\\,\.,\,C]&amp;empty set |[]|\cr
-28&amp;|open@,math@,case_head@,close| $\RA$ |math|\cr
-&amp;\qquad\[M_2=O\,M_1\,\.\$\,|cancel|\,
-C_1\,|cancel|\,|outdent|\,\.\$\,C_2]&amp;case in field list\cr
-29&amp;|open@,math@,close| $\RA$ |math|&amp;parenthesized group\cr
-30&amp;|open@,math@,colon| $\RA$ |open@,math|&amp;colon in parentheses\cr
-31&amp;|open@,math@,proc@,intro| $\RA$ |open@,math|\[M_2=M_1\,|math_op|\,|cancel|\,
-P\,\.\}]&amp;|procedure| in parentheses\cr
-32&amp;|open@,math@,semi| $\RA$ |open@,math|\[M_2=M_1\,S\,\.\\\,\.,\,|opt|\,
-\.5]&amp;semicolon in parentheses\cr
-33&amp;|open@,math@,var_head@,intro| $\RA$ |open@,math|\[M_2=M_1\,|math_op|\,
-|cancel|\,V\,\.\}]&amp;|var| in parentheses\cr
-34&amp;|open@,proc@,intro| $\RA$ |open@,math|\[M=|math_op|\,|cancel|\,
-P\,\.\}]&amp;|procedure| in parentheses\cr
-35&amp;|open@,simp| $\RA$ |open@,math|&amp;convert to math mode\cr
-36&amp;|open@,stmt@,close| $\RA$ |math|\[M=O\,\.\$\,|cancel|\,S\,|cancel|\,
-\.\$\,C]&amp;field list\cr
-37&amp;|open@,var_head@,intro| $\RA$ |open@,math|\[M=|math_op|\,|cancel|\,V\,
-\.\}]&amp;|var| in parentheses\cr
-38&amp;|proc@,beginning@,close@,terminator| $\RA$ |stmt|\[S=P\,|cancel|\,
-|outdent|\,B\,C\,T]&amp;end of procedure declaration\cr
-39&amp;|proc@,stmt| $\RA$ |proc|\[P_2=P_1\,|break_space|\,S]&amp;procedure declaration
+25&|mod_scrap| $\RA$ |simp|&module unlike a statement\cr
+26&|open@,case_head@,close| $\RA$ |math|\[M=O\,\.\$\,|cancel|\,C_1\,
+|cancel|\,|outdent|\,\.\$\,C_2]&case in field list\cr
+27&|open@,close| $\RA$ |math|\[M=O\,\.\\\,\.,\,C]&empty set |[]|\cr
+28&|open@,math@,case_head@,close| $\RA$ |math|\cr
+&\qquad\[M_2=O\,M_1\,\.\$\,|cancel|\,
+C_1\,|cancel|\,|outdent|\,\.\$\,C_2]&case in field list\cr
+29&|open@,math@,close| $\RA$ |math|&parenthesized group\cr
+30&|open@,math@,colon| $\RA$ |open@,math|&colon in parentheses\cr
+31&|open@,math@,proc@,intro| $\RA$ |open@,math|\[M_2=M_1\,|math_op|\,|cancel|\,
+P\,\.\}]&|procedure| in parentheses\cr
+32&|open@,math@,semi| $\RA$ |open@,math|\[M_2=M_1\,S\,\.\\\,\.,\,|opt|\,
+\.5]&semicolon in parentheses\cr
+33&|open@,math@,var_head@,intro| $\RA$ |open@,math|\[M_2=M_1\,|math_op|\,
+|cancel|\,V\,\.\}]&|var| in parentheses\cr
+34&|open@,proc@,intro| $\RA$ |open@,math|\[M=|math_op|\,|cancel|\,
+P\,\.\}]&|procedure| in parentheses\cr
+35&|open@,simp| $\RA$ |open@,math|&convert to math mode\cr
+36&|open@,stmt@,close| $\RA$ |math|\[M=O\,\.\$\,|cancel|\,S\,|cancel|\,
+\.\$\,C]&field list\cr
+37&|open@,var_head@,intro| $\RA$ |open@,math|\[M=|math_op|\,|cancel|\,V\,
+\.\}]&|var| in parentheses\cr
+38&|proc@,beginning@,close@,terminator| $\RA$ |stmt|\[S=P\,|cancel|\,
+|outdent|\,B\,C\,T]&end of procedure declaration\cr
+39&|proc@,stmt| $\RA$ |proc|\[P_2=P_1\,|break_space|\,S]&procedure declaration
 grows\cr
-40&amp;|record_head@,intro@,casey| $\RA$ |casey|\[C_2=R\,I\,\sp\,|cancel|\,C_1]&amp;
-\&amp;{record case} $\ldots$\cr
-41&amp;|record_head| $\RA$ |case_head|\[C=|indent|\,R\,|cancel|]&amp;other \&amp;{record}
+40&|record_head@,intro@,casey| $\RA$ |casey|\[C_2=R\,I\,\sp\,|cancel|\,C_1]&
+\&{record case} $\ldots$\cr
+41&|record_head| $\RA$ |case_head|\[C=|indent|\,R\,|cancel|]&other \&{record}
 structures\cr
-42&amp;|semi| $\RA$ |terminator|&amp;semicolon after statement\cr
-43&amp;|simp@,close| $\RA$ |stmt@,close|&amp;end of field list\cr
-44&amp;|simp@,colon| $\RA$ |intro|\[I=|force|\,|backup|\,S\,C]&amp;simple label\cr
-45&amp;|simp@,math| $\RA$ |math|&amp;simple concatenation\cr
-46&amp;|simp@,mod_scrap| $\RA$ |mod_scrap|&amp;in emergencies\cr
-47&amp;|simp@,simp| $\RA$ |simp|&amp;simple concatenation\cr
-48&amp;|simp@,terminator| $\RA$ |stmt|&amp;simple statement\cr
-49&amp;|stmt@,stmt| $\RA$ |stmt|\[S_3=S_1\,|break_space|\,S_2]&amp;adjacent
+42&|semi| $\RA$ |terminator|&semicolon after statement\cr
+43&|simp@,close| $\RA$ |stmt@,close|&end of field list\cr
+44&|simp@,colon| $\RA$ |intro|\[I=|force|\,|backup|\,S\,C]&simple label\cr
+45&|simp@,math| $\RA$ |math|&simple concatenation\cr
+46&|simp@,mod_scrap| $\RA$ |mod_scrap|&in emergencies\cr
+47&|simp@,simp| $\RA$ |simp|&simple concatenation\cr
+48&|simp@,terminator| $\RA$ |stmt|&simple statement\cr
+49&|stmt@,stmt| $\RA$ |stmt|\[S_3=S_1\,|break_space|\,S_2]&adjacent
 statements\cr
-50&amp;|terminator| $\RA$ |stmt|&amp;empty statement\cr
-51&amp;|var_head@,beginning| $\RA$ |stmt@,beginning|&amp;end of variable
+50&|terminator| $\RA$ |stmt|&empty statement\cr
+51&|var_head@,beginning| $\RA$ |stmt@,beginning|&end of variable
 declarations\cr
-52&amp;|var_head@,math@,colon| $\RA$ |var_head@,intro|\[I=\.\$\,M\,\.\$\,C]&amp;
+52&|var_head@,math@,colon| $\RA$ |var_head@,intro|\[I=\.\$\,M\,\.\$\,C]&
 variable declaration\cr
-53&amp;|var_head@,simp@,colon| $\RA$ |var_head@,intro|&amp;variable declaration\cr
-54&amp;|var_head@,stmt| $\RA$ |var_head|\[V_2=V_1\,|break_space|\,S]&amp;variable
+53&|var_head@,simp@,colon| $\RA$ |var_head@,intro|&variable declaration\cr
+54&|var_head@,stmt| $\RA$ |var_head|\[V_2=V_1\,|break_space|\,S]&variable
 declarations grow\cr}
 \yskip\noindent
 Translations are not specified here when they are simple concatenations
@@ -3012,7 +2990,8 @@ of the scraps that change. For example, the full translation of
 
 The notation `|simp|*', in the |exp|-related productions above,
 stands for a |simp| scrap that isn't followed by another |simp|.
-@* Implementing the productions.
+
+@* Implementing the productions.
 When \PASCAL\ text is to be processed with the grammar above, we put its
 initial scraps $s_1\ldots s_n$ into two arrays |cat[1..n]| and |trans[1..n]|.
 The value of |cat[k]| is simply a category code from the list above; the
@@ -3046,7 +3025,7 @@ of type |text_pointer|, because the final sorting phase of \.{WEAVE}
 uses this array to contain elements of type |name_pointer|. Both
 of these types are subranges of |0..10239|.
 
-@&lt;Glo...@&gt;=
+@<Glo...@>=
 @!cat:array[0..max_scraps] of eight_bits; {category codes of scraps}
 @!trans:array[0..max_scraps] of 0..10239; {translation texts of scraps}
 @!pp:0..max_scraps; {current position for reducing productions}
@@ -3057,7 +3036,7 @@ of these types are subranges of |0..10239|.
 stat@!max_scr_ptr:0..max_scraps; {largest value assumed by |scrap_ptr|}
 tats
 
-@ @&lt;Set init...@&gt;=
+@ @<Set init...@>=
 scrap_base←1; scrap_ptr←0;
 stat max_scr_ptr←0; @+tats
 
@@ -3069,7 +3048,7 @@ items for \TeX\ output.
 
 \item{$\bullet$}|id_flag+p| represents \.{\\\\\{{\rm identifier $p$}\}};
 
-\item{$\bullet$}|res_flag+p| represents \.{\\\&amp;\{{\rm identifier $p$}\}};
+\item{$\bullet$}|res_flag+p| represents \.{\\\&\{{\rm identifier $p$}\}};
 
 \item{$\bullet$}|mod_flag+p| represents module name |p|;
 
@@ -3096,19 +3075,19 @@ else for j←tok_start[p] to tok_start[p+1]-1 do
 	case tok_mem[j] div id_flag of
 	1: begin print('\\',lbrace); print_id(r); print(rbrace);
 		end; {|id_flag|}
-	2: begin print('\&amp;',lbrace); print_id(r); print(rbrace);
+	2: begin print('\&',lbrace); print_id(r); print(rbrace);
 		end; {|res_flag|}
-	3: begin print('&lt;'); print_id(r); print('&gt;');
+	3: begin print('<'); print_id(r); print('>');
 		end; {|mod_flag|}
 	4: print('[[',r:1,']]'); {|tok_flag|}
 	5: print('|[[',r:1,']]|'); {|inner_tok_flag|}
-	othercases @&lt;Print token |r| in symbolic form@&gt;
+	othercases @<Print token |r| in symbolic form@>
 	endcases;
 	end;
 end;
 gubed
 
-@ @&lt;Print token |r|...@&gt;=
+@ @<Print token |r|...@>=
 case r of
 math_bin: print('\mathbin',lbrace);
 math_rel: print('\mathrel',lbrace);
@@ -3202,7 +3181,7 @@ of program text. The |translate| procedure, which incorporates the |case|
 statement here, would become too long for those compilers if we did
 not do something to split the cases into parts. Therefore
 a separate procedure called |five_cases| has been introduced.
-@↑split procedures@&gt;
+@↑split procedures@>
 This auxiliary procedure contains approximately half of the program text
 that |translate| would otherwise have had. There's also a procedure
 called |alpha_cases|, which turned out to be necessary because the best
@@ -3210,23 +3189,23 @@ two-way split wasn't good enough. The procedure could be split further
 in an analogous manner, but the present scheme works on all compilers
 known to the author.
 
-@&lt;Match a production at |pp|, or increase |pp| if there is no match@&gt;=
+@<Match a production at |pp|, or increase |pp| if there is no match@>=
 if cat[pp]≤alpha then
-	if cat[pp]&lt;alpha then five_cases@+else alpha_cases
+	if cat[pp]<alpha then five_cases@+else alpha_cases
 else	begin case cat[pp] of
-	case_head: @&lt;Cases for |case_head|@&gt;;
-	casey: @&lt;Cases for |casey|@&gt;;
-	clause: @&lt;Cases for |clause|@&gt;;
-	cond: @&lt;Cases for |cond|@&gt;;
-	elsie: @&lt;Cases for |elsie|@&gt;;
-	exp: @&lt;Cases for |exp|@&gt;;
-	mod_scrap: @&lt;Cases for |mod_scrap|@&gt;;
-	proc: @&lt;Cases for |proc|@&gt;;
-	record_head: @&lt;Cases for |record_head|@&gt;;
-	semi: @&lt;Cases for |semi|@&gt;;
-	stmt: @&lt;Cases for |stmt|@&gt;;
-	terminator: @&lt;Cases for |terminator|@&gt;;
-	var_head: @&lt;Cases for |var_head|@&gt;;
+	case_head: @<Cases for |case_head|@>;
+	casey: @<Cases for |casey|@>;
+	clause: @<Cases for |clause|@>;
+	cond: @<Cases for |cond|@>;
+	elsie: @<Cases for |elsie|@>;
+	exp: @<Cases for |exp|@>;
+	mod_scrap: @<Cases for |mod_scrap|@>;
+	proc: @<Cases for |proc|@>;
+	record_head: @<Cases for |record_head|@>;
+	semi: @<Cases for |semi|@>;
+	stmt: @<Cases for |stmt|@>;
+	terminator: @<Cases for |terminator|@>;
+	var_head: @<Cases for |var_head|@>;
 	othercases do_nothing
 	endcases;@/
 	incr(pp); {if no match was found, we move to the right}
@@ -3235,15 +3214,15 @@ else	begin case cat[pp] of
 @ Here are the procedures that need to be present for the reason just
 explained.
 
-@&lt;Declaration of subprocedures for |translate|@&gt;=
+@<Declaration of subprocedures for |translate|@>=
 procedure five_cases; {handles almost half of the syntax}
 label found;
 begin case cat[pp] of
-beginning: @&lt;Cases for |beginning|@&gt;;
-intro: @&lt;Cases for |intro|@&gt;;
-math: @&lt;Cases for |math|@&gt;;
-open: @&lt;Cases for |open|@&gt;;
-simp: @&lt;Cases for |simp|@&gt;;
+beginning: @<Cases for |beginning|@>;
+intro: @<Cases for |intro|@>;
+math: @<Cases for |math|@>;
+open: @<Cases for |open|@>;
+simp: @<Cases for |simp|@>;
 othercases do_nothing
 endcases;@/
 incr(pp); {if no match was found, we move to the right}
@@ -3251,7 +3230,7 @@ found: end;
 @#
 procedure alpha_cases;
 label found;
-begin @&lt;Cases for |alpha|@&gt;;
+begin @<Cases for |alpha|@>;
 incr(pp); {if no match was found, we move to the right}
 found: end;
 
@@ -3260,7 +3239,7 @@ with a particular type of scrap. Whenever a match is discovered,
 the |squash| or |reduce| macro will cause the appropriate action
 to be performed, followed by |goto found|.
 
-@&lt;Cases for |alpha|@&gt;=
+@<Cases for |alpha|@>=
 if cat[pp+1]=math then
 	begin if cat[pp+2]=colon then squash(pp+1,2,math,0)(1)
 	else if cat[pp+2]=omega then
@@ -3275,7 +3254,7 @@ else if cat[pp+1]=omega then
 	end
 else if cat[pp+1]=simp then squash(pp+1,1,math,0)(4)
 
-@ @&lt;Cases for |beginning|@&gt;=
+@ @<Cases for |beginning|@>=
 if cat[pp+1]=close then
 	begin if (cat[pp+2]=terminator)∨(cat[pp+2]=stmt) then
 		squash(pp,3,stmt,-2)(5);
@@ -3285,7 +3264,7 @@ else if cat[pp+1]=stmt then
 	reduce(pp,2,beginning,-1)(6);
 	end
 
-@ @&lt;Cases for |case_head|@&gt;=
+@ @<Cases for |case_head|@>=
 if cat[pp+1]=casey then
 	begin if cat[pp+2]=clause then
 		begin app1(pp); app(outdent); app2(pp+1);
@@ -3303,17 +3282,17 @@ else if cat[pp+1]=stmt then
 	reduce(pp,2,case_head,0)(9);
 	end
 
-@ @&lt;Cases for |casey|@&gt;=
+@ @<Cases for |casey|@>=
 if cat[pp+1]=clause then squash(pp,2,case_head,0)(10)
 
-@ @&lt;Cases for |clause|@&gt;=
+@ @<Cases for |clause|@>=
 if cat[pp+1]=stmt then
 	begin app1(pp); app(break_space); app1(pp+1);
 	app(cancel); app(outdent);
 	app(force); reduce(pp,2,stmt,-2)(11);
 	end
 
-@ @&lt;Cases for |cond|@&gt;=
+@ @<Cases for |cond|@>=
 if (cat[pp+1]=clause)∧(cat[pp+2]=stmt) then
 	if cat[pp+3]=elsie then
 		begin app2(pp); app(break_space); app2(pp+2); app(" ");
@@ -3323,10 +3302,10 @@ if (cat[pp+1]=clause)∧(cat[pp+2]=stmt) then
 		app(outdent); app(force); reduce(pp,3,stmt,-2)(13);
 		end
 
-@ @&lt;Cases for |elsie|@&gt;=
+@ @<Cases for |elsie|@>=
 squash(pp,1,intro,-3)(14)
 
-@ @&lt;Cases for |exp|@&gt;=
+@ @<Cases for |exp|@>=
 if cat[pp+1]=math then
 	begin if cat[pp+2]=simp then if cat[pp+3]≠simp then
 		begin app3(pp); app("}"); reduce(pp,3,math,-1)(15);
@@ -3336,13 +3315,13 @@ else if cat[pp+1]=simp then if cat[pp+2]≠simp then
 	begin app2(pp); app("}"); reduce(pp,2,math,-1)(16);
 	end
 
-@ @&lt;Cases for |intro|@&gt;=
+@ @<Cases for |intro|@>=
 if cat[pp+1]=stmt then
 	begin app1(pp); app(" "); app(opt); app("7");
 	app(cancel); app1(pp+1); reduce(pp,2,stmt,-2)(17);
 	end
 
-@ @&lt;Cases for |math|@&gt;=
+@ @<Cases for |math|@>=
 if cat[pp+1]=close then
 	begin app("$"); app1(pp); app("$"); reduce(pp,1,stmt,-2)(18);
 	end
@@ -3362,23 +3341,23 @@ else if cat[pp+1]=terminator then
 	reduce(pp,2,stmt,-2)(23);
 	end
 
-@ @&lt;Cases for |mod_scrap|@&gt;=
+@ @<Cases for |mod_scrap|@>=
 if (cat[pp+1]=terminator)∨(cat[pp+1]=semi) then
 	begin app2(pp); app(force); reduce(pp,2,stmt,-2)(24);
 	end
 else squash(pp,1,simp,-2)(25)
 
-@ @&lt;Cases for |open|@&gt;=
+@ @<Cases for |open|@>=
 if (cat[pp+1]=case_head)∧(cat[pp+2]=close) then
 	begin app1(pp); app("$"); app(cancel); app1(pp+1); app(cancel);
 	app(outdent); app("$"); app1(pp+2); reduce(pp,3,math,-1)(26);
 	end
 else if cat[pp+1]=close then
 	begin app1(pp); app("\"); app(","); app1(pp+1);
-@.\\,@&gt;
+@.\\,@>
 	reduce(pp,2,math,-1)(27);
 	end
-else if cat[pp+1]=math then @&lt;Cases for |open@,math|@&gt;
+else if cat[pp+1]=math then @<Cases for |open@,math|@>
 else if cat[pp+1]=proc then
 	begin if cat[pp+2]=intro then
 		begin app(math_op); app(cancel); app1(pp+1); app("}");
@@ -3397,7 +3376,7 @@ else if cat[pp+1]=var_head then
 		end;
 	end
 
-@ @&lt;Cases for |open@,math|@&gt;=
+@ @<Cases for |open@,math|@>=
 begin if (cat[pp+2]=case_head)∧(cat[pp+3]=close) then
 	begin app2(pp); app("$"); app(cancel); app1(pp+2); app(cancel);
 	app(outdent); app("$"); app1(pp+3); reduce(pp,4,math,-1)(28);
@@ -3412,7 +3391,7 @@ else if cat[pp+2]=proc then
 	end
 else if cat[pp+2]=semi then
 	begin app2(pp+1); app("\"); app(","); app(opt); app("5");
-@.\\,@&gt;
+@.\\,@>
 	reduce(pp+1,2,math,0)(32);
 	end
 else if cat[pp+2]=var_head then
@@ -3423,7 +3402,7 @@ else if cat[pp+2]=var_head then
 	end;
 end
 
-@ @&lt;Cases for |proc|@&gt;=
+@ @<Cases for |proc|@>=
 if cat[pp+1]=beginning then
 	begin if (cat[pp+2]=close)∧(cat[pp+3]=terminator) then
 		begin app1(pp); app(cancel); app(outdent); app3(pp+1);
@@ -3435,7 +3414,7 @@ else if cat[pp+1]=stmt then
 	reduce(pp,2,proc,-2)(39);
 	end
 
-@ @&lt;Cases for |record_head|@&gt;=
+@ @<Cases for |record_head|@>=
 if (cat[pp+1]=intro)∧(cat[pp+2]=casey) then
 	begin app2(pp); app(" "); app(cancel); app1(pp+2);
 	reduce(pp,3,casey,-2)(40);
@@ -3444,10 +3423,10 @@ else	begin app(indent); app1(pp); app(cancel);
 	reduce(pp,1,case_head,0)(41);
 	end
 
-@ @&lt;Cases for |semi|@&gt;=
+@ @<Cases for |semi|@>=
 squash(pp,1,terminator,-3)(42)
 
-@ @&lt;Cases for |simp|@&gt;=
+@ @<Cases for |simp|@>=
 if cat[pp+1]=close then squash(pp,1,stmt,-2)(43)
 else if cat[pp+1]=colon then
 	begin app(force); app(backup); app2(pp); reduce(pp,2,intro,-3)(44);
@@ -3457,16 +3436,16 @@ else if cat[pp+1]=mod_scrap then squash(pp,2,mod_scrap,0)(46)
 else if cat[pp+1]=simp then squash(pp,2,simp,-2)(47)
 else if cat[pp+1]=terminator then squash(pp,2,stmt,-2)(48)
 
-@ @&lt;Cases for |stmt|@&gt;=
+@ @<Cases for |stmt|@>=
 if cat[pp+1]=stmt then
 	begin app1(pp); app(break_space); app1(pp+1);
 	reduce(pp,2,stmt,-2)(49);
 	end
 
-@ @&lt;Cases for |terminator|@&gt;=
+@ @<Cases for |terminator|@>=
 squash(pp,1,stmt,-2)(50)
 
-@ @&lt;Cases for |var_head|@&gt;=
+@ @<Cases for |var_head|@>=
 if cat[pp+1]=beginning then squash(pp,1,stmt,-2)(51)
 else if cat[pp+1]=math then
 	begin if cat[pp+2]=colon then
@@ -3504,16 +3483,16 @@ scrap list.
 	@!d:integer);
 var i:0..max_scraps; {index into scrap memory}
 begin cat[j]←c; trans[j]←text_ptr; freeze_text;
-if k&gt;1 then
+if k>1 then
 	begin for i←j+k to lo_ptr do
 		begin cat[i-k+1]←cat[i]; trans[i-k+1]←trans[i];
 		end;
 	lo_ptr←lo_ptr-k+1;
 	end;
-@&lt;Change |pp| to $\max(|scrap_base|,|pp+d|)$@&gt;;
+@<Change |pp| to $\max(|scrap_base|,|pp+d|)$@>;
 end;
 
-@ @&lt;Change |pp| to $\max(|scrap_base|,|pp+d|)$@&gt;=
+@ @<Change |pp| to $\max(|scrap_base|,|pp+d|)$@>=
 if pp+d≥scrap_base then pp←pp+d
 else pp←scrap_base
 
@@ -3524,7 +3503,7 @@ procedure takes advantage of the simplification that occurs when |k=1|.
 	@!d:integer);
 var i:0..max_scraps; {index into scrap memory}
 begin if k=1 then
-	begin cat[j]←c; @&lt;Change |pp|...@&gt;;
+	begin cat[j]←c; @<Change |pp|...@>;
 	end
 else	begin for i←j to j+k-1 do
 		begin app1(i);
@@ -3537,30 +3516,30 @@ end;
 requires two local labels (|found| and |done|), as well as a local
 variable (|i|).
 
-@&lt;Reduce the scraps using the productions until no more rules apply@&gt;=
-loop@+begin @&lt;Make sure the entries |cat[pp..(pp+3)]| are defined@&gt;;
-	if (tok_ptr+8&gt;max_toks)∨(text_ptr+4&gt;max_texts) then
-		begin stat if tok_ptr&gt;max_tok_ptr then max_tok_ptr←tok_ptr;
-		if text_ptr&gt;max_txt_ptr then max_txt_ptr←text_ptr;
+@<Reduce the scraps using the productions until no more rules apply@>=
+loop@+begin @<Make sure the entries |cat[pp..(pp+3)]| are defined@>;
+	if (tok_ptr+8>max_toks)∨(text_ptr+4>max_texts) then
+		begin stat if tok_ptr>max_tok_ptr then max_tok_ptr←tok_ptr;
+		if text_ptr>max_txt_ptr then max_txt_ptr←text_ptr;
 		tats@;@/
 		overflow('token/text');
 		end;
-	if pp&gt;lo_ptr then goto done;
-	@&lt;Match a production...@&gt;;
+	if pp>lo_ptr then goto done;
+	@<Match a production...@>;
 	end;
 done:
 
 @ If we get to the end of the scrap list, category codes equal to zero are
 stored, since zero does not match anything in a production.
 
-@&lt;Make sure the entries...@&gt;=
-if lo_ptr&lt;pp+3 then
+@<Make sure the entries...@>=
+if lo_ptr<pp+3 then
 	begin repeat if hi_ptr≤scrap_ptr then
 		begin incr(lo_ptr);@/
 		cat[lo_ptr]←cat[hi_ptr]; trans[lo_ptr]←trans[hi_ptr];@/
 		incr(hi_ptr);
 		end;
-	until (hi_ptr&gt;scrap_ptr)∨(lo_ptr=pp+3);
+	until (hi_ptr>scrap_ptr)∨(lo_ptr=pp+3);
 	for i←lo_ptr+1 to pp+3 do cat[i]←0;
 	end
 
@@ -3568,10 +3547,10 @@ if lo_ptr&lt;pp+3 then
 current stack categories will be printed out when |tracing| is set to 2;
 a sequence of two or more irreducible scraps will be printed out when
 |tracing| is set to 1.
-@.\AT!2@&gt;
-@.\AT!1@&gt;
+@.\AT!2@>
+@.\AT!1@>
 
-@&lt;Glo...@&gt;=
+@<Glo...@>=
 @!debug@!tracing:0..2; {can be used to show parsing details}
 gubed
 
@@ -3601,21 +3580,21 @@ the given sequence of scraps.
 After calling |translate|, we will have |text_ptr+3≤max_texts| and
 |tok_ptr+6≤max_toks|, so it will be possible to create up to three token
 lists with up to six tokens without checking for overflow. Before calling
-|translate|, we should have |text_ptr&lt;max_texts| and |scrap_ptr&lt;max_scraps|,
+|translate|, we should have |text_ptr<max_texts| and |scrap_ptr<max_scraps|,
 since |translate| might add a new text and a new scrap before it checks
 for overflow.
 
-@p @&lt;Declaration of subprocedures for |translate|@&gt;@;
+@p @<Declaration of subprocedures for |translate|@>@;
 function translate:text_pointer; {converts a sequence of scraps}
 label done,found;
 var i: 1..max_scraps; {index into |cat|}
 @!j:0..max_scraps; {runs through final scraps}
 @!k:0..long_buf_size; {index into |buffer|}
 begin pp←scrap_base; lo_ptr←pp-1; hi_ptr←pp;
-@&lt;If tracing, print an indication of where we are@&gt;;
-@&lt;Reduce the scraps...@&gt;;
+@<If tracing, print an indication of where we are@>;
+@<Reduce the scraps...@>;
 if (lo_ptr=scrap_base)∧(cat[lo_ptr]≠math) then translate←trans[lo_ptr]
-else @&lt;Combine the irreducible scraps that remain@&gt;;
+else @<Combine the irreducible scraps that remain@>;
 end;
 
 @ If the initial sequence of scraps does not reduce to a single scrap,
@@ -3623,8 +3602,8 @@ we concatenate the translations of all remaining scraps, separated by
 blank spaces, with dollar signs surrounding the translations of |math|
 scraps.
 
-@&lt;Combine the irreducible...@&gt;=
-begin @&lt;If semi-tracing, show the irreducible scraps@&gt;;
+@<Combine the irreducible...@>=
+begin @<If semi-tracing, show the irreducible scraps@>;
 for j←scrap_base to lo_ptr do
 	begin if j≠scrap_base then
 		begin app(" ");
@@ -3636,13 +3615,13 @@ for j←scrap_base to lo_ptr do
 	if cat[j]=math then
 		begin app("$");
 		end;
-	if tok_ptr+6&gt;max_toks then overflow('token');
+	if tok_ptr+6>max_toks then overflow('token');
 	end;
 freeze_text; translate←text_ptr-1;
 end
 
-@ @&lt;If semi-tracing, show the irreducible scraps@&gt;=
-@!debug if (lo_ptr&gt;scrap_base)∧(tracing=1) then
+@ @<If semi-tracing, show the irreducible scraps@>=
+@!debug if (lo_ptr>scrap_base)∧(tracing=1) then
 	begin print_nl('Irreducible scrap sequence in section ',module_count:1);
 	print_ln(':'); mark_harmless;
 	for j←scrap_base to lo_ptr do
@@ -3651,17 +3630,18 @@ end
 	end;
 gubed
 
-@ @&lt;If tracing,...@&gt;=
+@ @<If tracing,...@>=
 @!debug if tracing=2 then
 	begin print_nl('Tracing after l.',line:1,':'); mark_harmless;
-	if loc&gt;50 then
+	if loc>50 then
 		begin print('...');
 		for k←loc-50 to loc do print(xchr[buffer[k-1]]);
 		end
 	else for k←1 to loc do print(xchr[buffer[k-1]]);
 	end
 gubed
-@* Initializing the scraps.
+
+@* Initializing the scraps.
 If we are going to use the powerful production mechanism just developed, we
 must get the scraps set up in the first place, given a \PASCAL\ text. A table
 of the initial scraps corresponding to \PASCAL\ tokens appeared above in the
@@ -3680,23 +3660,23 @@ Like |prod|, this procedure has to split into pieces so that each
 part is short enough to be handled by \PASCAL\ compilers that discriminate
 against long subroutines. This time there are two split-off routines,
 called |easy_cases| and |sub_cases|.
-@↑split procedures@&gt;
+@↑split procedures@>
 
 After studying |Pascal_parse|, we will look at the sub-procedures
 |app_comment|, |app_octal|, and |app_hex| that are used in some of its
 branches.
 
-@p @&lt;Declaration of the |app_comment| procedure@&gt;@;
-@&lt;Declaration of the |app_octal| and |app_hex| procedures@&gt;@;
-@&lt;Declaration of the |easy_cases| procedure@&gt;@;
-@&lt;Declaration of the |sub_cases| procedure@&gt;@;
+@p @<Declaration of the |app_comment| procedure@>@;
+@<Declaration of the |app_octal| and |app_hex| procedures@>@;
+@<Declaration of the |easy_cases| procedure@>@;
+@<Declaration of the |sub_cases| procedure@>@;
 procedure Pascal_parse; {creates scraps from \PASCAL\ tokens}
 label reswitch, exit;
 var j:0..long_buf_size; {index into |buffer|}
 @!p:name_pointer; {identifier designator}
 @!q,@!qq,@!r:integer; {registers for new reference insertion loop}
-begin while next_control&lt;format do
-	begin @&lt;Append the scrap appropriate to |next_control|@&gt;;
+begin while next_control<format do
+	begin @<Append the scrap appropriate to |next_control|@>;
 	next_control←get_next;
 	if (next_control="|")∨(next_control="{") then return;
 	end;
@@ -3723,73 +3703,73 @@ translation has three tokens $t_1$, $t_2$, $t_3$ is generated by
 @d comment_scrap(#)==begin app(#); app_comment;
 	end
 
-@ @&lt;Append the scr...@&gt;=
-@&lt;Make sure that there is room for at least four more scraps, six more
-tokens, and four more texts@&gt;;
+@ @<Append the scr...@>=
+@<Make sure that there is room for at least four more scraps, six more
+tokens, and four more texts@>;
 reswitch: case next_control of
-string,verbatim: @&lt;Append a \(string scrap@&gt;;
-identifier: @&lt;Append an identifier scrap@&gt;;
-TeX_string: @&lt;Append a \TeX\ string scrap@&gt;;
+string,verbatim: @<Append a \(string scrap@>;
+identifier: @<Append an identifier scrap@>;
+TeX_string: @<Append a \TeX\ string scrap@>;
 othercases easy_cases
 endcases
 
 @ The |easy_cases| each result in straightforward scraps.
 
-@&lt;Declaration of the |easy_cases| procedure@&gt;=
+@<Declaration of the |easy_cases| procedure@>=
 procedure easy_cases; {a subprocedure of |Pascal_parse|}
 begin case next_control of
 set_element_sign: sc3("\")("i")("n")(math);
-@.\\in@&gt;
+@.\\in@>
 double_dot: sc3("\")("t")("o")(math);
-@.\\to@&gt;
+@.\\to@>
 "#","$","%","↑","_": sc2("\")(next_control)(math);
-@.\\\#@&gt;
-@.\\\$@&gt;
-@.\\\%@&gt;
-@.\\\↑@&gt;
+@.\\\#@>
+@.\\\$@>
+@.\\\%@>
+@.\\\↑@>
 ignore,"|",xref_roman,xref_wildcard,xref_typewriter: do_nothing;
 "(","[": sc1(next_control)(open);
 ")","]": sc1(next_control)(close);
 "*": sc4("\")("a")("s")("t")(math);
-@.\\ast@&gt;
+@.\\ast@>
 ",": sc3(",")(opt)("9")(math);
 ".","0","1","2","3","4","5","6","7","8","9": sc1(next_control)(simp);
 ";": sc1(";")(semi);
 ":": sc1(":")(colon);
-@t\4@&gt;	@&lt;Cases involving nonstandard ASCII characters@&gt;@;
+@t\4@>	@<Cases involving nonstandard ASCII characters@>@;
 exponent: sc3("\")("E")("{")(exp);
-@.\\E@&gt;
+@.\\E@>
 begin_comment: sc2("\")("B")(math);
-@.\\B@&gt;
+@.\\B@>
 end_comment: sc2("\")("T")(math);
-@.\\T@&gt;
+@.\\T@>
 octal: app_octal;
 hex: app_hex;
 check_sum: sc2("\")(")")(simp);
-@.\\)@&gt;
+@.\\)@>
 force_line: sc2("\")("]")(simp);
-@.\\]@&gt;
+@.\\]@>
 thin_space: sc2("\")(",")(math);
-@.\\,@&gt;
+@.\\,@>
 math_break: sc2(opt)("0")(simp);
 line_break: comment_scrap(force);
 big_line_break: comment_scrap(big_force);
 no_line_break: begin app(big_cancel); app("\"); app(" ");
-@.\\\ @&gt;
+@.\\\ @>
 	comment_scrap(big_cancel);
 	end;
 pseudo_semi: sc0(semi);
 join: sc2("\")("J")(math);
-@.\\J@&gt;
+@.\\J@>
 othercases sc1(next_control)(math)
 endcases;
 end;
 
-@ @&lt;Make sure that there is room for at least four...@&gt;=
-if (scrap_ptr+4&gt;max_scraps)∨(tok_ptr+6&gt;max_toks)∨(text_ptr+4&gt;max_texts) then
-	begin stat if scrap_ptr&gt;max_scr_ptr then max_scr_ptr←scrap_ptr;
-	if tok_ptr&gt;max_tok_ptr then max_tok_ptr←tok_ptr;
-	if text_ptr&gt;max_txt_ptr then max_txt_ptr←text_ptr;
+@ @<Make sure that there is room for at least four...@>=
+if (scrap_ptr+4>max_scraps)∨(tok_ptr+6>max_toks)∨(text_ptr+4>max_texts) then
+	begin stat if scrap_ptr>max_scr_ptr then max_scr_ptr←scrap_ptr;
+	if tok_ptr>max_tok_ptr then max_tok_ptr←tok_ptr;
+	if text_ptr>max_txt_ptr then max_txt_ptr←text_ptr;
 	tats@;@/
 	overflow('scrap/token/text');
 	end
@@ -3798,23 +3778,23 @@ if (scrap_ptr+4&gt;max_scraps)∨(tok_ptr+6&gt;max_toks)∨(text_ptr+4&gt;max_te
 standard ones. They are converted to \TeX\ control sequences so that it is
 possible to keep \.{WEAVE} from stepping beyond standard ASCII.
 
-@&lt;Cases involving nonstandard...@&gt;=
+@<Cases involving nonstandard...@>=
 not_equal: sc2("\")("I")(math);
-@.\\I@&gt;
+@.\\I@>
 less_or_equal: sc2("\")("L")(math);
-@.\\L@&gt;
+@.\\L@>
 greater_or_equal: sc2("\")("G")(math);
-@.\\G@&gt;
+@.\\G@>
 equivalence_sign: sc2("\")("S")(math);
-@.\\S@&gt;
+@.\\S@>
 and_sign: sc2("\")("W")(math);
-@.\\W@&gt;
+@.\\W@>
 or_sign: sc2("\")("V")(math);
-@.\\V@&gt;
+@.\\V@>
 not_sign: sc2("\")("R")(math);
-@.\\R@&gt;
+@.\\R@>
 left_arrow: sc2("\")("K")(math);
-@.\\K@&gt;
+@.\\K@>
 
 @ The following code must use |app_tok| instead of |app| in order to
 protect against overflow. Note that |tok_ptr+1≤max_toks| after |app_tok|
@@ -3822,39 +3802,39 @@ has been used, so another |app| is legitimate before testing again.
 
 Many of the special characters in a string must be prefixed by `\.\\' so that
 \TeX\ will print them properly.
-@↑special string characters@&gt;
+@↑special string characters@>
 
-@&lt;Append a \(string scrap@&gt;=
+@<Append a \(string scrap@>=
 begin app("\");
 if next_control=verbatim then
 	begin app("=");
-@.\\=@&gt;
+@.\\=@>
 	end
 else	begin app(".");
-@.\\.@&gt;
+@.\\.@>
 	end;
 app("{"); j←id_first;
-while j&lt;id_loc do
+while j<id_loc do
 	begin case buffer[j] of
-	" ","\","#","%","$","↑","'","`","{","}","~","&amp;","_":
+	" ","\","#","%","$","↑","'","`","{","}","~","&","_":
 			begin app("\");
 			end;
-@.\\\ @&gt;
-@.\\\\@&gt;
-@.\\\#@&gt;
-@.\\\%@&gt;
-@.\\\$@&gt;
-@.\\\↑@&gt;
-@.\\\'@&gt;
-@.\\\`@&gt;
-@.\\\{@&gt;
-@.\\\}@&gt;
-@.\\\~@&gt;
-@.\\\&amp;@&gt;
-@.\\_@&gt;
+@.\\\ @>
+@.\\\\@>
+@.\\\#@>
+@.\\\%@>
+@.\\\$@>
+@.\\\↑@>
+@.\\\'@>
+@.\\\`@>
+@.\\\{@>
+@.\\\}@>
+@.\\\~@>
+@.\\\&@>
+@.\\_@>
 	"@@": if buffer[j+1]="@@" then incr(j)
 		else err_print('! Double @@ should be used in strings');
-@.Double \AT! should be used...@&gt;
+@.Double \AT! should be used...@>
 	othercases do_nothing
 	endcases;@/
 	app_tok(buffer[j]); incr(j);
@@ -3862,22 +3842,22 @@ while j&lt;id_loc do
 sc1("}")(simp);
 end
 
-@ @&lt;Append a \TeX\ string scrap@&gt;=
+@ @<Append a \TeX\ string scrap@>=
 begin app("\"); app("h"); app("b"); app("o"); app("x");
 app("{");
 for j←id_first to id_loc-1 do app_tok(buffer[j]);
 sc1("}")(simp);
 end
 
-@ @&lt;Append an identifier scrap@&gt;=
+@ @<Append an identifier scrap@>=
 begin p←id_lookup(normal);
-if ilk[p]=normal then @&lt;Insert a new reference, if this is new@&gt;;
+if ilk[p]=normal then @<Insert a new reference, if this is new@>;
 case ilk[p] of
 normal,array_like,const_like,div_like,
 	do_like,for_like,goto_like,nil_like,to_like: sub_cases(p);
-@t\4@&gt;@&lt;Cases that generate more than one scrap@&gt;@;
+@t\4@>@<Cases that generate more than one scrap@>@;
 othercases begin next_control←ilk[p]-char_like; goto reswitch;
-	end {\&amp;{and}, \&amp;{in}, \&amp;{not}, \&amp;{or}}
+	end {\&{and}, \&{in}, \&{not}, \&{or}}
 endcases;
 end
 
@@ -3888,14 +3868,14 @@ so we have to watch out that |def_val| might be |undef_val|.
 @d flaky=1
 @d guaranteed=0
 
-@&lt;Insert a new reference, if this is new@&gt;=
+@<Insert a new reference, if this is new@>=
 begin q←def_val[p];
 if q≠0 then if q≠undef_val then if not phase_three then
 	begin repeat r←q; q←dlink(q);
-	until (q=0) or (num(q)&gt;mm);
+	until (q=0) or (num(q)>mm);
 	if num(r)≠mm then
 		begin qq←0; q←ref_link[0];
-		while ref_loc[q]&gt;r do
+		while ref_loc[q]>r do
 			begin qq←q; q←ref_link[qq];
 			end;
 		if ref_loc[q]=r then
@@ -3916,60 +3896,60 @@ end
 
 @ The |sub_cases| also result in straightforward scraps.
 
-@&lt;Declaration of the |sub_cases| procedure@&gt;=
+@<Declaration of the |sub_cases| procedure@>=
 procedure sub_cases(@!p:name_pointer); {a subprocedure of |Pascal_parse|}
 begin case ilk[p] of
 normal: sc1(id_flag+p)(simp); {not a reserved word}
-array_like: sc1(res_flag+p)(alpha); {\&amp;{array}, \&amp;{file}, \&amp;{set}}
+array_like: sc1(res_flag+p)(alpha); {\&{array}, \&{file}, \&{set}}
 const_like: sc3(force)(backup)(res_flag+p)(intro);
-	{\&amp;{const}, \&amp;{label}, \&amp;{type}}
-div_like: sc3(math_bin)(res_flag+p)("}")(math); {\&amp;{div}, \&amp;{mod}}
-do_like: sc1(res_flag+p)(omega); {\&amp;{do}, \&amp;{of}, \&amp;{then}}
-for_like: sc2(force)(res_flag+p)(alpha); {\&amp;{for}, \&amp;{while}, \&amp;{with}}
-goto_like: sc1(res_flag+p)(intro); {\&amp;{goto}, \&amp;{packed}}
-nil_like: sc1(res_flag+p)(simp); {\&amp;{nil}}
-to_like: sc3(math_rel)(res_flag+p)("}")(math); {\&amp;{downto}, \&amp;{to}}
+	{\&{const}, \&{label}, \&{type}}
+div_like: sc3(math_bin)(res_flag+p)("}")(math); {\&{div}, \&{mod}}
+do_like: sc1(res_flag+p)(omega); {\&{do}, \&{of}, \&{then}}
+for_like: sc2(force)(res_flag+p)(alpha); {\&{for}, \&{while}, \&{with}}
+goto_like: sc1(res_flag+p)(intro); {\&{goto}, \&{packed}}
+nil_like: sc1(res_flag+p)(simp); {\&{nil}}
+to_like: sc3(math_rel)(res_flag+p)("}")(math); {\&{downto}, \&{to}}
 end;
 end;
 
-@ @&lt;Cases that generate more than one scrap@&gt;=
+@ @<Cases that generate more than one scrap@>=
 begin_like: begin sc3(force)(res_flag+p)(cancel)(beginning); sc0(intro);
-	end; {\&amp;{begin}}
+	end; {\&{begin}}
 case_like: begin sc0(casey); sc2(force)(res_flag+p)(alpha);
-	end; {\&amp;{case}}
-else_like: begin @&lt;Append |terminator| if not already present@&gt;;
+	end; {\&{case}}
+else_like: begin @<Append |terminator| if not already present@>;
 	sc3(force)(backup)(res_flag+p)(elsie);
-	end; {\&amp;{else}}
-end_like: begin @&lt;Append |term...@&gt;;
+	end; {\&{else}}
+end_like: begin @<Append |term...@>;
 	sc2(force)(res_flag+p)(close);
-	end; {\&amp;{end}}
+	end; {\&{end}}
 if_like: begin sc0(cond); sc2(force)(res_flag+p)(alpha);
-	end; {\&amp;{if}}
+	end; {\&{if}}
 loop_like: begin sc3(force)("\")("~")(alpha);
-@.\\\~@&gt;
+@.\\\~@>
 	sc1(res_flag+p)(omega);
-	end; {\&amp;{xclause}}
+	end; {\&{xclause}}
 proc_like: begin sc4(force)(backup)(res_flag+p)(cancel)(proc);
 	sc3(indent)("\")(" ")(intro);
-@.\\\ @&gt;
-	end; {\&amp;{function}, \&amp;{procedure}, \&amp;{program}}
+@.\\\ @>
+	end; {\&{function}, \&{procedure}, \&{program}}
 record_like: begin sc1(res_flag+p)(record_head); sc0(intro);
-	end; {\&amp;{record}}
+	end; {\&{record}}
 repeat_like: begin sc4(force)(indent)(res_flag+p)(cancel)(beginning);
 	sc0(intro);
-	end; {\&amp;{repeat}}
-until_like: begin @&lt;Append |term...@&gt;;
+	end; {\&{repeat}}
+until_like: begin @<Append |term...@>;
 	sc3(force)(backup)(res_flag+p)(close); sc0(clause);
-	end; {\&amp;{until}}
+	end; {\&{until}}
 var_like: begin sc4(force)(backup)(res_flag+p)(cancel)(var_head); sc0(intro);
-	end; {\&amp;{var}}
+	end; {\&{var}}
 
-@ If a comment or semicolon appears before the reserved words \&amp;{end},
-\&amp;{else}, or \&amp;{until}, the |semi| or |terminator| scrap that is already
+@ If a comment or semicolon appears before the reserved words \&{end},
+\&{else}, or \&{until}, the |semi| or |terminator| scrap that is already
 present overrides the |terminator| scrap belonging to this reserved word.
 
-@&lt;Append |termin...@&gt;=
-if (scrap_ptr&lt;scrap_base)∨((cat[scrap_ptr]≠terminator)∧
+@<Append |termin...@>=
+if (scrap_ptr<scrap_base)∨((cat[scrap_ptr]≠terminator)∧
 		(cat[scrap_ptr]≠semi)) then sc0(terminator)
 
 @ A comment is incorporated into the previous scrap if that scrap is of type
@@ -3982,11 +3962,11 @@ The |app_comment| procedure takes care of placing a comment at the end of the
 current scrap list. When |app_comment| is called, we assume that the current
 token list is the translation of the comment involved.
 
-@&lt;Declaration of the |app_comment|...@&gt;=
+@<Declaration of the |app_comment|...@>=
 procedure app_comment; {append a comment to the scrap list}
 begin freeze_text;
-if (scrap_ptr&lt;scrap_base)∨(cat[scrap_ptr]&lt;omega)∨
-		(cat[scrap_ptr]&gt;terminator) then sc0(terminator)
+if (scrap_ptr<scrap_base)∨(cat[scrap_ptr]<omega)∨
+		(cat[scrap_ptr]>terminator) then sc0(terminator)
 else	begin app1(scrap_ptr); {|cat[scrap_ptr]| is
 		|omega| or |semi| or |terminator|}
 	end;
@@ -3996,10 +3976,10 @@ end;
 @ We are now finished with |Pascal_parse|, except for two relatively
 trivial subprocedures that convert constants into tokens.
 
-@&lt;Declaration of the |app_octal| and...@&gt;=
+@<Declaration of the |app_octal| and...@>=
 procedure app_octal;
 begin app("\"); app("O"); app("{");
-@.\\O@&gt;
+@.\\O@>
 while (buffer[loc]≥"0")∧(buffer[loc]≤"7") do
 	begin app_tok(buffer[loc]); incr(loc);
 	end;
@@ -4008,7 +3988,7 @@ end;
 @#
 procedure app_hex;
 begin app("\"); app("H"); app("{");
-@.\\H@&gt;
+@.\\H@>
 while ((buffer[loc]≥"0")∧(buffer[loc]≤"9"))∨@|
 		((buffer[loc]≥"A")∧(buffer[loc]≤"F")) do
 	begin app_tok(buffer[loc]); incr(loc);
@@ -4028,10 +4008,10 @@ var p:text_pointer; {points to the translation}
 begin save_base←scrap_base; scrap_base←scrap_ptr+1; safety←flaky;
 Pascal_parse; {get the scraps together}
 if next_control≠"|" then err_print('! Missing "|" after Pascal text');
-@.Missing "|"...@&gt;
+@.Missing "|"...@>
 app_tok(cancel); app_comment; {place a |cancel| token as a final ``comment''}
 p←translate; {make the translation}
-stat if scrap_ptr&gt;max_scr_ptr then max_scr_ptr←scrap_ptr;@;@+tats@;@/
+stat if scrap_ptr>max_scr_ptr then max_scr_ptr←scrap_ptr;@;@+tats@;@/
 scrap_ptr←scrap_base-1; scrap_base←save_base; {scrap the scraps}
 safety←guaranteed; Pascal_translate←p;
 end;
@@ -4043,14 +4023,14 @@ until |next_control≥format|. Thus, it takes care of embedded comments.
 @p procedure outer_parse; {makes scraps from \PASCAL\ tokens and comments}
 var bal:eight_bits; {brace level in comment}
 @!p,@!q:text_pointer; {partial comments}
-begin while next_control&lt;format do
+begin while next_control<format do
 	if next_control≠"{" then Pascal_parse
-	else	begin @&lt;Make sure that there is room for at least seven more
-			tokens, three more texts, and one more scrap@&gt;;
+	else	begin @<Make sure that there is room for at least seven more
+			tokens, three more texts, and one more scrap@>;
 		app("\"); app("C"); app("{");
-@.\\C@&gt;
+@.\\C@>
 		bal←copy_comment(1); next_control←"|";
-		while bal&gt;0 do
+		while bal>0 do
 			begin p←text_ptr; freeze_text; q←Pascal_translate;
 			{at this point we have |tok_ptr+6≤max_toks|}
 			app(tok_flag+p); app(inner_tok_flag+q);
@@ -4061,15 +4041,16 @@ begin while next_control&lt;format do
 		end;
 end;
 
-@ @&lt;Make sure that there is room for at least seven more...@&gt;=
-if (tok_ptr+7&gt;max_toks)∨(text_ptr+3&gt;max_texts)∨(scrap_ptr≥max_scraps) then
-	begin stat if scrap_ptr&gt;max_scr_ptr then max_scr_ptr←scrap_ptr;
-	if tok_ptr&gt;max_tok_ptr then max_tok_ptr←tok_ptr;
-	if text_ptr&gt;max_txt_ptr then max_txt_ptr←text_ptr;
+@ @<Make sure that there is room for at least seven more...@>=
+if (tok_ptr+7>max_toks)∨(text_ptr+3>max_texts)∨(scrap_ptr≥max_scraps) then
+	begin stat if scrap_ptr>max_scr_ptr then max_scr_ptr←scrap_ptr;
+	if tok_ptr>max_tok_ptr then max_tok_ptr←tok_ptr;
+	if text_ptr>max_txt_ptr then max_txt_ptr←text_ptr;
 	tats@;@/
 	overflow('token/text/scrap');
 	end
-@* Output of tokens.
+
+@* Output of tokens.
 So far our programs have only built up multi-layered token lists in
 \.{WEAVE}'s internal memory; we have to figure out how to get them into
 the desired final form. The job of converting token lists to characters in
@@ -4111,7 +4092,7 @@ output process.
 @d inner=0 {value of |mode| for \PASCAL\ texts within \TeX\ texts}
 @d outer=1 {value of |mode| for \PASCAL\ texts in modules}
 
-@&lt;Types...@&gt;=
+@<Types...@>=
 @!mode=inner..outer;@/
 @!output_state=record@!end_field:sixteen_bits; {ending location of token list}
 	@!tok_field:sixteen_bits; {present location within token list}
@@ -4123,14 +4104,14 @@ output process.
 @d cur_mode==cur_state.mode_field {current mode of interpretation}
 @d init_stack==stack_ptr←0;cur_mode←outer {do this to initialize the stack}
 
-@&lt;Glob...@&gt;=
+@<Glob...@>=
 @!cur_state:output_state; {|cur_end|, |cur_tok|, |cur_mode|}
 @!stack:array[1..stack_size] of output_state; {info for non-current levels}
 @!stack_ptr:0..stack_size; {first unused location in the output state stack}
 stat@!max_stack_ptr:0..stack_size; {largest value assumed by |stack_ptr|}
 tats
 
-@ @&lt;Set init...@&gt;=stat max_stack_ptr←0;@+tats
+@ @<Set init...@>=stat max_stack_ptr←0;@+tats
 
 @ To insert token-list |p| into the output, the |push_level| subroutine
 is called; it saves the old level of output and gets a new one going.
@@ -4138,10 +4119,10 @@ The value of |cur_mode| is not changed.
 
 @p procedure push_level(@!p:text_pointer); {suspends the current level}
 begin if stack_ptr=stack_size then overflow('stack')
-else	begin if stack_ptr&gt;0 then
+else	begin if stack_ptr>0 then
 		stack[stack_ptr]←cur_state; {save |cur_end|$\,\ldots\,$|cur_mode|}
 	incr(stack_ptr);
-	stat if stack_ptr&gt;max_stack_ptr then
+	stat if stack_ptr>max_stack_ptr then
 		max_stack_ptr←stack_ptr;@;@+tats@;@/
 	cur_tok←tok_start[p]; cur_end←tok_start[p+1];
 	end;
@@ -4200,9 +4181,9 @@ output of \PASCAL\ text within `\pb' brackets, and this procedure uses
 |make_output| to output the current token list. Thus, the recursive call
 of |make_output| actually occurs when |make_output| calls |output_Pascal|
 while outputting the name of a module.
-@↑recursion@&gt;
+@↑recursion@>
 
-@p procedure make_output; forward; @t\2@&gt;@#
+@p procedure make_output; forward; @t\2@>@#
 procedure output_Pascal; {outputs the current token list}
 var save_tok_ptr,@!save_text_ptr,@!save_next_control:sixteen_bits;
 	{values to be restored}
@@ -4211,8 +4192,8 @@ begin save_tok_ptr←tok_ptr; save_text_ptr←text_ptr;
 save_next_control←next_control; next_control←"|"; p←Pascal_translate;
 app(p+inner_tok_flag);
 make_output; {output the list}
-stat if text_ptr&gt;max_txt_ptr then max_txt_ptr←text_ptr;
-if tok_ptr&gt;max_tok_ptr then max_tok_ptr←tok_ptr;@;@+tats@;@/
+stat if text_ptr>max_txt_ptr then max_txt_ptr←text_ptr;
+if tok_ptr>max_tok_ptr then max_tok_ptr←tok_ptr;@;@+tats@;@/
 text_ptr←save_text_ptr; tok_ptr←save_tok_ptr; {forget the tokens}
 next_control←save_next_control; {restore |next_control| to original state}
 end;
@@ -4236,20 +4217,20 @@ freeze_text; push_level(text_ptr-1);
 loop@+	begin a←get_output;
 reswitch: case a of
 	end_translation: return;
-	identifier,res_word:@&lt;Output an identifier@&gt;;
-	mod_name:@&lt;Output a module name@&gt;;
-	math_bin,math_op,math_rel:@&lt;Output a \.{\\math} operator@&gt;;
+	identifier,res_word:@<Output an identifier@>;
+	mod_name:@<Output a module name@>;
+	math_bin,math_op,math_rel:@<Output a \.{\\math} operator@>;
 	cancel: begin repeat a←get_output;
-		until (a&lt;backup)∨(a&gt;big_force);
+		until (a<backup)∨(a>big_force);
 		goto reswitch;
 		end;
 	big_cancel: begin repeat a←get_output;
-		until ((a&lt;backup)∧(a≠" "))∨(a&gt;big_force);
+		until ((a<backup)∧(a≠" "))∨(a>big_force);
 		goto reswitch;
 		end;
-	indent,outdent,opt,backup,break_space,force,big_force:@&lt;Output a
+	indent,outdent,opt,backup,break_space,force,big_force:@<Output a
 		\(control, look ahead in case of line breaks,
-		possibly |goto reswitch|@&gt;;
+		possibly |goto reswitch|@>;
 	othercases out(a) {otherwise |a| is an ASCII character}
 	endcases;
 	end;
@@ -4260,20 +4241,20 @@ looks slightly better if set in a math-italic font instead of a (slightly
 narrower) text-italic font. Thus we output `\.{\\\char'174a}' but
 `\.{\\\\\{aa\}}'.
 
-@&lt;Output an identifier@&gt;=
+@<Output an identifier@>=
 begin out("\");
 if a=identifier then
 	if length(cur_name)=1 then out("|")
-@.\\|@&gt;
+@.\\|@>
 	else out("\")
-@.\\\\@&gt;
-else out("&amp;"); {|a=res_word|}
-@.\\\&amp;@&gt;
+@.\\\\@>
+else out("&"); {|a=res_word|}
+@.\\\&@>
 if length(cur_name)=1 then out(byte_mem[cur_name mod ww,byte_start[cur_name]])
 else out_name(cur_name);
 end
 
-@ @&lt;Output a \....@&gt;=
+@ @<Output a \....@>=
 begin out5("\")("m")("a")("t")("h");
 if a=math_bin then out3("b")("i")("n")
 else if a=math_rel then out3("r")("e")("l")
@@ -4284,22 +4265,22 @@ end
 @ The current mode does not affect the behavior of \.{WEAVE}'s output routine
 except when we are outputting control tokens.
 
-@&lt;Output a \(control...@&gt;=
-if a&lt;break_space then
+@<Output a \(control...@>=
+if a<break_space then
 	begin if cur_mode=outer then
 		begin out2("\")(a+-cancel+"0");
-@.\\1@&gt;
-@.\\2@&gt;
-@.\\3@&gt;
-@.\\4@&gt;
-@.\\5@&gt;
-@.\\6@&gt;
-@.\\7@&gt;
+@.\\1@>
+@.\\2@>
+@.\\3@>
+@.\\4@>
+@.\\5@>
+@.\\6@>
+@.\\7@>
 		if a=opt then out(get_output) {|opt| is followed by a digit}
 		end
 	else if a=opt then b←get_output {ignore digit following |opt|}
 	end
-else @&lt;Look ahead for strongest line break, |goto reswitch|@&gt;
+else @<Look ahead for strongest line break, |goto reswitch|@>
 
 @ If several of the tokens |break_space|, |force|, |big_force| occur in a
 row, possibly mixed with blank spaces (which are ignored),
@@ -4307,35 +4288,35 @@ the largest one is used. A line break also occurs in the output file,
 except at the very end of the translation. The very first line break
 is suppressed (i.e., a line break that follows `\.{\\Y\\P}').
 
-@&lt;Look ahead for st...@&gt;=
+@<Look ahead for st...@>=
 begin b←a; save_mode←cur_mode;
 loop@+	begin a←get_output;
 	if (a=cancel)∨(a=big_cancel) then goto reswitch;
 		{|cancel| overrides everything}
-	if ((a≠" ")∧(a&lt;break_space))∨(a&gt;big_force) then
+	if ((a≠" ")∧(a<break_space))∨(a>big_force) then
 		begin if save_mode=outer then
-			begin if out_ptr&gt;3 then
+			begin if out_ptr>3 then
 				if (out_buf[out_ptr]="P")∧
 					(out_buf[out_ptr-1]="\")∧
-@.\\P@&gt;
-@.\\Y@&gt;
+@.\\P@>
+@.\\Y@>
 					(out_buf[out_ptr-2]="Y")∧
 					(out_buf[out_ptr-3]="\") then
 					goto reswitch;
-@.\\1@&gt;
-@.\\2@&gt;
-@.\\3@&gt;
-@.\\4@&gt;
-@.\\5@&gt;
-@.\\6@&gt;
-@.\\7@&gt;
+@.\\1@>
+@.\\2@>
+@.\\3@>
+@.\\4@>
+@.\\5@>
+@.\\6@>
+@.\\7@>
 			out2("\")(b-cancel+"0");
 			if a≠end_translation then finish_line;
 			end
 		else if (a≠end_translation)∧(cur_mode=inner) then out(" ");
 		goto reswitch;
 		end;
-	if a&gt;b then b←a; {if |a=" "| we have |a&lt;b|}
+	if a>b then b←a; {if |a=" "| we have |a<b|}
 	end;
 end
 
@@ -4346,9 +4327,9 @@ routines, since the name may contain \PASCAL\ code embedded in
 input buffer and the translation process uses the end of the active
 |tok_mem| area.
 
-@&lt;Output a module name@&gt;=
+@<Output a module name@>=
 begin out2("\")("X");
-@.\\X@&gt;
+@.\\X@>
 cur_xref←xref[cur_name];
 if num(cur_xref)≥def_flag then
 	begin out_mod(num(cur_xref)-def_flag);
@@ -4362,29 +4343,29 @@ if num(cur_xref)≥def_flag then
 		end;
 	end
 else out("0"); {output the module number, or zero if it was undefined}
-out(":"); @&lt;Output the text of the module name@&gt;;
+out(":"); @<Output the text of the module name@>;
 out2("\")("X");
 end
 
-@ @&lt;Output the text...@&gt;=
+@ @<Output the text...@>=
 k←byte_start[cur_name]; w←cur_name mod ww; k_limit←byte_start[cur_name+ww];
 cur_mod_name←cur_name;
-while k&lt;k_limit do
+while k<k_limit do
 	begin b←byte_mem[w,k]; incr(k);
-	if b="@@" then @&lt;Skip next character, give error if not `\.{@@}'@&gt;;
+	if b="@@" then @<Skip next character, give error if not `\.{@@}'@>;
 	if b≠"|" then out(b)
-	else	begin @&lt;Copy the \PASCAL\ text into |buffer[(limit+1)..j]|@&gt;;
+	else	begin @<Copy the \PASCAL\ text into |buffer[(limit+1)..j]|@>;
 		save_loc←loc; save_limit←limit; loc←limit+2; limit←j+1;
 		buffer[limit]←"|"; output_Pascal;
 		loc←save_loc; limit←save_limit;
 		end;
 	end
 
-@ @&lt;Skip next char...@&gt;=
+@ @<Skip next char...@>=
 begin if byte_mem[w,k]≠"@@" then
 	begin print_nl('! Illegal control code in section name:');
-@.Illegal control code...@&gt;
-	print_nl('&lt;'); print_id(cur_mod_name); print('&gt; '); mark_error;
+@.Illegal control code...@>
+	print_nl('<'); print_id(cur_mod_name); print('> '); mark_error;
 	end;
 incr(k);
 end
@@ -4395,21 +4376,21 @@ error message that displays the whole buffer will look a little bit sensible.
 The variable |string_delimiter| is zero outside of strings, otherwise it
 equals the delimiter that began the string being copied.
 
-@&lt;Copy the \PASCAL\ text into...@&gt;=
+@<Copy the \PASCAL\ text into...@>=
 j←limit+1; buffer[j]←"|"; string_delimiter←0;
 loop@+	begin if k≥k_limit then
 		begin print_nl('! Pascal text in section name didn''t end:');
-@.Pascal text...didn't end@&gt;
-		print_nl('&lt;'); print_id(cur_mod_name); print('&gt; '); mark_error;
+@.Pascal text...didn't end@>
+		print_nl('<'); print_id(cur_mod_name); print('> '); mark_error;
 		goto found;
 		end;
 	b←byte_mem[w,k]; incr(k);
-	if b="@@" then @&lt;Copy a control code into the buffer@&gt;
+	if b="@@" then @<Copy a control code into the buffer@>
 	else	begin if (b="""")∨(b="'") then
 			if string_delimiter=0 then string_delimiter←b
 			else if string_delimiter=b then string_delimiter←0;
 		if (b≠"|")∨(string_delimiter≠0) then
-			begin if j&gt;long_buf_size-3 then overflow('buffer');
+			begin if j>long_buf_size-3 then overflow('buffer');
 			incr(j); buffer[j]←b;
 			end
 		else goto found;
@@ -4417,30 +4398,31 @@ loop@+	begin if k≥k_limit then
 	end;
 found:
 
-@ @&lt;Copy a control code into the buffer@&gt;=
-begin if j&gt;long_buf_size-4 then overflow('buffer');
+@ @<Copy a control code into the buffer@>=
+begin if j>long_buf_size-4 then overflow('buffer');
 buffer[j+1]←"@@"; buffer[j+2]←byte_mem[w,k]; j←j+2; incr(k);
 end
-@* Phase two processing.
+
+@* Phase two processing.
 We have assembled enough pieces of the puzzle in order to be ready to specify
 the processing in \.{WEAVE}'s main pass over the source file. Phase two
 is analogous to phase one, except that more work is involved because we must
 actually output the \TeX\ material instead of merely looking at the
 \.{WEB} specifications.
 
-@&lt;Phase II: Read all the text again and translate it to \TeX\ form@&gt;=
+@<Phase II: Read all the text again and translate it to \TeX\ form@>=
 reset_input; print_nl('Writing the output file...');
 module_count←0; xx←0;
 copy_limbo;
 finish_line; flush_buffer(0,false); {insert a blank line, it looks nice}
-@&lt;Prepare high-speed access to definitions via |dlink| and |def_val|@&gt;;
-while ¬ input_has_ended do @&lt;Translate the \(current module@&gt;
+@<Prepare high-speed access to definitions via |dlink| and |def_val|@>;
+while ¬ input_has_ended do @<Translate the \(current module@>
 
-@ @&lt;Prepare high-speed access to definitions via |dlink| and |def_val|@&gt;=
+@ @<Prepare high-speed access to definitions via |dlink| and |def_val|@>=
 for lhs←1 to name_ptr do if ilk[lhs]=normal then
 	begin def_val[lhs]←0; rhs←xref[lhs];
 	while rhs≠0 do
-		begin if num(rhs)&gt;def_flag then
+		begin if num(rhs)>def_flag then
 			begin dlink(rhs)←def_val[lhs];
 			def_val[lhs]←rhs;
 			end;
@@ -4454,7 +4436,7 @@ if it appears only in a comment within the section and if the corresponding
 identifier is multiply defined.
 
 
-@&lt;Glob...@&gt;=
+@<Glob...@>=
 @!mm:integer; {current module number plus |def_flag|}
 @!ref_loc:array[0..max_new_refs] of sixteen_bits;
 @!ref_link:array[0..max_new_refs] of sixteen_bits;
@@ -4474,23 +4456,23 @@ and `|emit_space_if_needed|' are able to handle the situation:
 @d save_position==save_line←out_line; save_place←out_ptr
 @d emit_space_if_needed==if (save_line≠out_line)∨(save_place≠out_ptr) then
 	out2("\")("Y")
-@.\\Y@&gt;
+@.\\Y@>
 
-@&lt;Glo...@&gt;=
+@<Glo...@>=
 @!save_line:integer; {former value of |out_line|}
 @!save_place:sixteen_bits; {former value of |out_ptr|}
 
-@ @&lt;Translate the \(current module@&gt;=
+@ @<Translate the \(current module@>=
 begin incr(module_count);@/
 mm←module_count+def_flag; ref_link[0]←0; ref_loc[0]←0; new_ref_ptr←0;
 safety←guaranteed;
-@&lt;Output the code for the beginning of a new module@&gt;;
+@<Output the code for the beginning of a new module@>;
 save_position;@/
-@&lt;Translate the \TeX\ part of the current module@&gt;;
-@&lt;Translate the \(definition part of the current module@&gt;;
-@&lt;Translate the \PASCAL\ part of the current module@&gt;;
-@&lt;Show cross references to this module@&gt;;
-@&lt;Output the code for the end of a module@&gt;;
+@<Translate the \TeX\ part of the current module@>;
+@<Translate the \(definition part of the current module@>;
+@<Translate the \PASCAL\ part of the current module@>;
+@<Show cross references to this module@>;
+@<Output the code for the end of a module@>;
 end
 
 @ Modules beginning with the \.{WEB} control sequence `\.{@@\ }' start in the
@@ -4498,12 +4480,12 @@ output with the \TeX\ control sequence `\.{\\M}', followed by the module
 number. Similarly, `\.{@@*}' modules lead to the control sequence `\.{\\N}'.
 If this is a changed module, we put \.{*} just before the module number.
 
-@&lt;Output the code for the beginning...@&gt;=
+@<Output the code for the beginning...@>=
 out("\");
 if buffer[loc-1]≠"*" then out("M")
-@.\\M@&gt;
+@.\\M@>
 else	begin out("N"); print('*',module_count:1);
-@.\\N@&gt;
+@.\\N@>
 	update_terminal; {print a progress report}
 	end;
 out_mod(module_count); out2(".")(" ")
@@ -4511,40 +4493,40 @@ out_mod(module_count); out2(".")(" ")
 @ In the \TeX\ part of a module, we simply copy the source text, except that
 index entries are not copied and \PASCAL\ text within \pb\ is translated.
 
-@&lt;Translate the \T...@&gt;=
+@<Translate the \T...@>=
 repeat next_control←copy_TeX;
 case next_control of
 "|": begin init_stack; output_Pascal;
 	end;
 "@@": out("@@");
-octal: @&lt;Translate an octal constant appearing in \TeX\ text@&gt;;
-hex: @&lt;Translate a hexadecimal constant appearing in \TeX\ text@&gt;;
+octal: @<Translate an octal constant appearing in \TeX\ text@>;
+hex: @<Translate a hexadecimal constant appearing in \TeX\ text@>;
 TeX_string,xref_roman,xref_wildcard,xref_typewriter,module_name:
-	begin loc←loc-2; next_control←get_next; {skip to \.{@@&gt;}}
+	begin loc←loc-2; next_control←get_next; {skip to \.{@@>}}
 	if next_control=TeX_string then
 		err_print('! TeX string should be in Pascal text only');
-@.TeX string should be...@&gt;
+@.TeX string should be...@>
 	end;
 begin_comment,end_comment,check_sum,thin_space,math_break,line_break,
 	big_line_break,no_line_break,join,pseudo_semi:
 		err_print('! You can''t do that in TeX text');
-@.You can't do that...@&gt;
+@.You can't do that...@>
 othercases do_nothing
 endcases;
 until next_control≥format
 
-@ @&lt;Translate an octal constant appearing in \TeX\ text@&gt;=
+@ @<Translate an octal constant appearing in \TeX\ text@>=
 begin out3("\")("O")("{");
-@.\\O@&gt;
+@.\\O@>
 while (buffer[loc]≥"0")∧(buffer[loc]≤"7") do
 	begin out(buffer[loc]); incr(loc);
 	end; {since |buffer[limit]=" "|, this loop will end}
 out("}");
 end
 
-@ @&lt;Translate a hexadecimal constant appearing in \TeX\ text@&gt;=
+@ @<Translate a hexadecimal constant appearing in \TeX\ text@>=
 begin out3("\")("H")("{");
-@.\\H@&gt;
+@.\\H@>
 while ((buffer[loc]≥"0")∧(buffer[loc]≤"9"))∨@|
 		((buffer[loc]≥"A")∧(buffer[loc]≤"F")) do
 	begin out(buffer[loc]); incr(loc);
@@ -4554,14 +4536,14 @@ end
 @ When we get to the following code we have |next_control≥format|, and
 the token memory is in its initial empty state.
 
-@&lt;Translate the \(d...@&gt;=
+@<Translate the \(d...@>=
 if next_control≤definition then {definition part non-empty}
 	begin emit_space_if_needed; save_position;
 	end;
 while next_control≤definition do {|format| or |definition|}
 	begin init_stack;
-	if next_control=definition then @&lt;Start a macro definition@&gt;
-	else @&lt;Start a format definition@&gt;;
+	if next_control=definition then @<Start a macro definition@>
+	else @<Start a format definition@>;
 	outer_parse; finish_Pascal;
 	end
 
@@ -4578,43 +4560,43 @@ takes place, so that the translation will normally end with \.{\\6} or
 @p procedure finish_Pascal; {finishes a definition or a \PASCAL\ part}
 var p:text_pointer; {translation of the scraps}
 begin out2("\")("P"); app_tok(force); app_comment; p←translate;
-@.\\P@&gt;
+@.\\P@>
 app(p+tok_flag); make_output; {output the list}
-if out_ptr&gt;1 then
+if out_ptr>1 then
 	if out_buf[out_ptr-1]="\" then
-@.\\6@&gt;
-@.\\7@&gt;
-@.\\Y@&gt;
+@.\\6@>
+@.\\7@>
+@.\\Y@>
 		if out_buf[out_ptr]="6" then out_ptr←out_ptr-2
 		else if out_buf[out_ptr]="7" then out_buf[out_ptr]←"Y";
 out4("\")("p")("a")("r"); finish_line;
-stat if text_ptr&gt;max_txt_ptr then max_txt_ptr←text_ptr;
-if tok_ptr&gt;max_tok_ptr then max_tok_ptr←tok_ptr;
-if scrap_ptr&gt;max_scr_ptr then max_scr_ptr←scrap_ptr;
+stat if text_ptr>max_txt_ptr then max_txt_ptr←text_ptr;
+if tok_ptr>max_tok_ptr then max_tok_ptr←tok_ptr;
+if scrap_ptr>max_scr_ptr then max_scr_ptr←scrap_ptr;
 tats@;@/
 tok_ptr←1; text_ptr←1; scrap_ptr←0; {forget the tokens and the scraps}
 end;
 
-@ @&lt;Start a macro...@&gt;=
-begin sc2("\")("D")(intro); {this will produce `\&amp;{define }'}
-@.\\D@&gt;
+@ @<Start a macro...@>=
+begin sc2("\")("D")(intro); {this will produce `\&{define }'}
+@.\\D@>
 next_control←get_next;
 if next_control≠identifier then err_print('! Improper macro definition')
-@.Improper macro definition@&gt;
+@.Improper macro definition@>
 else sc1(id_flag+id_lookup(normal))(math);
 next_control←get_next;
 end
 
-@ @&lt;Start a format...@&gt;=
-begin sc2("\")("F")(intro); {this will produce `\&amp;{format }'}
-@.\\F@&gt;
+@ @<Start a format...@>=
+begin sc2("\")("F")(intro); {this will produce `\&{format }'}
+@.\\F@>
 next_control←get_next;
 if next_control=identifier then
 	begin sc1(id_flag+id_lookup(normal))(math);
 	next_control←get_next;
 	if next_control=equivalence_sign then
 		begin sc2("\")("S")(math); {output an equivalence sign}
-@.\\S@&gt;
+@.\\S@>
 		next_control←get_next;
 		if next_control=identifier then
 			begin sc1(id_flag+id_lookup(normal))(math);
@@ -4624,41 +4606,41 @@ if next_control=identifier then
 		end;
 	end;
 if scrap_ptr≠5 then err_print('! Improper format definition');
-@.Improper format definition@&gt;
+@.Improper format definition@>
 end
 
 @ Finally, when the \TeX\ and definition parts have been treated, we have
 |next_control≥begin_Pascal|. We will make the global variable |this_module|
 point to the current module name, if it has a name.
 
-@&lt;Glob...@&gt;=@!this_module:name_pointer; {the current module name, or zero}
+@<Glob...@>=@!this_module:name_pointer; {the current module name, or zero}
 
-@ @&lt;Translate the \P...@&gt;=
+@ @<Translate the \P...@>=
 this_module←0;
 if next_control≤module_name then
 	begin emit_space_if_needed; init_stack;
 	if next_control=begin_Pascal then next_control←get_next
 	else	begin this_module←cur_module;
-		@&lt;Check that |=| or |==| follows this module name, and
-			emit the scraps to start the module definition@&gt;;
+		@<Check that |=| or |==| follows this module name, and
+			emit the scraps to start the module definition@>;
 		end;
 	while next_control≤module_name do
 		begin outer_parse;
-		@&lt;Emit the scrap for a module name if present@&gt;;
+		@<Emit the scrap for a module name if present@>;
 		end;
 	finish_Pascal;
 	end
 
-@ @&lt;Check that |=|...@&gt;=
+@ @<Check that |=|...@>=
 repeat next_control←get_next;
 until next_control≠"+"; {allow optional `\.{+=}'}
 if (next_control≠"=")∧(next_control≠equivalence_sign) then
 	err_print('! You need an = sign after the section name')
-@.You need an = sign...@&gt;
+@.You need an = sign...@>
 else next_control←get_next;
-if out_ptr&gt;1 then
+if out_ptr>1 then
 	if (out_buf[out_ptr]="Y")∧(out_buf[out_ptr-1]="\") then
-@.\\Y@&gt;
+@.\\Y@>
 		begin app(backup); {the module name will be flush left}
 		end;
 sc1(mod_flag+this_module)(mod_scrap);
@@ -4669,13 +4651,13 @@ if num(cur_xref)≠module_count+def_flag then
 	this_module←0; {so we won't give cross-reference info here}
 	end;
 sc2("\")("S")(math); {output an equivalence sign}
-@.\\S@&gt;
+@.\\S@>
 sc1(force)(semi); {this forces a line break unless `\.{@@+}' follows}
 
-@ @&lt;Emit the scrap...@&gt;=
-if next_control&lt;module_name then
+@ @<Emit the scrap...@>=
+if next_control<module_name then
 	begin err_print('! You can''t do that in Pascal text');
-@.You can't do that...@&gt;
+@.You can't do that...@>
 	next_control←get_next;
 	end
 else if next_control=module_name then
@@ -4684,9 +4666,9 @@ else if next_control=module_name then
 
 @ Cross references relating to a named module are given after the module ends.
 
-@&lt;Show cross...@&gt;=
-if this_module&gt;0 then
-	begin @&lt;Rearrange the list pointed to by |cur_xref|@&gt;;
+@<Show cross...@>=
+if this_module>0 then
+	begin @<Rearrange the list pointed to by |cur_xref|@>;
 	footnote(def_flag); footnote(0);
 	end
 
@@ -4694,7 +4676,7 @@ if this_module&gt;0 then
 four more variables that point to cross reference entries.  We'll end up
 with a list pointed to by |cur_xref|.
 
-@&lt;Glob...@&gt;=
+@<Glob...@>=
 @!next_xref,@!this_xref,@!first_xref,@!mid_xref:xref_number;
 	{pointer variables for rearranging a list}
 
@@ -4703,10 +4685,10 @@ with a list pointed to by |cur_xref|.
 entries, in ascending order.  There may be no entries in either one or both
 of these categories.
 
-@&lt;Rearrange the list...@&gt;=
+@<Rearrange the list...@>=
 first_xref←xref[this_module];
 this_xref←xlink(first_xref); {bypass current module number}
-if num(this_xref)&gt;def_flag then
+if num(this_xref)>def_flag then
 	begin mid_xref←this_xref; cur_xref←0; {this value doesn't matter}
 	repeat	next_xref←xlink(this_xref); xlink(this_xref)←cur_xref;
 		cur_xref←this_xref; this_xref←next_xref;
@@ -4719,7 +4701,7 @@ while this_xref≠0 do
 	begin next_xref←xlink(this_xref); xlink(this_xref)←cur_xref;
 	cur_xref←this_xref; this_xref←next_xref;
 	end;
-if mid_xref&gt;0 then xlink(mid_xref)←cur_xref
+if mid_xref>0 then xlink(mid_xref)←cur_xref
 else xlink(first_xref)←cur_xref;
 cur_xref←xlink(first_xref)
 
@@ -4736,11 +4718,11 @@ label done,exit;
 var q:xref_number; {cross-reference pointer variable}
 begin if num(cur_xref)≤flag then return;
 finish_line; out("\");
-@.\\A@&gt;
-@.\\U@&gt;
+@.\\A@>
+@.\\U@>
 if flag=0 then out("U")@+else out("A");
 out4(" ")("s")("e")("c"); out4("t")("i")("o")("n");
-@&lt;Output all the module numbers on the reference list |cur_xref|@&gt;;
+@<Output all the module numbers on the reference list |cur_xref|@>;
 out(".");
 exit:end;
 
@@ -4748,26 +4730,26 @@ exit:end;
 of cross references is one, two, or more than two. Variable |q| points
 to the first cross reference, and the last link is a zero.
 
-@&lt;Output all the module numbers...@&gt;=
-q←cur_xref; if num(xlink(q))&gt;flag then out("s"); {plural}
+@<Output all the module numbers...@>=
+q←cur_xref; if num(xlink(q))>flag then out("s"); {plural}
 out("~");
 loop@+	begin out_mod(num(cur_xref)-flag);
 	cur_xref←xlink(cur_xref); {point to the next cross reference to output}
 	if num(cur_xref)≤flag then goto done;
-	if (num(xlink(cur_xref))&gt;flag)∨(cur_xref≠xlink(q)) then out(",");
+	if (num(xlink(cur_xref))>flag)∨(cur_xref≠xlink(q)) then out(",");
 		{not the last of two}
 	out(" ");
 	if num(xlink(cur_xref))≤flag then out4("a")("n")("d")("~"); {the last}
 	end;
 done:
 
-@ @&lt;Output the code for the end of a module@&gt;=
+@ @<Output the code for the end of a module@>=
 out3("\")("α")("%");
 beta_out;
 flush_buffer(out_ptr,false);
 out4("}")("\")("F")("I"); finish_line;
 flush_buffer(0,false); {insert a blank line, it looks nice}
-@.\\FI@&gt;
+@.\\FI@>
 
 @ The |alpha_out| procedure makes entries for all identifiers defined
 in the current module. (However, I no longer need these!)
@@ -4777,16 +4759,16 @@ label exit;
 var p,w,k:integer;
 begin loop begin
 	if xx=xref_ptr then return;
-	if num(xx+1)&gt;mm then return;
+	if num(xx+1)>mm then return;
 	incr(xx);
-      	if num(xx)&gt;def_flag then if dback(xx)&gt;0 then
+      	if num(xx)>def_flag then if dback(xx)>0 then
 	 if ilk[dback(xx)]=normal then
 		begin flush_buffer(out_ptr,false);
 		out2("\")("α");
 		p←dback(xx);
 		w←p mod ww;
 		for k←byte_start[p] to byte_start[p+ww]-1 do out(byte_mem[w,k]);
-		if dtype(xx)&gt;dtype_comma then incr(xx);
+		if dtype(xx)>dtype_comma then incr(xx);
 		end;
 	end;
 exit:end;
@@ -4811,11 +4793,11 @@ end;
 begin out("\");
 if ilk[p]=normal then
 	if length(p)=1 then out("|")
-@.\\|@&gt;
+@.\\|@>
 	else out("\")
-@.\\\\@&gt;
-else out("&amp;");
-@.\\\&amp;@&gt;
+@.\\\\@>
+else out("&");
+@.\\\&@>
 if length(p)=1 then out(byte_mem[p mod ww,byte_start[p]])
 else out_name(p);
 end;
@@ -4834,14 +4816,14 @@ while p≠0 do
 	for k←byte_start[q] to byte_start[q+ww]-1 do out(byte_mem[w,k]);
 	out(" "); out_const(num(xx)-def_flag);
 	out(" ");
-	@&lt;Move past commas@&gt;;
-	@&lt;Output the reference, based on its |dtype|@&gt;;
+	@<Move past commas@>;
+	@<Output the reference, based on its |dtype|@>;
 	if ref_safety[p]=flaky then out3(" ")("%")("?");
 	p←ref_link[p];
 	end;
 end;
 
-@ @&lt;Output the reference, based on its |dtype|@&gt;=
+@ @<Output the reference, based on its |dtype|@>=
 case dtype(xx) of
 dtype_none: out2("\")("ε");
 dtype_macro: out6("=")("m")("a")("c")("r")("o");
@@ -4870,45 +4852,46 @@ goto found;
  out("$");
 found:
 
-@ @&lt;Move past commas@&gt;=
+@ @<Move past commas@>=
 mmm←num(xx);
 loop	begin if dtype(xx)≠dtype_comma then if num(xx)=mmm then goto done;
 	if xx=xref_ptr then
 		begin dtype(xx)←dtype_none; goto done;
 		end;
-	if num(xx+1)&gt;mmm then
+	if num(xx+1)>mmm then
 		begin dtype(xx)←dtype_none; goto done;
 		end;
 	incr(xx);
 	end;
 done:
-@* Phase three processing.
+
+@* Phase three processing.
 We are nearly finished! \.{WEAVE}'s only remaining task is to write out the
 index, after sorting the identifiers and index entries.
 
-@&lt;Phase III: Output the cross-reference index@&gt;=
+@<Phase III: Output the cross-reference index@>=
 phase_three←true; print_nl('Writing the index...');
 if change_exists then
-	begin finish_line; @&lt;Tell about changed modules@&gt;;
+	begin finish_line; @<Tell about changed modules@>;
 	end;
 finish_line; out4("\")("i")("n")("x"); finish_line;
-@.\\inx@&gt;
-@&lt;Do the first pass of sorting@&gt;;
-@&lt;Sort and output the index@&gt;;
+@.\\inx@>
+@<Do the first pass of sorting@>;
+@<Sort and output the index@>;
 out4("\")("f")("i")("n"); finish_line;
-@.\\fin@&gt;
-@&lt;Output all the module names@&gt;;
+@.\\fin@>
+@<Output all the module names@>;
 out4("\")("c")("o")("n"); finish_line;
-@.\\con@&gt;
+@.\\con@>
 print('Done.');
 
 @ Just before the index comes a list of all the changed modules, including
 the index module itself.
 
-@&lt;Glob...@&gt;=
+@<Glob...@>=
 @!k_module:0..max_modules; {runs through the modules}
 
-@ @&lt;Tell about changed modules@&gt;=
+@ @<Tell about changed modules@>=
 begin {remember that the index is already marked as changed}
 k_module←1;
 while ¬ changed_module[k_module] do incr(k_module);
@@ -4925,11 +4908,11 @@ adjust the collating sequence and since the running time will be at worst
 proportional to the total length of all entries in the index. We put the
 identifiers into 102 different lists based on their first characters.
 (Uppercase letters are put into the same list as the corresponding lowercase
-letters, since we want to have `$t&lt;\\{TeX}&lt;\&amp;{to}$'.) The
+letters, since we want to have `$t<\\{TeX}<\&{to}$'.) The
 list for character |c| begins at location |bucket[c]| and continues through
 the |blink| array.
 
-@&lt;Glob...@&gt;=
+@<Glob...@>=
 @!bucket:array[ASCII_code] of name_pointer;
 @!next_name: name_pointer; {successor of |cur_name| when sorting}
 @!c:ASCII_code; {index into |bucket|}
@@ -4939,7 +4922,7 @@ the |blink| array.
 @ To begin the sorting, we go through all the hash lists and put each entry
 having a nonempty cross-reference list into the proper bucket.
 
-@&lt;Do the first pass...@&gt;=
+@<Do the first pass...@>=
 for c←0 to 127 do bucket[c]←0;
 for h←0 to hash_size-1 do
 	begin next_name←hash[h];
@@ -4967,27 +4950,27 @@ present; the lists are output in reverse order (first |sort_ptr|, then
 @d sort_ptr==scrap_ptr {ditto}
 @d max_sorts==max_scraps {ditto}
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!cur_depth:eight_bits; {depth of current buckets}
 @!cur_byte:0..max_bytes; {index into |byte_mem|}
 @!cur_bank:0..ww-1; {row of |byte_mem|}
 @!cur_val:sixteen_bits; {current cross reference number}
 stat@!max_sort_ptr:0..max_sorts;@+tats {largest value of |sort_ptr|}
 
-@ @&lt;Set init...@&gt;=stat max_sort_ptr←0;@+tats
+@ @<Set init...@>=stat max_sort_ptr←0;@+tats
 
 @ The desired alphabetic order is specified by the |collate| array; namely,
-|collate[0]&lt;collate[1]&lt;@t$\cdots$@&gt;&lt;collate[100]|.
+|collate[0]<collate[1]<@t$\cdots$@><collate[100]|.
 
-@&lt;Glob...@&gt;=@!collate:array[0..100] of ASCII_code; {collation order}
+@<Glob...@>=@!collate:array[0..100] of ASCII_code; {collation order}
 
-@ @&lt;Local variables for init...@&gt;=
+@ @<Local variables for init...@>=
 @!c:ASCII_code; {used to initialize |collate|}
 
-@ We use the order $\hbox{null}&lt;\.\ &lt;\hbox{other characters}&lt;\.\_&lt;
-\.A=\.a&lt;\cdots&lt;\.Z=\.z&lt;\.0&lt;\cdots&lt;\.9.$
+@ We use the order $\hbox{null}<\.\ <\hbox{other characters}<\.\_<
+\.A=\.a<\cdots<\.Z=\.z<\.0<\cdots<\.9.$
 
-@&lt;Set init...@&gt;=
+@<Set init...@>=
 collate[0]←0; collate[1]←" ";
 for c←1 to " "-1 do collate[c+1]←c;
 for c←" "+1 to "0"-1 do collate[c]←c;
@@ -5009,25 +4992,25 @@ regarded as identical.
 
 @p procedure unbucket(@!d:eight_bits); {empties buckets having depth |d|}
 var c:ASCII_code; {index into |bucket|}
-begin for c←100 downto 0 do if bucket[collate[c]]&gt;0 then
-	begin if sort_ptr&gt;max_sorts then overflow('sorting');
+begin for c←100 downto 0 do if bucket[collate[c]]>0 then
+	begin if sort_ptr>max_sorts then overflow('sorting');
 	incr(sort_ptr);
-	stat if sort_ptr&gt;max_sort_ptr then max_sort_ptr←sort_ptr;@;@+tats@;@/
+	stat if sort_ptr>max_sort_ptr then max_sort_ptr←sort_ptr;@;@+tats@;@/
 	if c=0 then depth[sort_ptr]←infinity else depth[sort_ptr]←d;
 	head[sort_ptr]←bucket[collate[c]]; bucket[collate[c]]←0;
 	end;
 end;
 
-@ @&lt;Sort and output...@&gt;=
+@ @<Sort and output...@>=
 sort_ptr←0; unbucket(1);
-while sort_ptr&gt;0 do
+while sort_ptr>0 do
 	begin cur_depth←cat[sort_ptr];
 	if (blink[head[sort_ptr]]=0)∨(cur_depth=infinity) then
-		@&lt;Output index entries for the list at |sort_ptr|@&gt;
-	else @&lt;Split the list at |sort_ptr| into further lists@&gt;;
+		@<Output index entries for the list at |sort_ptr|@>
+	else @<Split the list at |sort_ptr| into further lists@>;
 	end
 
-@ @&lt;Split the list...@&gt;=
+@ @<Split the list...@>=
 begin next_name←head[sort_ptr];
 repeat cur_name←next_name; next_name←blink[cur_name];
 	cur_byte←byte_start[cur_name]+cur_depth; cur_bank←cur_name mod ww;
@@ -5040,40 +5023,40 @@ until next_name=0;
 decr(sort_ptr); unbucket(cur_depth+1);
 end
 
-@ @&lt;Output index...@&gt;=
+@ @<Output index...@>=
 begin cur_name←head[sort_ptr];
 @!debug if trouble_shooting then debug_help;@;@+gubed@/
 repeat out2("\")(":");
-@.\\:@&gt;
-	@&lt;Output the name at |cur_name|@&gt;;
-	@&lt;Output the cross-references at |cur_name|@&gt;;
+@.\\:@>
+	@<Output the name at |cur_name|@>;
+	@<Output the cross-references at |cur_name|@>;
 	cur_name←blink[cur_name];
 until cur_name=0;
 decr(sort_ptr);
 end
 
-@ @&lt;Output the name...@&gt;=
+@ @<Output the name...@>=
 case ilk[cur_name] of
 normal: if length(cur_name)=1 then out2("\")("|")@+else out2("\")("\");
-@.\\|@&gt;
-@.\\\\@&gt;
+@.\\|@>
+@.\\\\@>
 roman: do_nothing;
 wildcard: out2("\")("9");
-@.\\9@&gt;
+@.\\9@>
 typewriter: out2("\")(".");
-@.\\.@&gt;
-othercases out2("\")("&amp;")
-@.\\\&amp;@&gt;
+@.\\.@>
+othercases out2("\")("&")
+@.\\\&@>
 endcases;@/
 out_name(cur_name)
 
 @ Section numbers that are to be underlined are enclosed in
 `\.{\\[}$\,\ldots\,$\.]'.
 
-@&lt;Output the cross-references...@&gt;=
-@&lt;Invert the cross-reference list at |cur_name|, making |cur_xref| the head@&gt;;
+@<Output the cross-references...@>=
+@<Invert the cross-reference list at |cur_name|, making |cur_xref| the head@>;
 repeat out2(",")(" "); cur_val←num(cur_xref);
-if cur_val&lt;def_flag then
+if cur_val<def_flag then
 	begin out_mod(cur_val);
 	if cur_val+1=num(xlink(cur_xref)) then
 		begin out2("-")("-");
@@ -5082,7 +5065,7 @@ if cur_val&lt;def_flag then
 		end;
 	end
 else	begin out2("\")("["); out_mod(cur_val-def_flag); out("]");
-@.\\[@&gt;
+@.\\[@>
 	end;
 cur_xref←xlink(cur_xref);
 until cur_xref=0;
@@ -5092,7 +5075,7 @@ out("."); finish_line
 pushing them onto another. In this case |cur_xref| will be the head of
 the stack that we push things onto.
 
-@&lt;Invert the cross-reference list at |cur_name|, making |cur_xref| the head@&gt;=
+@<Invert the cross-reference list at |cur_name|, making |cur_xref| the head@>=
 this_xref←xref[cur_name]; cur_xref←0;
 repeat next_xref←xlink(this_xref); xlink(this_xref)←cur_xref;
 cur_xref←this_xref; this_xref←next_xref;
@@ -5100,13 +5083,13 @@ until this_xref=0
 
 @ The following recursive procedure walks through the tree of module names and
 prints them.
-@↑recursion@&gt;
+@↑recursion@>
 
 @p procedure mod_print(p:name_pointer); {print all module names in subtree |p|}
-begin if p&gt;0 then
+begin if p>0 then
 	begin mod_print(llink[p]);@/
 	out2("\")(":");@/
-@.\\:@&gt;
+@.\\:@>
 	tok_ptr←1; text_ptr←1; scrap_ptr←0; init_stack;
 	app(p+mod_flag); make_output;
 	footnote(0); {|cur_xref| was set by |make_output|}
@@ -5115,8 +5098,9 @@ begin if p&gt;0 then
 	end;
 end;
 
-@ @&lt;Output all the module names@&gt;=@+mod_print(root)
-@* Debugging.
+@ @<Output all the module names@>=@+mod_print(root)
+
+@* Debugging.
 The \PASCAL\ debugger with which \.{WEAVE} was developed allows breakpoints
 to be set, and variables can be read and changed, but procedures cannot be
 executed. Therefore a `|debug_help|' procedure has been inserted in the main
@@ -5133,11 +5117,11 @@ breakpoint, allowing you to look at and/or change variables (if you typed
 zero), or to exit the routine (if you typed a negative value).
 
 Another global variable, |debug_cycle|, can be used to skip silently
-past calls on |debug_help|. If you set |debug_cycle&gt;1|, the program stops
+past calls on |debug_help|. If you set |debug_cycle>1|, the program stops
 only every |debug_cycle| times |debug_help| is called; however,
 any error stop will set |debug_cycle| to zero.
 
-@&lt;Globals...@&gt;=
+@<Globals...@>=
 @!debug@!trouble_shooting:boolean; {is |debug_help| wanted?}
 @!ddt:integer; {operation code for the |debug_help| routine}
 @!dd:integer; {operand in procedures performed by |debug_help|}
@@ -5147,25 +5131,25 @@ any error stop will set |debug_cycle| to zero.
 gubed
 
 @ The debugging routine needs to read from the user's terminal.
-@↑system dependencies@&gt;
-@&lt;Set init...@&gt;=
+@↑system dependencies@>
+@<Set init...@>=
 @!debug trouble_shooting←true; debug_cycle←1; debug_skipped←0; tracing←0;@/
 trouble_shooting←false; debug_cycle←99999; {use these when it almost works}
 reset(term_in,'TTY:','/I'); {open |term_in| as the terminal, don't do a |get|}
 gubed
 
 @ @d breakpoint=888 {place where a breakpoint is desirable}
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
 @p @!debug procedure debug_help; {routine to display various things}
 label breakpoint,exit;
 var k:integer; {index into various arrays}
 begin incr(debug_skipped);
-if debug_skipped&lt;debug_cycle then return;
+if debug_skipped<debug_cycle then return;
 debug_skipped←0;
 loop@+	begin write(term_out,'#'); update_terminal; {prompt}
 	read(term_in,ddt); {read a list of integers}
-	if ddt&lt;0 then return
+	if ddt<0 then return
 	else if ddt=0 then
 		begin goto breakpoint;@\ {go to every label at least once}
 		breakpoint: ddt←0;@\
@@ -5186,36 +5170,37 @@ loop@+	begin write(term_out,'#'); update_terminal; {prompt}
 	end;
 exit:end;
 gubed
-@* The main program.
+
+@* The main program.
 Let's put it all together now: \.{WEAVE} starts and ends here.
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
 The main procedure has been split into three sub-procedures in order to
 keep certain \PASCAL\ compilers from overflowing their capacity.
-@↑split procedures@&gt;
+@↑split procedures@>
 
 @p procedure Phase_I;
-begin @&lt;Phase I:...@&gt;;
+begin @<Phase I:...@>;
 end;
 @#
 procedure Phase_II;
 var lhs:integer;
-begin @&lt;Phase II:...@&gt;;
+begin @<Phase II:...@>;
 end;
 @#
 begin initialize; {beginning of the main program}
 print_ln(banner); {print a ``banner line''}
-@&lt;Store all the reserved words@&gt;;
+@<Store all the reserved words@>;
 Phase_I; Phase_II;@/
-@&lt;Phase III:...@&gt;;
-@&lt;Check that all changes have been read@&gt;;
+@<Phase III:...@>;
+@<Check that all changes have been read@>;
 end_of_WEAVE:
-stat @&lt;Print statistics about memory usage@&gt;;@+tats@;@/
-@t\4\4@&gt;{here files should be closed if the operating system requires it}
-@&lt;Print the job |history|@&gt;;
+stat @<Print statistics about memory usage@>;@+tats@;@/
+@t\4\4@>{here files should be closed if the operating system requires it}
+@<Print the job |history|@>;
 end.
 
-@ @&lt;Print statistics about memory usage@&gt;=
+@ @<Print statistics about memory usage@>=
 print_nl('Memory usage statistics: ',
 	name_ptr:1,' names, ', xref_ptr:1,' cross references, ',
 	byte_ptr[0]:1);
@@ -5228,16 +5213,17 @@ print_nl('sorting required ',max_sort_ptr:1, ' levels.')
 @ Some implementations may wish to pass the |history| value to the
 operating system so that it can be used to govern whether or not other
 programs are started. Here we simply report the history to the user.
-@↑system dependencies@&gt;
+@↑system dependencies@>
 
-@&lt;Print the job |history|@&gt;=
+@<Print the job |history|@>=
 case history of
 spotless: print_nl('(No errors were found.)');
 harmless_message: print_nl('(Did you see the warning message above?)');
 error_message: print_nl('(Pardon me, but I think I spotted something wrong.)');
 fatal_message: print_nl('(That was a fatal error, my friend.)');
 end {there are no other cases}
-@* System-dependent changes.
+
+@* System-dependent changes.
 This module should be replaced, if necessary, by changes to the program
 that are necessary to make \.{WEAVE} work at a particular installation.
 It is usually best to design your change file so that all changes to
@@ -5245,8 +5231,9 @@ previous modules preserve the module numbering; then everybody's version
 will be consistent with the printed program. More extensive changes,
 which introduce new modules, can be inserted here; then only the index
 itself will get a new module number.
-@↑system dependencies@&gt;
-@* Index.
+@↑system dependencies@>
+
+@* Index.
 If you have read and understood the code for Phase III above, you know what
 is in this index and how it got here. All modules in which an identifier is
 used are listed with that identifier, except that reserved words are
@@ -5255,7 +5242,3 @@ of identifiers in module names are not indexed. Underlined entries
 correspond to where the identifier was declared. Error messages, control
 sequences put into the output, and a few
 other things like ``recursion'' are indexed here too.
-</pre>
-
-
-</body></html>
