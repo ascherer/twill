@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="TWIMAC.TEX[TEX,SYS]%20-%20www.SailDart.org-Dateien/u8.css"><meta charset="utf-8">
-<title>TWIMAC.TEX[TEX,SYS] - www.SailDart.org</title>
-</head>
-<body id="u8body">
-<div id="tagline">perm filename TWIMAC.TEX[TEX,SYS]  blob <a href="https://saildart.org/TWIMAC.TEX[TEX,SYS]_blob">sn#846747</a> filedate 1987-10-11 generic text, type T, neo UTF8</div>
-<pre id="u8lump">% Special formatting for Computers and Typesetting: The Programs
+% Special formatting for Computers and Typesetting: The Programs
 
 % Note: A bug was corrected since the first edition was printed;
 % this makes the paging come out differently, so the files probably
@@ -129,7 +122,7 @@
 
 \def\\#1{\hbox{\it#1\/\kern.05em}} % italic type for identifiers
 \def\|#1{\hbox{$#1$}} % one-letter identifiers look a bit better this way
-\def\{\hbox{\bf#1\/}} % boldface type for reserved words
+\def\&#1{\hbox{\bf#1\/}} % boldface type for reserved words
 \def\.#1{\hbox{\ttx % typewriter type for strings
   \let\\=\BS % backslash in a string
   \let\'=\RQ % right quote in a string
@@ -139,7 +132,7 @@
   \let\~=\TL % tilde in a string
   \let\ =\SP % space in a string
   \let\_=\UL % underline in a string
-  \let\&amp;=\AM % ampersand in a string
+  \let\&=\AM % ampersand in a string
   #1}}
 \def\#{\hbox{\tt\char`\#}} % parameter sign
 \def\${\hbox{\tt\char`\$}} % dollar sign
@@ -149,7 +142,7 @@
 \def\AT!{@} % at sign for control text
 \def\pct!{{\char`\%}} % percent sign in ordinary text
 
-\chardef\AM=`\&amp; % ampersand character in a string
+\chardef\AM=`\& % ampersand character in a string
 \chardef\BS=`\\ % backslash in a string
 \chardef\LB=`\{ % left brace in a string
 \def\LQ{{\tt\char'22}} % left quote in a string
@@ -178,7 +171,7 @@
 \def\note#1#2.{\par\penalty5000
   \Y\noindent{\hangindent2\em\baselineskip10pt\eightrm#1 #2.\par}}
 \def\startsection{\Q\noindent\strut{\bf\modno.\quad}}
-\def\defin#1{\global\advance\ind by 2 \1\&amp;{#1 }} % begin `define' or `format'
+\def\defin#1{\global\advance\ind by 2 \1\&{#1 }} % begin `define' or `format'
 \def\A{\note{See also}} % cross-reference for multiply defined section names
 \def\B{\mathopen{\.{@\{}}} % begin controlled comment
 \def\C#1{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi % Pascal comments
@@ -189,7 +182,7 @@
 \let\G=\ge % greater than or equal sign
 \def\H#1{\hbox{\rm\char"7D\tt#1}} % hexadecimal constant
 \let\I=\ne % unequal sign
-\def\J{\.{@\&amp;}} % TANGLE's join operation
+\def\J{\.{@\&}} % TANGLE's join operation
 \let\K=\gets % left arrow
 \let\L=\le % less than or equal sign
 \outer\def\M#1.{\def\modno{#1}\startsection\ignorespaces}
@@ -268,8 +261,8 @@
         \hbox to 35pc{\vbox to10pt{}\eightrm\folio\hfil\nineit\rrhead\/}\vfill}
       \unvbox\partialpage
       \vfill
-%     \ifdim\ht0&gt;1pt \kern8pt\hrule \hbox{%
-      \ifdim\ht0&gt;1pt \kern11pt\hrule \hbox{%    % changed Oct 87 by DEK!
+%     \ifdim\ht0>1pt \kern8pt\hrule \hbox{%
+      \ifdim\ht0>1pt \kern11pt\hrule \hbox{%    % changed Oct 87 by DEK!
           \nsize=\ht0 \advance\nsize-\topskip
           \divide\nsize by 3 \divide\nsize by\ninept
           \multiply\nsize by\ninept \advance\nsize\topskip
@@ -281,7 +274,7 @@
           \vbox to\nsize{\box0\vss}} \fi}
     \global\advance\pageno 1 \global\let\rhead=\rrhead\fi
   {\globaldefs=1
-    \nn=199 \loop \ifnum\nn&lt;221 \toks\nn={} \count\nn=0 \advance\nn 1 \repeat
+    \nn=199 \loop \ifnum\nn<221 \toks\nn={} \count\nn=0 \advance\nn 1 \repeat
     \nrefs=0
     \baseno=\modno}}
 
@@ -298,7 +291,7 @@
   \ifvoid\partialpage\else\advance\nsize 5pt \advance\nsize\ht\partialpage\fi
   \advance\nsize\ht\newmod 
   \message{\the\nsize} % show the page break decision amount
-  \ifdim\nsize&gt;88pc \flushout \message{\modno}\fi
+  \ifdim\nsize>88pc \flushout \message{\modno}\fi
   \addtopartialpage}
 \def\addtopartialpage{\let\β=\addnewref \catcode`\_=\active \let_=\uline
   \globaldefs=1 \the\newrefs
@@ -310,14 +303,14 @@
 \def\shortpage{\par\vskip-2\baselineskip
   \null\vfill\penalty-5000\message{(shortpage)}}
 
-\def\countnewref #1 #2 {\ifnum#2&lt;\baseno \let\next\cn
-  \else\ifnum#2&gt;\modno \let\next\cn \else\let\next\flushref\fi\fi\next#1 #2 }
+\def\countnewref #1 #2 {\ifnum#2<\baseno \let\next\cn
+  \else\ifnum#2>\modno \let\next\cn \else\let\next\flushref\fi\fi\next#1 #2 }
 \def\cn #1 #2 {\expandafter\cnr\csname#1 #2\endcsname #2 }
 \def\cnr#1#2 #3 {\ifx#1\relax \advance\nn 1 \fi}
 \def\flushref#1 #2 #3 {}
-\def\addnewref #1 #2 {\ifnum#2&lt;\baseno \let\next\an \nn=199
-  \else\ifnum#2&gt;\modno \let\next\an \nn=#2 \advance\nn-\baseno
-    \advance\nn200 \ifnum\nn&gt;219 \nn=220 \fi
+\def\addnewref #1 #2 {\ifnum#2<\baseno \let\next\an \nn=199
+  \else\ifnum#2>\modno \let\next\an \nn=#2 \advance\nn-\baseno
+    \advance\nn200 \ifnum\nn>219 \nn=220 \fi
     \else\let\next\flushref\fi\fi\next#1 #2 }
 \def\an #1 #2 {\expandafter\anr\csname#1 #2\endcsname #1 #2 }
 \def\anr#1#2 #3 #4 {\ifx#1\relax
@@ -334,8 +327,8 @@
 \def\ε{\ε}
 \def\readrefs{\the\prefs \mm=\modno \advance\mm-\baseno \advance\mm200
   {\def\λ##1{\global\let##1\relax}\pp=200 %  this patch made AFTER first edition
-    \loop\ifnum\pp&lt;\mm \the\toks\pp \advance\pp 1 \repeat}	% of Vol B!!
-  \loop\ifnum\mm&lt;221 \the\toks\mm \advance\mm 1 \repeat}
+    \loop\ifnum\pp<\mm \the\toks\pp \advance\pp 1 \repeat}	% of Vol B!!
+  \loop\ifnum\mm<221 \the\toks\mm \advance\mm 1 \repeat}
 \def\readln{\read\sreffile to\next \expandafter\next\space \readin}
 \def\donewithpage#1 {%\ifnum\pageno=#1 \else\message{page #1??}\fi
   \let\readin=\relax}
@@ -409,7 +402,3 @@
  \else\ifnum\pageno=\nextpage\getnextpage\let\next=\Shipout
   \else\let\next=\Tosspage\fi\fi \next}
 \newbox\garbage \def\Tosspage{\deadcycles=0\setbox\garbage=}
-</pre>
-
-
-</body></html>
