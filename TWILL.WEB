@@ -15,14 +15,14 @@
 \mathchardef\BA="3224 % double arrow
 \def\({} % kludge for alphabetizing certain module names
 
-\def\title{TITLE}
-\def\contentspagenumber{15} % should be odd
+\def\title{TWILL}
+\def\contentspagenumber{1} % should be odd
 \def\topofcontents{\null\vfill
 	\titlefalse % include headline on the contents page
 	\def\rheader{\mainfont Appendix D\hfil \contentspagenumber}
-	\centerline{\titlefont The {\ttitlefont WEAVE} processor}
+	\centerline{\titlefont The {\ttitlefont TWILL} processor}
 	\vskip 15pt
-	\centerline{(Version 2.8)}
+	\centerline{(Version 2.9)}
 	\vfill}
 \pageno=\contentspagenumber \advance\pageno by 1
 
@@ -54,7 +54,7 @@ dependencies' in the index below.
 The ``banner line'' defined here should be changed whenever \.{WEAVE}
 is modified.
 
-@d banner=='This is TWILL, Version 2.8'
+@d banner=='This is TWILL, Version 2.9'
 
 @ The program begins with a fairly normal header, made up of pieces that
 @^system dependencies@>
