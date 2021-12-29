@@ -49,7 +49,7 @@ These features are also present in the \PASCAL\ version of \TeX, where they
 are used in a similar (but more complex) way. System-dependent portions
 of \.{WEAVE} can be identified by looking at the entries for `system
 dependencies' in the index below.
-@!@↑system dependencies@>
+@!@^system dependencies@>
 
 The ``banner line'' defined here should be changed whenever \.{WEAVE}
 is modified.
@@ -57,7 +57,7 @@ is modified.
 @d banner=='This is TWILL, Version 2.8'
 
 @ The program begins with a fairly normal header, made up of pieces that
-@↑system dependencies@>
+@^system dependencies@>
 will mostly be filled in later. The \.{WEB} input comes from files |web_file|
 and |change_file|, and the \TeX\ output goes to file |tex_file|.
 
@@ -98,7 +98,7 @@ if statistics about \.{WEAVE}'s memory usage are desired.
 @ The \PASCAL\ compiler used to develop this system has ``compiler
 directives'' that can appear in comments whose first character is a dollar sign.
 In production versions of \.{WEAVE} these directives tell the compiler that
-@↑system dependencies@>
+@^system dependencies@>
 it is safe to avoid range checks and to leave out the extra code it inserts
 for the \PASCAL\ debugger's benefit, although interrupts will occur if
 there is arithmetic overflow.
@@ -138,7 +138,7 @@ and they are sometimes repeated by going to `|continue|'.
 
 @ We assume that |case| statements may include a default case that applies
 if no matching label is found. Thus, we shall use constructions like
-@↑system dependencies@>
+@^system dependencies@>
 $$\vbox{\halign{#\hfil\cr
 |case x of|\cr
 1: $\langle\,$code for $x=1\,\rangle$;\cr
@@ -224,7 +224,7 @@ the code used for preprocessed constants like \.{"A"}. If you are writing
 a program in \.{WEB} that makes use of such one-character constants, you
 should convert your input to ASCII form, like \.{WEAVE} and \.{TANGLE} do.
 Otherwise \.{WEB}'s internal coding scheme does not affect you.
-@↑ASCII code@>
+@^ASCII code@>
 
 Here is a table of the standard visible ASCII codes:
 $$\def\:{\char\count255\global\advance\count255 by 1}
@@ -281,7 +281,7 @@ to stand for the data type of the characters in the input and output
 files.  We shall also assume that |text_char| consists of the elements
 |chr(first_text_char)| through |chr(last_text_char)|, inclusive. The
 following definitions should be adjusted if necessary.
-@↑system dependencies@>
+@^system dependencies@>
 
 @d text_char == char {the data type of characters in text files}
 @d first_text_char=0 {ordinal number of the smallest element of |text_char|}
@@ -444,7 +444,7 @@ this module should be changed to
 $$\hbox{|for i←1 to @'37 do xchr[i]←chr(i);|}$$
 \.{WEB}'s character set is essentially identical to MIT's, even with respect to
 characters less than @'40.
-@↑system dependencies@>
+@^system dependencies@>
 
 Changes to the present module will make \.{WEB} more friendly on computers
 that have an extended character set, so that one can type things like
@@ -485,7 +485,7 @@ dynamically by the user, and since there is no input from the terminal.
 
 @ Terminal output is done by writing on file |term_out|, which is assumed to
 consist of characters of type |text_char|:
-@↑system dependencies@>
+@^system dependencies@>
 
 @d print(#)==write(term_out,#) {`|print|' means write on the terminal}
 @d print_ln(#)==write_ln(term_out,#) {`|print|' and then start new line}
@@ -500,7 +500,7 @@ consist of characters of type |text_char|:
 @ Different systems have different ways of specifying that the output on a
 certain file will appear on the user's terminal. Here is one way to do this
 on the \PASCAL\ system that was used in \.{TANGLE}'s initial development:
-@↑system dependencies@>
+@^system dependencies@>
 
 @<Set init...@>=
 rewrite(term_out,'TTY:'); {send |term_out| output to the terminal}
@@ -508,7 +508,7 @@ rewrite(term_out,'TTY:'); {send |term_out| output to the terminal}
 @ The |update_terminal| procedure is called when we want
 to make sure that everything we have output to the terminal so far has
 actually left the computer's internal buffers and been sent.
-@↑system dependencies@>
+@^system dependencies@>
 
 @d update_terminal == break(term_out) {empty the terminal output buffer}
 
@@ -524,7 +524,7 @@ in the program header, we assume that the \PASCAL\ runtime system has
 already checked that suitable file names have been given; therefore no
 additional error checking needs to be done. We will see below that
 \.{WEAVE} reads through the entire input twice.
-@↑system dependencies@>
+@^system dependencies@>
 
 @p procedure open_input; {prepare to read |web_file| and |change_file|}
 begin reset(web_file); reset(change_file);
@@ -539,7 +539,7 @@ end;
 Since this file was listed in the program header, we assume that the
 \PASCAL\ runtime system has checked that a suitable external file name has
 been given.
-@↑system dependencies@>
+@^system dependencies@>
 
 @<Set init...@>=
 rewrite(tex_file);
@@ -555,7 +555,7 @@ of \TeX\ are followed; i.e., |ASCII_code| numbers representing the next line
 of the file are input into |buffer[0]|, |buffer[1]|, \dots,
 |buffer[limit-1]|; trailing blanks are ignored;
 and the global variable |limit| is set to the length of the
-@↑system dependencies@>
+@^system dependencies@>
 line. The value of |limit| must be strictly less than |buf_size|.
 
 We assume that none of the |ASCII_code| values
@@ -633,7 +633,7 @@ unlooked-at position in |buffer|, the current line number, and whether or not
 the current line is from |change_file| or |web_file|.
 This routine should be modified on systems whose standard text editor
 has special line-numbering conventions.
-@↑system dependencies@>
+@^system dependencies@>
 
 @<Print error location based on input buffer@>=
 begin if changing then print('. (change file ')@+else print('. (');
@@ -656,7 +656,7 @@ in \.{WEAVE}. It is used when no recovery from a particular error has
 been provided.
 
 Some \PASCAL\ compilers do not implement non-local |goto| statements.
-@↑system dependencies@>
+@^system dependencies@>
 In such cases the code that appears at label |end_of_WEAVE| should be
 copied into the |jump_out| procedure, followed by a call to a system procedure
 that terminates the program.
@@ -1510,7 +1510,7 @@ milestones, and the code of |new_module| should be the largest of
 all. Some of these numeric control codes take the place of ASCII
 control codes that will not otherwise appear in the output of the
 scanning routines.
-@↑ASCII code@>
+@^ASCII code@>
 
 @d ignore=0 {control code of no interest to \.{WEAVE}}
 @d verbatim=@'2 {extended ASCII alpha will not appear}
@@ -2257,7 +2257,7 @@ current module name of interest.
 
 @ The following recursive procedure
 walks through the tree of module names and prints out anomalies.
-@↑recursion@>
+@^recursion@>
 
 @p procedure mod_check(@!p:name_pointer); {print anomalies in subtree |p|}
 begin if p>0 then
@@ -2883,7 +2883,7 @@ programs. The production rules below have been formulated in the same
 spirit of ``almost anything goes.''
 
 @ Here is a table of all the productions. The reader can best get a feel for
-@↑productions, table of@>
+@^productions, table of@>
 how they work by trying them out by hand on small examples; no amount of
 explanation will be as effective as watching the rules in action.
 Parsing can also be watched by debugging with `\.{@@2}'.
@@ -3181,7 +3181,7 @@ of program text. The |translate| procedure, which incorporates the |case|
 statement here, would become too long for those compilers if we did
 not do something to split the cases into parts. Therefore
 a separate procedure called |five_cases| has been introduced.
-@↑split procedures@>
+@^split procedures@>
 This auxiliary procedure contains approximately half of the program text
 that |translate| would otherwise have had. There's also a procedure
 called |alpha_cases|, which turned out to be necessary because the best
@@ -3660,7 +3660,7 @@ Like |prod|, this procedure has to split into pieces so that each
 part is short enough to be handled by \PASCAL\ compilers that discriminate
 against long subroutines. This time there are two split-off routines,
 called |easy_cases| and |sub_cases|.
-@↑split procedures@>
+@^split procedures@>
 
 After studying |Pascal_parse|, we will look at the sub-procedures
 |app_comment|, |app_octal|, and |app_hex| that are used in some of its
@@ -3802,7 +3802,7 @@ has been used, so another |app| is legitimate before testing again.
 
 Many of the special characters in a string must be prefixed by `\.\\' so that
 \TeX\ will print them properly.
-@↑special string characters@>
+@^special string characters@>
 
 @<Append a \(string scrap@>=
 begin app("\");
@@ -4181,7 +4181,7 @@ output of \PASCAL\ text within `\pb' brackets, and this procedure uses
 |make_output| to output the current token list. Thus, the recursive call
 of |make_output| actually occurs when |make_output| calls |output_Pascal|
 while outputting the name of a module.
-@↑recursion@>
+@^recursion@>
 
 @p procedure make_output; forward; @t\2@>@#
 procedure output_Pascal; {outputs the current token list}
@@ -5083,7 +5083,7 @@ until this_xref=0
 
 @ The following recursive procedure walks through the tree of module names and
 prints them.
-@↑recursion@>
+@^recursion@>
 
 @p procedure mod_print(p:name_pointer); {print all module names in subtree |p|}
 begin if p>0 then
@@ -5131,7 +5131,7 @@ any error stop will set |debug_cycle| to zero.
 gubed
 
 @ The debugging routine needs to read from the user's terminal.
-@↑system dependencies@>
+@^system dependencies@>
 @<Set init...@>=
 @!debug trouble_shooting←true; debug_cycle←1; debug_skipped←0; tracing←0;@/
 trouble_shooting←false; debug_cycle←99999; {use these when it almost works}
@@ -5139,7 +5139,7 @@ reset(term_in,'TTY:','/I'); {open |term_in| as the terminal, don't do a |get|}
 gubed
 
 @ @d breakpoint=888 {place where a breakpoint is desirable}
-@↑system dependencies@>
+@^system dependencies@>
 
 @p @!debug procedure debug_help; {routine to display various things}
 label breakpoint,exit;
@@ -5173,11 +5173,11 @@ gubed
 
 @* The main program.
 Let's put it all together now: \.{WEAVE} starts and ends here.
-@↑system dependencies@>
+@^system dependencies@>
 
 The main procedure has been split into three sub-procedures in order to
 keep certain \PASCAL\ compilers from overflowing their capacity.
-@↑split procedures@>
+@^split procedures@>
 
 @p procedure Phase_I;
 begin @<Phase I:...@>;
@@ -5213,7 +5213,7 @@ print_nl('sorting required ',max_sort_ptr:1, ' levels.')
 @ Some implementations may wish to pass the |history| value to the
 operating system so that it can be used to govern whether or not other
 programs are started. Here we simply report the history to the user.
-@↑system dependencies@>
+@^system dependencies@>
 
 @<Print the job |history|@>=
 case history of
@@ -5231,7 +5231,7 @@ previous modules preserve the module numbering; then everybody's version
 will be consistent with the printed program. More extensive changes,
 which introduce new modules, can be inserted here; then only the index
 itself will get a new module number.
-@↑system dependencies@>
+@^system dependencies@>
 
 @* Index.
 If you have read and understood the code for Phase III above, you know what
