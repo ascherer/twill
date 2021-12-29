@@ -1,0 +1,73 @@
+/* SAILDART utf8data pages /u8.css */
+*{ margin:0; padding:0; }
+.GreenBar{ background-color: #DFD; line-height: 1.6em; }
+.BlueBar{ background-color: #DDF; line-height: 1.6em; }
+.GrayBar{ background-color: #EEE; line-height: 1.6em; }
+.DarkBar{ background-color: #DDD; line-height: 1.6em; }
+.PinkBar{ background-color: #FDD; line-height: 1.6em; }
+.PinFeed{ color:#FFF;background-color: #FFF; line-height: 1.6em; text-align:center; }
+.PinFeedHole{color:#000;background-color: #FFF; line-height: 1.6em; text-align:center;}
+.TallWideDiv {
+    width:75%;height:80%;
+    background:gray;
+    padding:1.5%;
+    margin:auto;
+    overflow:auto;
+    border-radius:20px;
+}
+.RightPad{text-align:right;padding-right:1em;}
+
+#u8body{
+    overflow:auto;
+}
+#tagline{
+    font: small bold;
+    background-color: #FFE;
+}
+#u8frame{
+    text-align:center;
+    vertical-align:middle;
+    background-color: #EEE;     
+}
+#svgframe{
+    width:100%;
+    text-align:center;
+    background-color:white;
+    border:1px solid red;
+}
+svg {
+/*    width:1026px;*/
+    width:100%;
+   height:100%;
+   padding:8px;
+}
+#u8lump{
+    font-weight: medium;
+    font-size: normal;
+    font-family: monospace; 
+    background-color: #EEE; 
+}
+#u8img{
+    width:99%;
+}
+.pgbar {
+        padding: 0.3em 50em 0.3em 0;
+/*        border:1px solid black;*/
+        background-color:#EEA;
+        line-height:2em;
+        margin: 2em 0 2em 0;
+}
+article{
+        background-color:white;
+}
+header{
+        background-color:lightgray;
+}
+embed{
+    visibility:hidden;
+    border:solid red 2px;
+    margin: 0; position: absolute;
+    top: 50%; left: 50%; margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
