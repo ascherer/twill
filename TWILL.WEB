@@ -808,7 +808,7 @@ to be treated when \PASCAL\ code is being formatted.
 @ The names of modules are stored in |byte_mem| together
 with the identifier names, but a hash table is not used for them because
 \.{WEAVE} needs to be able to recognize a module name when given a prefix of
-that name. A conventional binary seach tree is used to retrieve module names,
+that name. A conventional binary search tree is used to retrieve module names,
 with fields called |llink| and |rlink| in place of |link| and |ilk|. The
 root of this tree is |rlink[0]|.
 
@@ -1052,7 +1052,7 @@ id_lookup:=p;
 end;
 
 @ A simple hash code is used: If the sequence of
-ASCII codes is $c_1c_2\ldots c_m$, its hash value will be
+ASCII codes is $c_1c_2\ldots c_n$, its hash value will be
 $$(2^{n-1}c_1+2^{n-2}c_2+\cdots+c_n)\,\bmod\,|hash_size|.$$
 
 @<Compute the hash...@>=
@@ -2606,7 +2606,7 @@ The combination rules are given as context-sensitive productions that are
 applied from left to right. Suppose that we are currently working on the
 sequence of scraps $s_1\,s_2\ldots s_n$. We try first to find the longest
 production that applies to an initial substring $s_1\,s_2\ldots\,$; but if
-no such productions exist, we find to find the longest production
+no such productions exist, we try to find the longest production
 applicable to the next substring $s_2\,s_3\ldots\,$; and if that fails, we
 try to match $s_3\,s_4\ldots\,$, etc.
 
@@ -3112,7 +3112,7 @@ here so that the program for each production is fairly short.
 
 All of our productions conform to the general notion that some |k|
 consecutive scraps starting at some position |j| are to be replaced by a
-single scrap of some category |c| whose translations is composed from the
+single scrap of some category |c| whose translation is composed from the
 translations of the disappearing scraps. After this production has been
 applied, the production pointer |pp| should change by an amount |d|. Such
 a production can be represented by the quadruple $(j,k,c,d)$. For example,
@@ -3131,7 +3131,7 @@ done by hand in each case, based on the full set of productions but not on
 the grammar of \PASCAL\ or on the rules for constructing the initial
 scraps.
 
-We also attach a serial number of each production, so that additional
+We also attach a serial number to each production, so that additional
 information is available when debugging. For example, the program below
 contains the statement `|reduce(pp+1,2,intro,+1)(52)|' when it implements
 the production just mentioned.
@@ -3234,7 +3234,7 @@ begin @<Cases for |alpha|@>;
 incr(pp); {if no match was found, we move to the right}
 found: end;
 
-@ Now comes the code that tries to match each production that starts
+@ Now comes the code that tries to match each production starting
 with a particular type of scrap. Whenever a match is discovered,
 the |squash| or |reduce| macro will cause the appropriate action
 to be performed, followed by |goto found|.
