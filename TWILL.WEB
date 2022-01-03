@@ -1972,7 +1972,7 @@ subroutine, which doesn't complain about certain syntactic errors.
 @d start_of_const(#)==(((#>="0")and(#<="9"))or(#=hex)or(#=octal)or(#=string)
 	or(#=identifier))
 @d sign(#)==(abs(#-",")=1)
-@d start_of_num(#)==(start_of_const(#)orsign(#))
+@d start_of_num(#)==(start_of_const(#)or sign(#))
 
 @p function scan_exp:integer;
 label done;
