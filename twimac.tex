@@ -320,11 +320,11 @@
 \else \def\lmda#1{#1\global\let#1\relax} \fi
 \def\makeref #1 #2 #3#4 {\nn=#2 \hangindent=1em
   \ifsorted\else\toks0={#1 #2 #3#4}\immediate\write\reffile{+ \the\toks0}\fi
-  \noindent\\{#1}\ifx#3\ε\else
+  \noindent\\{#1}\ifx#3\none\else
   \if#3:: \else\unhcopy\eqbox \fi#4\fi, \section\number\nn.\par}
 \newbox\eqbox \setbox\eqbox=\hbox{\kern2pt\eightrm=\kern2pt}
 \def\section{\mathhexbox278}
-\def\ε{\ε}
+\def\none{\none}
 \def\readrefs{\the\prefs \mm=\modno \advance\mm-\baseno \advance\mm200
   {\def\lmda##1{\global\let##1\relax}\pp=200 %  this patch made AFTER first edition
     \loop\ifnum\pp<\mm \the\toks\pp \advance\pp 1 \repeat}	% of Vol B!!

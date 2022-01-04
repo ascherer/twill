@@ -4827,7 +4827,7 @@ end;
 
 @ @<Output the reference, based on its |dtype|@>=
 case dtype(xx) of
-dtype_none: out2("\")("ε");
+dtype_none: out5("\")("n")("o")("n")("e");
 dtype_macro: out6("=")("m")("a")("c")("r")("o");
 dtype_const: begin out2("=")("$"); out_const(dname(xx)); out("$");
 	end;
