@@ -186,11 +186,11 @@
 \let\K=\gets % left arrow
 \let\L=\le % less than or equal sign
 \outer\def\M#1.{\def\modno{#1}\startsection\ignorespaces}
-\outer\def\N#1. \[#2]#3.{\def\modno{#1}\flushout % begin starred section
-  \gdef\rhead{PART #2:\uppercase{#3}} % define running headline
+\outer\def\N#1. #2.{\def\modno{#1}\flushout % begin starred section
+  \gdef\rhead{\uppercase{#2}} % define running headline
   \global\let\rrhead=\rhead
   \message{*\modno} % progress report
-  \startsection{\bf\ignorespaces#3.\quad}\ignorespaces}
+  \startsection{\bf\ignorespaces#2.\quad}\ignorespaces}
 \outer\def\NN#1. \[#2]#3.{\def\modno{#1} % begin starred section on rh page
   \global\setbox\partialpage=\vbox{
     \vbox to 44pc{\box\partialpage\vfill}\break}
