@@ -4811,7 +4811,7 @@ var k,p,q,w,xx,mmm:integer;
 begin p:=ref_link[0];
 while p<>0 do
 	begin flush_buffer(out_ptr,false);
-	out2("\")("β");
+	out2("\")("[");
 	xx:=ref_loc[p]; q:=dback(xx); w:=q mod ww;
 	for k:=byte_start[q] to byte_start[q+ww]-1 do out(byte_mem[w,k]);
 	out(" "); out_const(num(xx)-def_flag);

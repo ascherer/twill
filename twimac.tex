@@ -247,7 +247,7 @@
         \hbox to 35pc{\vbox to10pt{}\nineit\rhead\hfil\eightrm\folio}\vfill}
       \nointerlineskip\box0}
     \global\advance\pageno 1
-    \let\β=\makeref
+    \let\[=\makeref
     \ifsorted \let\readin=\readln \readrefs
     \else \immediate\write\reffile{∀\the\pageno}\let\readin=\readrefs \fi
     \setbox0=\vbox{\eightpoint \hsize=11pc \catcode`\_=\active \let_=\_
@@ -282,7 +282,7 @@
   \newrefs=\bgroup}
 \def\FI{\nn=\modno \advance\nn-\baseno \advance\nn 200
   \advance\nrefs-\count\nn \nn=\nrefs
-  \let\β=\countnewref \the\newrefs \endgroup
+  \let\[=\countnewref \the\newrefs \endgroup
   \nobreak\null\nobreak\vskip-\baselineskip\penalty-500\vfil\eject}
 \def\twillout{\setbox\newmod=\vbox{\unvbox255}
   \ifnum\nn=0 \nsize=0pt
@@ -293,7 +293,7 @@
   \message{\the\nsize} % show the page break decision amount
   \ifdim\nsize>88pc \flushout \message{\modno}\fi
   \addtopartialpage}
-\def\addtopartialpage{\let\β=\addnewref \catcode`\_=\active \let_=\uline
+\def\addtopartialpage{\let\[=\addnewref \catcode`\_=\active \let_=\uline
   \globaldefs=1 \the\newrefs
   \nsize=\dp\partialpage
   \setbox\partialpage=\ifvoid\partialpage \box\newmod
@@ -315,7 +315,7 @@
 \def\an #1 #2 {\expandafter\anr\csname#1 #2\endcsname #1 #2 }
 \def\anr#1#2 #3 #4 {\ifx#1\relax
     \advance\nrefs1 \advance\count\nn 1
-    \def#1{\β#2 #3 #4 }\toks\nn=\expandafter{\the\toks\nn\λ#1}\fi}
+    \def#1{\[#2 #3 #4 }\toks\nn=\expandafter{\the\toks\nn\λ#1}\fi}
 \ifsorted \def\λ#1{\global\let#1\relax}
 \else \def\λ#1{#1\global\let#1\relax} \fi
 \def\makeref #1 #2 #3#4 {\nn=#2 \hangindent=1em
