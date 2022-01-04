@@ -174,7 +174,7 @@
 \def\defin#1{\global\advance\ind by 2 \1\&{#1 }} % begin `define' or `format'
 \def\A{\note{See also}} % cross-reference for multiply defined section names
 \def\B{\mathopen{\.{@\{}}} % begin controlled comment
-\def\C#1{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi % Pascal comments
+\def\C#1{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi %$% Pascal comments
   \XX\hfil\penalty-1\hfilneg\quad$\{\,$#1$\,\}$\XX}
 \def\D{\defin{define}} % macro definition
 \def\E{\cdot10↑} % exponent in floating point constant
@@ -213,11 +213,11 @@
 \def\U{\note{This code is used in}} % cross-reference for uses of sections
 \let\V=\lor % logical or
 \let\W=\land % logical and
-\def\X#1:#2\X{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi % section name
+\def\X#1:#2\X{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi %$% section name
   \XX$\langle\,$#2{\sevenrm\kern.5em#1}$\,\rangle$\XX}
 \def\Y{\par\yskip}
 \let\Z=\let % now you can \send the control sequence \Z
-\def\){\hbox{\.{@\$}}} % sign for string pool check sum
+\def\){\hbox{\.{@\$}}} %$% sign for string pool check sum
 \def\]{\hbox{\.{@\\}}} % sign for forced line break
 \def\=#1{\kern2pt\hbox{\vrule\vtop{\vbox{\hrule
         \hbox{\strut\kern2pt\.{#1}\kern2pt}}
