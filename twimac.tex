@@ -137,8 +137,8 @@
 \def\#{\hbox{\tt\char`\#}} % parameter sign
 \def\${\hbox{\tt\char`\$}} % dollar sign
 \def\%{\hbox{\tt\char`\%}} % percent sign
-\def\↑{\ifmmode\mathchar"222 \else\char`↑ \fi} % pointer or hat
-% circumflex accents can be obtained from \↑↑D instead of \↑
+\def\^{\ifmmode\mathchar"222 \else\char`^ \fi} % pointer or hat
+% circumflex accents can be obtained from \^^D instead of \^
 \def\AT!{@} % at sign for control text
 \def\pct!{{\char`\%}} % percent sign in ordinary text
 
@@ -177,7 +177,7 @@
 \def\C#1{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi %$% Pascal comments
   \XX\hfil\penalty-1\hfilneg\quad$\{\,$#1$\,\}$\XX}
 \def\D{\defin{define}} % macro definition
-\def\E{\cdot10↑} % exponent in floating point constant
+\def\E{\cdot10^} % exponent in floating point constant
 \def\F{\defin{format}} % format definition
 \let\G=\ge % greater than or equal sign
 \def\H#1{\hbox{\rm\char"7D\tt#1}} % hexadecimal constant
