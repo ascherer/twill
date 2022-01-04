@@ -315,9 +315,9 @@
 \def\an #1 #2 {\expandafter\anr\csname#1 #2\endcsname #1 #2 }
 \def\anr#1#2 #3 #4 {\ifx#1\relax
     \advance\nrefs1 \advance\count\nn 1
-    \def#1{\[#2 #3 #4 }\toks\nn=\expandafter{\the\toks\nn\λ#1}\fi}
-\ifsorted \def\λ#1{\global\let#1\relax}
-\else \def\λ#1{#1\global\let#1\relax} \fi
+    \def#1{\[#2 #3 #4 }\toks\nn=\expandafter{\the\toks\nn\lmda#1}\fi}
+\ifsorted \def\lmda#1{\global\let#1\relax}
+\else \def\lmda#1{#1\global\let#1\relax} \fi
 \def\makeref #1 #2 #3#4 {\nn=#2 \hangindent=1em
   \ifsorted\else\toks0={#1 #2 #3#4}\immediate\write\reffile{∃ \the\toks0}\fi
   \noindent\\{#1}\ifx#3\ε\else
@@ -326,7 +326,7 @@
 \def\section{\mathhexbox278}
 \def\ε{\ε}
 \def\readrefs{\the\prefs \mm=\modno \advance\mm-\baseno \advance\mm200
-  {\def\λ##1{\global\let##1\relax}\pp=200 %  this patch made AFTER first edition
+  {\def\lmda##1{\global\let##1\relax}\pp=200 %  this patch made AFTER first edition
     \loop\ifnum\pp<\mm \the\toks\pp \advance\pp 1 \repeat}	% of Vol B!!
   \loop\ifnum\mm<221 \the\toks\mm \advance\mm 1 \repeat}
 \def\readln{\read\sreffile to\next \expandafter\next\space \readin}
