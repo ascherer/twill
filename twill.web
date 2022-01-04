@@ -4744,7 +4744,8 @@ loop@+	begin out_mod(num(cur_xref)-flag);
 done:
 
 @ @<Output the code for the end of a module@>=
-out3("\")("α")("%");
+out6("\")("m")("i")("n")("i")("%");
+@.\\mini@>
 beta_out;
 flush_buffer(out_ptr,false);
 out4("}")("\")("F")("I"); finish_line;
@@ -4764,7 +4765,8 @@ begin loop begin
       	if num(xx)>def_flag then if dback(xx)>0 then
 	 if ilk[dback(xx)]=normal then
 		begin flush_buffer(out_ptr,false);
-		out2("\")("α");
+		out5("\")("m")("i")("n")("i");
+@.\\mini@>
 		p:=dback(xx);
 		w:=p mod ww;
 		for k:=byte_start[p] to byte_start[p+ww]-1 do out(byte_mem[w,k]);
