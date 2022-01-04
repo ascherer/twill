@@ -319,7 +319,7 @@
 \ifsorted \def\lmda#1{\global\let#1\relax}
 \else \def\lmda#1{#1\global\let#1\relax} \fi
 \def\makeref #1 #2 #3#4 {\nn=#2 \hangindent=1em
-  \ifsorted\else\toks0={#1 #2 #3#4}\immediate\write\reffile{∃ \the\toks0}\fi
+  \ifsorted\else\toks0={#1 #2 #3#4}\immediate\write\reffile{+ \the\toks0}\fi
   \noindent\\{#1}\ifx#3\ε\else
   \if#3:: \else\unhcopy\eqbox \fi#4\fi, \section\number\nn.\par}
 \newbox\eqbox \setbox\eqbox=\hbox{\kern2pt\eightrm=\kern2pt}
