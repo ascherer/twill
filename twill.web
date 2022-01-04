@@ -2,6 +2,7 @@
 % But it is not polished either, so you probably shouldn't try....
 % Version 2.8 (based on WEAVE 2.8) was hacked together on 28 Sep 1985.
 % Version 2.9 fixed output for dtype_string (14 Jun 1987).
+% Version 4.5 (based on WEAVE 4.5) was hacked together on 04 Jan 2021.
 
 % Here is TeX material that gets inserted after \input webmac
 \def\hang{\hangindent 3em\indent\ignorespaces}
@@ -16,14 +17,14 @@
 \def\({} % kludge for alphabetizing certain module names
 
 \def\title{TWILL}
-\def\contentspagenumber{1} % should be odd
+\def\contentspagenumber{15} % should be odd
 \def\topofcontents{\null\vfill
-	\titlefalse % include headline on the contents page
-	\def\rheader{\mainfont Appendix D\hfil \contentspagenumber}
-	\centerline{\titlefont The {\ttitlefont TWILL} processor}
-	\vskip 15pt
-	\centerline{(Version 2.9)}
-	\vfill}
+  \titlefalse % include headline on the contents page
+  \def\rheader{\mainfont Appendix D\hfil \contentspagenumber}
+  \centerline{\titlefont The {\ttitlefont TWILL} processor}
+  \vskip 15pt
+  \centerline{(Version 4.5)}
+  \vfill}
 \pageno=\contentspagenumber \advance\pageno by 1
 
 @* Introduction.
@@ -32,7 +33,7 @@ end of September, 1985, in order to prepare the listing of \TeX,
 on the WAITS system. No attempt has been made to polish anything
 or to make this code usable by anyone else but its author.]
 
-This program converts a \.{WEB} file to a \TeX\ file. \.{WEAVE} was written
+This program converts a \.{WEB} file to a \TeX\ file. It was written
 by D. E. Knuth in October, 1981; a somewhat similar {\mc SAIL} program had
 been developed in March, 1979, although the earlier program used a top-down
 parsing method that is quite different from the present scheme.
@@ -54,7 +55,7 @@ dependencies' in the index below.
 The ``banner line'' defined here should be changed whenever \.{WEAVE}
 is modified.
 
-@d banner=='This is TWILL, Version 2.9'
+@d banner=='This is TWILL, Version 4.5'
 
 @ The program begins with a fairly normal header, made up of pieces that
 @^system dependencies@>
@@ -163,19 +164,19 @@ this program must be extended by listing all remaining cases.)
 should be sufficient for most applications of \.{WEAVE}.
 
 @<Constants...@>=
-@!max_bytes=42000; {|1/ww| times the number of bytes in identifiers,
+@!max_bytes=45000; {|1/ww| times the number of bytes in identifiers,
 	index entries, and module names; must be less than 65536}
-@!max_names=4000; {number of identifiers, index entries, and module names;
+@!max_names=5000; {number of identifiers, index entries, and module names;
 	must be less than 10240}
-@!max_modules=1400; {greater than the total number of modules}
+@!max_modules=2000; {greater than the total number of modules}
 @!hash_size=353; {should be prime}
 @!buf_size=100; {maximum length of input line}
 @!longest_name=400; {module names shouldn't be longer than this}
 @!long_buf_size=500; {|buf_size+longest_name|}
 @!line_length=80; {lines of \TeX\ output have at most this many characters,
 	should be less than 256}
-@!max_refs=21000; {number of cross references; must be less than 65536}
-@!max_toks=4000; {number of symbols in \PASCAL\ texts being parsed;
+@!max_refs=30000; {number of cross references; must be less than 65536}
+@!max_toks=30000; {number of symbols in \PASCAL\ texts being parsed;
 	must be less than 65536}
 @!max_texts=2000; {number of phrases in \PASCAL\ texts being parsed;
 	must be less than 10240}
@@ -213,11 +214,13 @@ programs deal with, and character encoding is one of the areas in which
 existing machines differ most widely from each other.
 
 To resolve this problem, all input to \.{WEAVE} and \.{TANGLE} is
-converted to an internal seven-bit code that is essentially standard
-ASCII, the ``American Standard Code for Information Interchange.''  The
-conversion is done immediately when each character is read in. Conversely,
-characters are converted from ASCII to the user's external representation
-just before they are output.
+converted to an internal eight-bit code that is essentially standard
+ASCII, the ``American Standard Code for Information Interchange.''
+The conversion is done immediately when each character is read in.
+Conversely, characters are converted from ASCII to the user's external
+representation just before they are output. (The original ASCII code
+was seven bits only; \.{WEB} now allows eight bits in an attempt to
+keep up with modern times.)
 
 Such an internal code is relevant to users of \.{WEB} only because it is
 the code used for preprocessed constants like \.{"A"}. If you are writing
@@ -264,7 +267,7 @@ of ASCII code was prepared; but \.{WEB} works with today's standard
 ASCII in which those codes represent circumflex and underline as shown.
 
 @<Types...@>=
-@!ASCII_code=0..127; {seven-bit numbers, a subrange of the integers}
+@!ASCII_code=0..255; {eight-bit numbers, a subrange of the integers}
 
 @ The original \PASCAL\ compiler was designed in the late 60s, when six-bit
 character sets were common, so it did not make provision for lowercase
@@ -285,7 +288,7 @@ following definitions should be adjusted if necessary.
 
 @d text_char == char {the data type of characters in text files}
 @d first_text_char=0 {ordinal number of the smallest element of |text_char|}
-@d last_text_char=127 {ordinal number of the largest element of |text_char|}
+@d last_text_char=255 {ordinal number of the largest element of |text_char|}
 
 @<Types...@>=
 @!text_file=packed file of text_char;
@@ -434,15 +437,16 @@ xchr[0]:=' '; xchr[@'177]:=' '; {these ASCII codes are not used}
 it will be convenient to make use of an index variable, |i|.
 
 @<Local variables for init...@>=
-@!i:0..last_text_char;
+@!i:0..255;
 
 @ Here now is the system-dependent part of the character set.
 If \.{WEB} is being implemented on a garden-variety \PASCAL\ for which
 only standard ASCII codes will appear in the input and output files, you
-don't need to make any changes here. But at MIT, for example, the code in
-this module should be changed to
+don't need to make any changes here. But if you have, for example, an extended
+character set like the one in Appendix~C of {\sl The \TeX book}, the first
+line of code in this module should be changed to
 $$\hbox{|for i:=1 to @'37 do xchr[i]:=chr(i);|}$$
-\.{WEB}'s character set is essentially identical to MIT's, even with respect to
+\.{WEB}'s character set is essentially identical to \TeX's, even with respect to
 characters less than @'40.
 @^system dependencies@>
 
@@ -464,13 +468,15 @@ standard equivalents.)
 
 @<Set init...@>=
 for i:=1 to @'37 do xchr[i]:=' ';
+for i:=@'200 to @'377 do xchr[i]:=' ';
 
 @ The following system-independent code makes the |xord| array contain a
 suitable inverse to the information in |xchr|.
 
 @<Set init...@>=
-for i:=first_text_char to last_text_char do xord[chr(i)]:=@'40;
-for i:=1 to @'176 do xord[xchr[i]]:=i;
+for i:=first_text_char to last_text_char do xord[chr(i)]:=" ";
+for i:=1 to @'377 do xord[xchr[i]]:=i;
+xord[' ']:=" ";
 
 @* Input and output.
 The input conventions of this program are intended to be very much like those
@@ -570,18 +576,19 @@ var final_limit:0..buf_size; {|limit| without trailing blanks}
 begin limit:=0; final_limit:=0;
 if eof(f) then input_ln:=false
 else	begin while not eoln(f) do
-		begin buffer[limit]:=xord[f^]; get(f);
-		incr(limit);
-		if buffer[limit-1]<>" " then final_limit:=limit;
-		if limit=buf_size then
-			begin while not eoln(f) do get(f);
-			decr(limit); {keep |buffer[buf_size]| empty}
-			print_nl('! Input line too long'); loc:=0; error;
+    begin buffer[limit]:=xord[f^]; get(f);
+    incr(limit);
+    if buffer[limit-1]<>" " then final_limit:=limit;
+    if limit=buf_size then
+      begin while not eoln(f) do get(f);
+      decr(limit); {keep |buffer[buf_size]| empty}
+      if final_limit>limit then final_limit:=limit;
+      print_nl('! Input line too long'); loc:=0; error;
 @.Input line too long@>
-			end;
-		end;
-	read_ln(f); limit:=final_limit; input_ln:=true;
-	end;
+      end;
+    end;
+  read_ln(f); limit:=final_limit; input_ln:=true;
+  end;
 end;
 
 @* Reporting errors to the user.
@@ -685,7 +692,7 @@ maintenance person, not the user. In such cases the program says
 @* Data structures.
 During the first phase of its processing, \.{WEAVE} puts identifier names,
 index entries, and module names into the large |byte_mem| array, which is
-packed with seven-bit integers. Allocation is sequential, since names are
+packed with eight-bit integers. Allocation is sequential, since names are
 never deleted.
 
 An auxiliary array |byte_start| is used as a directory for |byte_mem|,
@@ -794,7 +801,7 @@ to be treated when \PASCAL\ code is being formatted.
 @d for_like=12 {\&{for}, \&{while}, \&{with}}
 @d goto_like=13 {\&{goto}, \&{packed}}
 @d if_like=14 {\&{if}}
-@d in_like=15 {\&{in}}
+@d intercal_like=15 {not used}
 @d nil_like=16 {\&{nil}}
 @d proc_like=17 {\&{function}, \&{procedure}, \&{program}}
 @d record_like=18 {\&{record}}
@@ -891,13 +898,13 @@ on whether a module name is being defined or used.
 
 @<Globals...@>=
 @!xmem:array[xref_number] of packed record@t@>@/
-	@!num_field: sixteen_bits; {module number plus zero or |def_flag|}
-	@!xlink_field: sixteen_bits; {pointer to the previous cross reference}
-	@!dtype_field: sixteen_bits; {type of definition}
-	@!dname_field: sixteen_bits; {identifier or constant}
-	@!dback_field: sixteen_bits; {if nonzero, this is a reference to name}
-	@!dlink_field: sixteen_bits; {link to definitions only}
-	end;
+  @!num_field: sixteen_bits; {module number plus zero or |def_flag|}
+  @!xlink_field: sixteen_bits; {pointer to the previous cross reference}
+  @!dtype_field: sixteen_bits; {type of definition}
+  @!dname_field: sixteen_bits; {identifier or constant}
+  @!dback_field: sixteen_bits; {if nonzero, this is a reference to name}
+  @!dlink_field: sixteen_bits; {link to definitions only}
+  end;
 @!xref_ptr:xref_number; {the largest occupied position in |xmem|}
 @!xref_switch,@!mod_xref_switch:0..def_flag; {either zero or |def_flag|}
 @!def_type,@!def_name,@!def_subtype,@!def_subname,
@@ -913,36 +920,36 @@ which discards duplicate entries and ignores non-underlined references
 to one-letter identifiers or \PASCAL's reserved words.
 
 @d append_xref(#)==if xref_ptr=max_refs then overflow('cross reference')
-	else	begin incr(xref_ptr); num(xref_ptr):=#;
-		dback(xref_ptr):=0;
-		end
+  else	begin incr(xref_ptr); num(xref_ptr):=#;
+    dback(xref_ptr):=0;
+    end
 
 @p procedure new_xref(@!p:name_pointer);
 label exit;
 var q:xref_number; {pointer to previous cross reference}
 @!m,@!n: sixteen_bits; {new and previous cross-reference value}
 begin if (reserved(p)or(byte_start[p]+1=byte_start[p+ww]))and
-	(xref_switch=0) then return;
+  (xref_switch=0) then return;
 m:=module_count+xref_switch; xref_switch:=0; q:=xref[p];
 if q>0 then
-	begin n:=num(q);
-	if (n=m)or(n=m+def_flag) then return
-	else if m=n+def_flag then
-		if (def_type>=dtype_comma) or danger_zone then
-			q:=xlink(q) {delete entry}
-		else	begin num(q):=m; dtype(q):=def_type;
-			dname(q):=def_name; dback(q):=p; return;
-			end;
-	end;
+  begin n:=num(q);
+  if (n=m)or(n=m+def_flag) then return
+  else if m=n+def_flag then
+    if (def_type>=dtype_comma) or danger_zone then
+      q:=xlink(q) {delete entry}
+    else begin num(q):=m; dtype(q):=def_type;
+      dname(q):=def_name; dback(q):=p; return;
+      end;
+  end;
 append_xref(m); xlink(xref_ptr):=q; xref[p]:=xref_ptr;
 if m>def_flag then
-	begin dtype(xref_ptr):=def_type; dname(xref_ptr):=def_name;
-	dback(xref_ptr):=p;
-	if def_type>dtype_comma then
-		begin append_xref(0); dtype(xref_ptr):=def_subtype;
-		dname(xref_ptr):=def_subname;
-		end;
-	end;
+  begin dtype(xref_ptr):=def_type; dname(xref_ptr):=def_name;
+  dback(xref_ptr):=p;
+  if def_type>dtype_comma then
+    begin append_xref(0); dtype(xref_ptr):=def_subtype;
+    dname(xref_ptr):=def_subname;
+    end;
+  end;
 exit: end;
 
 @ The |new_blank_xref| is similar but it ignores the |xref_switch|.
@@ -1292,6 +1299,7 @@ that takes care of merging |change_file| into |web_file|. The |get_line|
 procedure also updates the line numbers for error messages.
 
 @<Globals...@>=
+@!ii:integer; {general purpose |for| loop variable in the outer block}
 @!line:integer; {the number of the current line in the current file}
 @!other_line:integer; {the number of the current line in the input file that
 	is not currently being read}
@@ -1497,7 +1505,7 @@ had a line that didn't match any relevant line in |web_file|.
 
 @<Check that all changes have been read@>=
 if change_limit<>0 then {|changing| is false}
-	begin for loc:=0 to change_limit do buffer[loc]:=change_buffer[loc];
+	begin for ii:=0 to change_limit-1 do buffer[ii]:=change_buffer[ii];
 	limit:=change_limit; changing:=true; line:=other_line; loc:=change_limit;
 	err_print('! Change file entry did not match');
 @.Change file entry did not match@>
@@ -1765,7 +1773,11 @@ case c of
 "@@": @<Get control code and possible module name@>;
 @t\4@>@<Compress two-symbol combinations like `\.{:=}'@>@;
 " ",tab_mark: goto restart; {ignore spaces and tabs}
-othercases do_nothing
+"}": begin err_print('! Extra }'); goto restart;
+@.Extra \}@>
+  end;
+othercases if c>=128 then goto restart {ignore nonstandard characters}
+  else do_nothing
 endcases;
 found:@!debug if trouble_shooting then debug_help;@;@+gubed@/
 get_next:=c;
@@ -1976,7 +1988,7 @@ subroutine, which doesn't complain about certain syntactic errors.
 
 @p function scan_exp:integer;
 label done;
-var accum,s,p:integer;
+var accum,s:integer;
 begin if sign(next_control) then accum:=0
 else accum:=scan_const;
 loop	begin if not sign(next_control) then goto done;
@@ -2005,9 +2017,10 @@ straightforward outline.
 @<Phase I: Read all the user's text and store the cross references@>=
 phase_one:=true; phase_three:=false;
 reset_input;
-module_count:=0; skip_limbo; change_exists:=false;
+module_count:=0; changed_module[0]:=false;
+skip_limbo; change_exists:=false;
 while not input_has_ended do
-	@<Store cross reference data for the current module@>;
+  @<Store cross reference data for the current module@>;
 changed_module[module_count]:=change_exists;
 	{the index changes if anything does}
 phase_one:=false; {prepare for second phase}
@@ -2016,7 +2029,8 @@ phase_one:=false; {prepare for second phase}
 @ @<Store cross reference data...@>=
 begin incr(module_count);
 if module_count=max_modules then overflow('section number');
-changed_module[module_count]:=false; {it will become |true| if any line changes}
+changed_module[module_count]:=false;
+ {it will become |true| if any line changes}
 if buffer[loc-1]="*" then
 	begin print('*',module_count:1);
 	update_terminal; {print a progress report}
@@ -2043,7 +2057,7 @@ typewriter| and |normal=0|. An implied `\.{@@!}' is inserted after
 
 @p procedure Pascal_xref; {makes cross references for \PASCAL\ identifiers}
 label exit,done,found,not_found;
-var p,q,r:name_pointer; {a referenced name}
+var p:name_pointer; {a referenced name}
 @!eq:0..3; {addition to |dtype| code}
 begin while next_control<format do
 	begin if (next_control>=identifier)and
@@ -2184,7 +2198,7 @@ The variables |lhs| and |rhs| point to the respective identifiers involved
 in a format definition.
 
 @<Global...@>=
-@!lhs,@!rhs:integer; {indices into |byte_start| for format identifiers}
+@!lhs,@!rhs:name_pointer; {indices into |byte_start| for format identifiers}
 
 @ When we get to the following code we have |next_control>=format|.
 
@@ -2297,11 +2311,14 @@ If the |per_cent| parameter is |true|, a |"%"| is appended to the line
 that is being output; in this case the breakpoint |b| should be strictly
 less than |line_length|. If the |per_cent| parameter is |false|,
 trailing blanks are suppressed.
-The characters emptied from the buffer form a new line of output.
+The characters emptied from the buffer form a new line of output;
+if the |carryover| parameter is true, a |"%"| in that line will be
+carried over to the next line (so that \TeX\ will ignore the completion
+of commented-out text).
 
-@p procedure flush_buffer(@!b:eight_bits;@!per_cent:boolean);
-	{outputs |out_buf[1..b]|, where |b<=out_ptr|}
-label done;
+@p procedure flush_buffer(@!b:eight_bits;@!per_cent,@!carryover:boolean);
+  {outputs |out_buf[1..b]|, where |b<=out_ptr|}
+label done,found;
 var j,@!k:0..line_length;
 begin j:=b;
 if not per_cent then {remove trailing blanks}
@@ -2312,7 +2329,14 @@ if not per_cent then {remove trailing blanks}
 done: for k:=1 to j do write(tex_file,xchr[out_buf[k]]);
 if per_cent then write(tex_file,xchr["%"]);
 write_ln(tex_file); incr(out_line);
-if b<out_ptr then for k:=b+1 to out_ptr do out_buf[k-b]:=out_buf[k];
+if carryover then
+  for k:=1 to j do
+    if out_buf[k]="%" then
+      if (k=1)or(out_buf[k-1]<>"\") then {comment mode should be preserved}
+        begin out_buf[b]:="%"; decr(b); goto found;
+        end;
+found: if (b<out_ptr) then
+  for k:=b+1 to out_ptr do out_buf[k-b]:=out_buf[k];
 out_ptr:=out_ptr-b;
 end;
 
@@ -2327,10 +2351,10 @@ been emitted during the output of translated \PASCAL\ text.
 @p procedure finish_line; {do this at the end of a line}
 label exit;
 var k:0..buf_size; {index into |buffer|}
-begin if out_ptr>0 then flush_buffer(out_ptr,false)
+begin if out_ptr>0 then flush_buffer(out_ptr,false,false)
 else	begin for k:=0 to limit do
 		if (buffer[k]<>" ")and(buffer[k]<>tab_mark) then return;
-	flush_buffer(0,false);
+	flush_buffer(0,false,false);
 	end;
 exit:end;
 
@@ -2390,16 +2414,16 @@ the break.
 @p procedure break_out; {finds a way to break the output line}
 label exit;
 var k:0..line_length; {index into |out_buf|}
-@!c,@!d:ASCII_code; {characters from the buffer}
+@!d:ASCII_code; {characters from the buffer}
 begin k:=out_ptr;
 loop@+	begin if k=0 then
 		@<Print warning message, break the line, |return|@>;
 	d:=out_buf[k];
 	if d=" " then
-		begin flush_buffer(k,false); return;
+		begin flush_buffer(k,false,true); return;
 		end;
 	if (d="\")and(out_buf[k-1]<>"\") then {in this case |k>1|}
-		begin flush_buffer(k-1,true); return;
+		begin flush_buffer(k-1,true,true); return;
 		end;
 	decr(k);
 	end;
@@ -2416,7 +2440,7 @@ begin print_nl('! Line had to be broken (output l.',out_line:1);
 print_ln('):');
 for k:=1 to out_ptr-1 do print(xchr[out_buf[k]]);
 new_line; mark_harmless;
-flush_buffer(out_ptr-1,true); return;
+flush_buffer(out_ptr-1,true,true); return;
 end
 
 @ Here is a procedure that outputs a module number in decimal notation.
@@ -3589,7 +3613,8 @@ function translate:text_pointer; {converts a sequence of scraps}
 label done,found;
 var i: 1..max_scraps; {index into |cat|}
 @!j:0..max_scraps; {runs through final scraps}
-@!k:0..long_buf_size; {index into |buffer|}
+@!debug@!k:0..long_buf_size; {index into |buffer|}
+gubed
 begin pp:=scrap_base; lo_ptr:=pp-1; hi_ptr:=pp;
 @<If tracing, print an indication of where we are@>;
 @<Reduce the scraps...@>;
@@ -4414,7 +4439,7 @@ actually output the \TeX\ material instead of merely looking at the
 reset_input; print_nl('Writing the output file...');
 module_count:=0; xx:=0;
 copy_limbo;
-finish_line; flush_buffer(0,false); {insert a blank line, it looks nice}
+finish_line; flush_buffer(0,false,false); {insert a blank line, it looks nice}
 @<Prepare high-speed access to definitions via |dlink| and |def_val|@>;
 while not input_has_ended do @<Translate the \(current module@>
 
@@ -4746,9 +4771,9 @@ done:
 @ @<Output the code for the end of a module@>=
 out3("\")("α")("%");
 beta_out;
-flush_buffer(out_ptr,false);
+flush_buffer(out_ptr,false,false);
 out4("}")("\")("F")("I"); finish_line;
-flush_buffer(0,false); {insert a blank line, it looks nice}
+flush_buffer(0,false,false); {insert a blank line, it looks nice}
 @.\\FI@>
 
 @ The |alpha_out| procedure makes entries for all identifiers defined
@@ -4763,7 +4788,7 @@ begin loop begin
 	incr(xx);
       	if num(xx)>def_flag then if dback(xx)>0 then
 	 if ilk[dback(xx)]=normal then
-		begin flush_buffer(out_ptr,false);
+		begin flush_buffer(out_ptr,false,false);
 		out2("\")("α");
 		p:=dback(xx);
 		w:=p mod ww;
@@ -4810,7 +4835,7 @@ label done,888,found;
 var k,p,q,w,xx,mmm:integer;
 begin p:=ref_link[0];
 while p<>0 do
-	begin flush_buffer(out_ptr,false);
+	begin flush_buffer(out_ptr,false,false);
 	out2("\")("β");
 	xx:=ref_loc[p]; q:=dback(xx); w:=q mod ww;
 	for k:=byte_start[q] to byte_start[q+ww]-1 do out(byte_mem[w,k]);
@@ -4906,7 +4931,7 @@ end
 @ A left-to-right radix sorting method is used, since this makes it easy to
 adjust the collating sequence and since the running time will be at worst
 proportional to the total length of all entries in the index. We put the
-identifiers into 102 different lists based on their first characters.
+identifiers into 230 different lists based on their first characters.
 (Uppercase letters are put into the same list as the corresponding lowercase
 letters, since we want to have `$t<\\{TeX}<\&{to}$'.) The
 list for character |c| begins at location |bucket[c]| and continues through
@@ -4923,7 +4948,7 @@ the |blink| array.
 having a nonempty cross-reference list into the proper bucket.
 
 @<Do the first pass...@>=
-for c:=0 to 127 do bucket[c]:=0;
+for c:=0 to 255 do bucket[c]:=0;
 for h:=0 to hash_size-1 do
 	begin next_name:=hash[h];
 	while next_name<>0 do
@@ -4960,9 +4985,9 @@ stat@!max_sort_ptr:0..max_sorts;@+tats {largest value of |sort_ptr|}
 @ @<Set init...@>=stat max_sort_ptr:=0;@+tats
 
 @ The desired alphabetic order is specified by the |collate| array; namely,
-|collate[0]<collate[1]<@t$\cdots$@><collate[100]|.
+|collate[0]<collate[1]<@t$\cdots$@><collate[229]|.
 
-@<Glob...@>=@!collate:array[0..100] of ASCII_code; {collation order}
+@<Glob...@>=@!collate:array[0..229] of ASCII_code; {collation order}
 
 @ @<Local variables for init...@>=
 @!c:ASCII_code; {used to initialize |collate|}
@@ -4977,10 +5002,10 @@ for c:=" "+1 to "0"-1 do collate[c]:=c;
 for c:="9"+1 to "A"-1 do collate[c-10]:=c;
 for c:="Z"+1 to "_"-1 do collate[c-36]:=c;
 collate["_"-36]:="_"+1;
-for c:="z"+1 to 126 do collate[c-63]:=c;
-collate[64]:="_";
-for c:="a" to "z" do collate[c-"a"+65]:=c;
-for c:="0" to "9" do collate[c-"0"+91]:=c;
+for c:="z"+1 to 255 do collate[c-63]:=c;
+collate[193]:="_";
+for c:="a" to "z" do collate[c-"a"+194]:=c;
+for c:="0" to "9" do collate[c-"0"+220]:=c;
 
 @ Procedure |unbucket| goes through the buckets and adds nonempty lists
 to the stack, using the collating sequence specified in the |collate| array.
@@ -4992,8 +5017,8 @@ regarded as identical.
 
 @p procedure unbucket(@!d:eight_bits); {empties buckets having depth |d|}
 var c:ASCII_code; {index into |bucket|}
-begin for c:=100 downto 0 do if bucket[collate[c]]>0 then
-	begin if sort_ptr>max_sorts then overflow('sorting');
+begin for c:=229 downto 0 do if bucket[collate[c]]>0 then
+	begin if sort_ptr=max_sorts then overflow('sorting');
 	incr(sort_ptr);
 	stat if sort_ptr>max_sort_ptr then max_sort_ptr:=sort_ptr;@;@+tats@;@/
 	if c=0 then depth[sort_ptr]:=infinity else depth[sort_ptr]:=d;
@@ -5147,27 +5172,27 @@ var k:integer; {index into various arrays}
 begin incr(debug_skipped);
 if debug_skipped<debug_cycle then return;
 debug_skipped:=0;
-loop@+	begin write(term_out,'#'); update_terminal; {prompt}
-	read(term_in,ddt); {read a list of integers}
-	if ddt<0 then return
-	else if ddt=0 then
-		begin goto breakpoint;@\ {go to every label at least once}
-		breakpoint: ddt:=0;@\
-		end
-	else	begin read(term_in,dd);
-		case ddt of
-		1: print_id(dd);
-		2: print_text(dd);
-		3: for k:=1 to dd do print(xchr[buffer[k]]);
-		4: for k:=1 to dd do print(xchr[mod_text[k]]);
-		5: for k:=1 to out_ptr do print(xchr[out_buf[k]]);
-		6: for k:=1 to dd do
-			begin print_cat(cat[k]); print(' ');
-			end;
-		othercases print('?')
-		endcases;
-		end;
-	end;
+loop@+  begin print_nl('#'); update_terminal; {prompt}
+  read(term_in,ddt); {read a debug-command code}
+  if ddt<0 then return
+  else if ddt=0 then
+    begin goto breakpoint;@\ {go to every label at least once}
+    breakpoint: ddt:=0;@\
+    end
+  else	begin read(term_in,dd);
+    case ddt of
+    1: print_id(dd);
+    2: print_text(dd);
+    3: for k:=1 to dd do print(xchr[buffer[k]]);
+    4: for k:=1 to dd do print(xchr[mod_text[k]]);
+    5: for k:=1 to out_ptr do print(xchr[out_buf[k]]);
+    6: for k:=1 to dd do
+      begin print_cat(cat[k]); print(' ');
+      end;
+    othercases print('?')
+    endcases;
+    end;
+  end;
 exit:end;
 gubed
 
