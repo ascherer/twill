@@ -137,8 +137,8 @@
 \def\#{\hbox{\tt\char`\#}} % parameter sign
 \def\${\hbox{\tt\char`\$}} % dollar sign
 \def\%{\hbox{\tt\char`\%}} % percent sign
-\def\↑{\ifmmode\mathchar"222 \else\char`↑ \fi} % pointer or hat
-% circumflex accents can be obtained from \↑↑D instead of \↑
+\def\^{\ifmmode\mathchar"222 \else\char`^ \fi} % pointer or hat
+% circumflex accents can be obtained from \^^D instead of \^
 \def\AT!{@} % at sign for control text
 \def\pct!{{\char`\%}} % percent sign in ordinary text
 
@@ -174,10 +174,10 @@
 \def\defin#1{\global\advance\ind by 2 \1\&{#1 }} % begin `define' or `format'
 \def\A{\note{See also}} % cross-reference for multiply defined section names
 \def\B{\mathopen{\.{@\{}}} % begin controlled comment
-\def\C#1{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi % Pascal comments
+\def\C#1{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi %$% Pascal comments
   \XX\hfil\penalty-1\hfilneg\quad$\{\,$#1$\,\}$\XX}
 \def\D{\defin{define}} % macro definition
-\def\E{\cdot10↑} % exponent in floating point constant
+\def\E{\cdot10^} % exponent in floating point constant
 \def\F{\defin{format}} % format definition
 \let\G=\ge % greater than or equal sign
 \def\H#1{\hbox{\rm\char"7D\tt#1}} % hexadecimal constant
@@ -186,11 +186,11 @@
 \let\K=\gets % left arrow
 \let\L=\le % less than or equal sign
 \outer\def\M#1.{\def\modno{#1}\startsection\ignorespaces}
-\outer\def\N#1. \[#2]#3.{\def\modno{#1}\flushout % begin starred section
-  \gdef\rhead{PART #2:\uppercase{#3}} % define running headline
+\outer\def\N#1. #2.{\def\modno{#1}\flushout % begin starred section
+  \gdef\rhead{\uppercase{#2}} % define running headline
   \global\let\rrhead=\rhead
   \message{*\modno} % progress report
-  \startsection{\bf\ignorespaces#3.\quad}\ignorespaces}
+  \startsection{\bf\ignorespaces#2.\quad}\ignorespaces}
 \outer\def\NN#1. \[#2]#3.{\def\modno{#1} % begin starred section on rh page
   \global\setbox\partialpage=\vbox{
     \vbox to 44pc{\box\partialpage\vfill}\break}
@@ -213,11 +213,11 @@
 \def\U{\note{This code is used in}} % cross-reference for uses of sections
 \let\V=\lor % logical or
 \let\W=\land % logical and
-\def\X#1:#2\X{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi % section name
+\def\X#1:#2\X{\ifmmode\gdef\XX{\null$\null}\else\gdef\XX{}\fi %$% section name
   \XX$\langle\,$#2{\sevenrm\kern.5em#1}$\,\rangle$\XX}
 \def\Y{\par\yskip}
 \let\Z=\let % now you can \send the control sequence \Z
-\def\){\hbox{\.{@\$}}} % sign for string pool check sum
+\def\){\hbox{\.{@\$}}} %$% sign for string pool check sum
 \def\]{\hbox{\.{@\\}}} % sign for forced line break
 \def\=#1{\kern2pt\hbox{\vrule\vtop{\vbox{\hrule
         \hbox{\strut\kern2pt\.{#1}\kern2pt}}
@@ -247,7 +247,7 @@
         \hbox to 35pc{\vbox to10pt{}\nineit\rhead\hfil\eightrm\folio}\vfill}
       \nointerlineskip\box0}
     \global\advance\pageno 1
-    \let\β=\makeref
+    \let\[=\makeref
     \ifsorted \let\readin=\readln \readrefs
     \else \immediate\write\reffile{∀\the\pageno}\let\readin=\readrefs \fi
     \setbox0=\vbox{\eightpoint \hsize=11pc \catcode`\_=\active \let_=\_
@@ -278,11 +278,11 @@
     \nrefs=0
     \baseno=\modno}}
 
-\def\α{\begingroup \catcode`\_=\active \let_=\uline \globaldefs=1
+\def\mini{\begingroup \catcode`\_=\active \let_=\uline \globaldefs=1
   \newrefs=\bgroup}
 \def\FI{\nn=\modno \advance\nn-\baseno \advance\nn 200
   \advance\nrefs-\count\nn \nn=\nrefs
-  \let\β=\countnewref \the\newrefs \endgroup
+  \let\[=\countnewref \the\newrefs \endgroup
   \nobreak\null\nobreak\vskip-\baselineskip\penalty-500\vfil\eject}
 \def\twillout{\setbox\newmod=\vbox{\unvbox255}
   \ifnum\nn=0 \nsize=0pt
@@ -293,7 +293,7 @@
   \message{\the\nsize} % show the page break decision amount
   \ifdim\nsize>88pc \flushout \message{\modno}\fi
   \addtopartialpage}
-\def\addtopartialpage{\let\β=\addnewref \catcode`\_=\active \let_=\uline
+\def\addtopartialpage{\let\[=\addnewref \catcode`\_=\active \let_=\uline
   \globaldefs=1 \the\newrefs
   \nsize=\dp\partialpage
   \setbox\partialpage=\ifvoid\partialpage \box\newmod
@@ -315,18 +315,18 @@
 \def\an #1 #2 {\expandafter\anr\csname#1 #2\endcsname #1 #2 }
 \def\anr#1#2 #3 #4 {\ifx#1\relax
     \advance\nrefs1 \advance\count\nn 1
-    \def#1{\β#2 #3 #4 }\toks\nn=\expandafter{\the\toks\nn\λ#1}\fi}
-\ifsorted \def\λ#1{\global\let#1\relax}
-\else \def\λ#1{#1\global\let#1\relax} \fi
+    \def#1{\[#2 #3 #4 }\toks\nn=\expandafter{\the\toks\nn\lmda#1}\fi}
+\ifsorted \def\lmda#1{\global\let#1\relax}
+\else \def\lmda#1{#1\global\let#1\relax} \fi
 \def\makeref #1 #2 #3#4 {\nn=#2 \hangindent=1em
-  \ifsorted\else\toks0={#1 #2 #3#4}\immediate\write\reffile{∃ \the\toks0}\fi
-  \noindent\\{#1}\ifx#3\ε\else
+  \ifsorted\else\toks0={#1 #2 #3#4}\immediate\write\reffile{+ \the\toks0}\fi
+  \noindent\\{#1}\ifx#3\none\else
   \if#3:: \else\unhcopy\eqbox \fi#4\fi, \section\number\nn.\par}
 \newbox\eqbox \setbox\eqbox=\hbox{\kern2pt\eightrm=\kern2pt}
 \def\section{\mathhexbox278}
-\def\ε{\ε}
+\def\none{\none}
 \def\readrefs{\the\prefs \mm=\modno \advance\mm-\baseno \advance\mm200
-  {\def\λ##1{\global\let##1\relax}\pp=200 %  this patch made AFTER first edition
+  {\def\lmda##1{\global\let##1\relax}\pp=200 %  this patch made AFTER first edition
     \loop\ifnum\pp<\mm \the\toks\pp \advance\pp 1 \repeat}	% of Vol B!!
   \loop\ifnum\mm<221 \the\toks\mm \advance\mm 1 \repeat}
 \def\readln{\read\sreffile to\next \expandafter\next\space \readin}

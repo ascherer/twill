@@ -4769,7 +4769,8 @@ loop@+	begin out_mod(num(cur_xref)-flag);
 done:
 
 @ @<Output the code for the end of a module@>=
-out3("\")("α")("%");
+out6("\")("m")("i")("n")("i")("%");
+@.\\mini@>
 beta_out;
 flush_buffer(out_ptr,false,false);
 out4("}")("\")("F")("I"); finish_line;
@@ -4789,7 +4790,8 @@ begin loop begin
       	if num(xx)>def_flag then if dback(xx)>0 then
 	 if ilk[dback(xx)]=normal then
 		begin flush_buffer(out_ptr,false,false);
-		out2("\")("α");
+		out5("\")("m")("i")("n")("i");
+@.\\mini@>
 		p:=dback(xx);
 		w:=p mod ww;
 		for k:=byte_start[p] to byte_start[p+ww]-1 do out(byte_mem[w,k]);
@@ -4836,7 +4838,7 @@ var k,p,q,w,xx,mmm:integer;
 begin p:=ref_link[0];
 while p<>0 do
 	begin flush_buffer(out_ptr,false,false);
-	out2("\")("β");
+	out2("\")("[");
 	xx:=ref_loc[p]; q:=dback(xx); w:=q mod ww;
 	for k:=byte_start[q] to byte_start[q+ww]-1 do out(byte_mem[w,k]);
 	out(" "); out_const(num(xx)-def_flag);
@@ -4850,7 +4852,7 @@ end;
 
 @ @<Output the reference, based on its |dtype|@>=
 case dtype(xx) of
-dtype_none: out2("\")("ε");
+dtype_none: out5("\")("n")("o")("n")("e");
 dtype_macro: out6("=")("m")("a")("c")("r")("o");
 dtype_const: begin out2("=")("$"); out_const(dname(xx)); out("$");
 	end;
